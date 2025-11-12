@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Middleware\Auth;
 
 class UserController
 {
@@ -62,11 +63,22 @@ class UserController
     }
 
     /**
-     * POST /api/users - Create new user
+     * POST /api/users - Create new user (Admin only)
      */
     public function create()
     {
         try {
+            // Verify admin authentication
+            $admin = Auth::getCurrentAdmin();
+            if (!$admin) {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Unauthorized: Admin authentication required'
+                ]);
+                return;
+            }
+
             $data = json_decode(file_get_contents('php://input'), true);
 
             if (!$data || !isset($data['name']) || !isset($data['email'])) {
@@ -102,11 +114,22 @@ class UserController
     }
 
     /**
-     * PUT /api/users/{id} - Update user
+     * PUT /api/users/{id} - Update user (Admin only)
      */
     public function update($params)
     {
         try {
+            // Verify admin authentication
+            $admin = Auth::getCurrentAdmin();
+            if (!$admin) {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Unauthorized: Admin authentication required'
+                ]);
+                return;
+            }
+
             $data = json_decode(file_get_contents('php://input'), true);
 
             if (!$data) {
@@ -141,11 +164,22 @@ class UserController
     }
 
     /**
-     * DELETE /api/users/{id} - Delete user
+     * DELETE /api/users/{id} - Delete user (Admin only)
      */
     public function delete($params)
     {
         try {
+            // Verify admin authentication
+            $admin = Auth::getCurrentAdmin();
+            if (!$admin) {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Unauthorized: Admin authentication required'
+                ]);
+                return;
+            }
+
             $result = $this->userModel->delete($params['id']);
             if ($result) {
                 echo json_encode([

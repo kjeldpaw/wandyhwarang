@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { userAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import '../styles/UserForm.css';
 
 function UserForm({ user, onSave, onCancel }) {
+  const { token } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -34,14 +36,19 @@ function UserForm({ user, onSave, onCancel }) {
 
     try {
       if (user) {
-        await userAPI.update(user.id, formData);
+        await userAPI.update(user.id, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       } else {
-        await userAPI.create(formData);
+        await userAPI.create(formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       }
       onSave();
       setFormData({ name: '', email: '' });
     } catch (err) {
-      setError(err.response?.data?.error || 'An error occurred');
+      const errorMsg = err.response?.data?.error || 'An error occurred';
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }

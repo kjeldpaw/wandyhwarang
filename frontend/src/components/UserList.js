@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { userAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import '../styles/UserList.css';
 
 function UserList({ refreshTrigger, onEdit }) {
+  const { token } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -27,7 +29,9 @@ function UserList({ refreshTrigger, onEdit }) {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await userAPI.delete(id);
+        await userAPI.delete(id, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         fetchUsers();
       } catch (err) {
         setError(err.response?.data?.error || 'Failed to delete user');

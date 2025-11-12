@@ -3,7 +3,7 @@
 // Enable CORS
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
 // Handle preflight requests
@@ -32,9 +32,25 @@ spl_autoload_register(function ($class) {
 
 use App\Router;
 use App\Controllers\UserController;
+use App\Controllers\AuthController;
 
 // Initialize router
 $router = new Router();
+
+// Auth routes
+$authController = new AuthController();
+
+$router->post('/api/auth/login', function() use ($authController) {
+    return $authController->login();
+});
+
+$router->post('/api/auth/register', function() use ($authController) {
+    return $authController->register();
+});
+
+$router->post('/api/auth/verify', function() use ($authController) {
+    return $authController->verify();
+});
 
 // User routes
 $userController = new UserController();

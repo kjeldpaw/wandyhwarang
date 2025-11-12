@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useAuth } from './context/AuthContext';
 import UserForm from './components/UserForm';
 import UserList from './components/UserList';
+import LoginPage from './pages/LoginPage';
 import './styles/App.css';
 
 function App() {
+  const { isAuthenticated, admin, logout, loading } = useAuth();
   const [selectedUser, setSelectedUser] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -20,11 +23,40 @@ function App() {
     setSelectedUser(null);
   };
 
+  const handleLogout = () => {
+    logout();
+  };
+
+  if (loading) {
+    return (
+      <div className="app">
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginPage onLoginSuccess={() => {}} />;
+  }
+
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Wandyhwarang</h1>
-        <p className="subtitle">User Management System</p>
+        <div className="header-content">
+          <div className="header-title">
+            <h1>Wandyhwarang</h1>
+            <p className="subtitle">User Management System</p>
+          </div>
+          <div className="header-user">
+            <span className="admin-name">Hello, {admin?.name}!</span>
+            <button onClick={handleLogout} className="logout-btn">
+              Logout
+            </button>
+          </div>
+        </div>
       </header>
       <main className="app-main">
         <div className="container">
