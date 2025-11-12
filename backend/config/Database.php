@@ -7,12 +7,21 @@ use PDOException;
 
 class Database
 {
-    private $host = 'localhost';
-    private $db_name = 'wandyhwarang';
-    private $user = 'root';
-    private $pass = '';
-    private $port = 3306;
+    private $host;
+    private $db_name;
+    private $user;
+    private $pass;
+    private $port;
     private $pdo;
+
+    public function __construct()
+    {
+        $this->host = getenv('DB_HOST') ?: 'localhost';
+        $this->db_name = getenv('DB_NAME') ?: 'wandyhwarang';
+        $this->user = getenv('DB_USER') ?: 'root';
+        $this->pass = getenv('DB_PASSWORD') ?: '';
+        $this->port = getenv('DB_PORT') ?: 3306;
+    }
 
     public function connect()
     {

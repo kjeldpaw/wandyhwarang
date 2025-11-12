@@ -1,0 +1,20 @@
+# Development overrides for docker-compose.yml
+# This file is automatically loaded and merged with docker-compose.yml
+
+version: '3.8'
+
+services:
+  php:
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=1
+    command: php -S 0.0.0.0:8000 -t public
+    stdin_open: true
+    tty: true
+
+  react:
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/backend/public
+      - BROWSER=none
+    stdin_open: true
+    tty: true

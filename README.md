@@ -30,12 +30,37 @@ wandyhwarang/
 
 ## Prerequisites
 
-- PHP 7.4+
-- MySQL 5.7+
-- Node.js 14+
+- PHP 7.4+ (for local development)
+- MySQL 5.7+ (for local development)
+- Node.js 14+ (for local development)
 - npm or yarn
+- Docker & Docker Compose (for containerized setup)
 
-## Setup Instructions
+## Quick Start with Docker
+
+The easiest way to get started is with Docker Compose:
+
+```bash
+# Build and start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Or use the Makefile
+make build
+make up
+make logs
+```
+
+Services will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000/backend/public/api
+- MySQL: localhost:3306
+
+See [DOCKER.md](DOCKER.md) for detailed Docker documentation.
+
+## Setup Instructions (Local Development)
 
 ### 1. Database Setup
 
