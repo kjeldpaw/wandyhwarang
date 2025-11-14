@@ -52,6 +52,10 @@ export function AuthProvider({ children }) {
         setAdmin(response.data.admin);
         localStorage.setItem('authToken', newToken);
         return { success: true };
+      } else {
+        const errorMsg = response.data.error || 'Login failed';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
       }
     } catch (err) {
       const errorMsg = err.response?.data?.error || 'Login failed';
@@ -82,6 +86,10 @@ export function AuthProvider({ children }) {
       if (response.data.success) {
         setError(null);
         return { success: true };
+      } else {
+        const errorMsg = response.data.error || 'Registration failed';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
       }
     } catch (err) {
       const errorMsg = err.response?.data?.error || 'Registration failed';
