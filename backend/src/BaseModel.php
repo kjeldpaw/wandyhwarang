@@ -17,6 +17,14 @@ abstract class BaseModel
     }
 
     /**
+     * Get PDO connection (useful for testing)
+     */
+    public function getPDO()
+    {
+        return $this->db;
+    }
+
+    /**
      * Get all records
      */
     public function getAll()
