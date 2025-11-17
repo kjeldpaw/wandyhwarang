@@ -13,7 +13,6 @@ wandyhwarang/
 │   │   ├── Models/
 │   │   └── Controllers/
 │   ├── public/       # Web root
-│   ├── config/       # Configuration
 │   ├── database/     # Database schema
 │   ├── composer.json
 │   └── .env.example

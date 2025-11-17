@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests;
+namespace App\Controllers;
 
-use PHPUnit\Framework\TestCase;
 use App\Models\Admin;
+use PHPUnit\Framework\TestCase;
 
 class AuthControllerTest extends TestCase
 {

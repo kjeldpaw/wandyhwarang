@@ -1,6 +1,15 @@
 <?php
 
-// Enable CORS
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// If it's not an API request, serve the React app (index.html)
+if (!preg_match('#^/api(/|$)#', $uri)) {
+    header('Content-Type: text/html; charset=utf-8');
+    readfile(__DIR__ . '/index.html');
+    exit();
+}
+
+// Enable CORS for API
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -15,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Include autoloader (manual PSR-4 autoloading)
 spl_autoload_register(function ($class) {
     $prefix = 'App\\';
-    $base_dir = __DIR__ . '/../';
 
     $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) {
@@ -23,10 +31,23 @@ spl_autoload_register(function ($class) {
     }
 
     $relative_class = substr($class, $len);
+
+    // Try src directory first
+    $base_dir = __DIR__ . '/../src/';
     $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
 
     if (file_exists($file)) {
         require $file;
+        return;
+    }
+
+    // Try config directory
+    $base_dir = __DIR__ . '/../config/';
+    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+
+    if (file_exists($file)) {
+        require $file;
+        return;
     }
 });
 

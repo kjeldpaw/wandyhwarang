@@ -34,7 +34,6 @@ WORKDIR /var/www/html
 # Copy PHP backend
 COPY backend/public ./public
 COPY backend/src ./src
-COPY backend/config ./config
 COPY backend/database ./database
 COPY backend/composer.json ./
 COPY backend/composer.lock ./
