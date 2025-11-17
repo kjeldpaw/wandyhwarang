@@ -29,4 +29,4 @@ CREATE INDEX idx_admin_email ON admins(email);
 
 -- Insert default admin user (password: admin123)
 INSERT IGNORE INTO admins (name, email, password) VALUES
-('Administrator', 'admin@example.com', '$2y$10$jc/k1D0n3sU8oJ2K3L4m5OJ/kL1D0n3sU8oJ2K3L4m5OJ/kL1D0n3s');
+('Administrator', 'admin@example.com', '$2y$12$AJl.d2/byLRklqpNm9OQPeyNer4C5EjXRi5d89lOFXC4v7sRh2G66');

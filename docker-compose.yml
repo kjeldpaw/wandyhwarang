@@ -5,34 +5,37 @@ services:
       dockerfile: Dockerfile
     container_name: app
     ports:
-      - "8000:80" # host:container => everything on http://localhost:8000
+      - "8000:80" # host:container => access at http://localhost:8000
     depends_on:
       - db
     environment:
       DB_HOST: db
       DB_PORT: 3306
       DB_NAME: wandyhwarang
-      DB_USER: root
-      DB_PASSWORD: example
+      DB_USER: wandyhwarang
+      DB_PASSWORD: wandyhwarang
       JWT_SECRET: your-secret-key-change-in-production
       API_URL: http://localhost:8000
-    # For development you can mount code; for a cleaner prod image, remove volumes.
-    volumes:
-      - ./backend:/var/www/html
-      - ./frontend:/app/frontend
+    restart: unless-stopped
 
   db:
     image: mysql:8.0
     container_name: db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: wandyhwarang
       MYSQL_DATABASE: wandyhwarang
-      # add MYSQL_USER / MYSQL_PASSWORD if you want a non-root user
+      MYSQL_USER: wandyhwarang
+      MYSQL_PASSWORD: wandyhwarang
     ports:
       - "3306:3306"
     volumes:
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
 volumes:
   db_data:

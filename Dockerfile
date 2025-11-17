@@ -31,7 +31,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy PHP backend
+# Copy React build files first
+COPY --from=frontend-builder /app/frontend/build ./public
+
+# Copy PHP backend (this will add index.php to the public directory)
 COPY backend/public ./public
 COPY backend/src ./src
 COPY backend/database ./database
@@ -41,15 +44,14 @@ COPY backend/composer.lock ./
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy built React app to public directory
-COPY --from=frontend-builder /app/frontend/build ./public/app
-
 # Configure Apache
 RUN a2enmod rewrite
 RUN a2enmod headers
+RUN a2enmod proxy
+RUN a2enmod proxy_fcgi
 
 # Create Apache VirtualHost configuration
-RUN cat > /etc/apache2/sites-available/000-default.conf << 'EOF'
+RUN cat > /etc/apache2/sites-available/000-default.conf <<'APACHE_CONFIG'
 <VirtualHost *:80>
     ServerName localhost
     DocumentRoot /var/www/html/public
@@ -72,19 +74,10 @@ RUN cat > /etc/apache2/sites-available/000-default.conf << 'EOF'
         RewriteEngine Off
     </Directory>
 
-    <FilesMatch \.php$>
-        SetHandler "proxy:unix:/run/php/php-fpm.sock|fcgi://localhost"
-    </FilesMatch>
-
-    # Proxy API requests to PHP
-    <Location /api>
-        ProxyPass !
-    </Location>
-
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
-EOF
+APACHE_CONFIG
 
 # Set environment variables
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
