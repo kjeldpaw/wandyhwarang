@@ -39,7 +39,7 @@ function LoginPage({ onLoginSuccess }) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>Wandyhwarang</h1>
+        <h1>Wandy Hwa Rang</h1>
         <p className="login-subtitle">Admin Login</p>
 
         <form onSubmit={handleSubmit} className="login-form">
