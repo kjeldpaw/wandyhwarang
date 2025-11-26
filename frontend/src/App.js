@@ -47,7 +47,7 @@ function App() {
       <header className="app-header">
         <div className="header-content">
           <div className="header-title">
-            <h1>Wandyhwarang</h1>
+            <h1>Wandy Hwa Rang</h1>
             <p className="subtitle">User Management System</p>
           </div>
           <div className="header-user">
