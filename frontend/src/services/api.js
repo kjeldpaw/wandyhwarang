@@ -11,11 +11,36 @@ const api = axios.create({
 
 // User API calls
 export const userAPI = {
-  getAll: () => api.get('/api/users'),
-  getById: (id) => api.get(`/api/users/${id}`),
-  create: (data) => api.post('/api/users', data),
-  update: (id, data) => api.put(`/api/users/${id}`, data),
-  delete: (id) => api.delete(`/api/users/${id}`),
+  getAll: () => {
+    const token = localStorage.getItem('authToken');
+    return api.get('/api/users', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+  getById: (id) => {
+    const token = localStorage.getItem('authToken');
+    return api.get(`/api/users/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+  create: (data) => {
+    const token = localStorage.getItem('authToken');
+    return api.post('/api/users', data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+  update: (id, data) => {
+    const token = localStorage.getItem('authToken');
+    return api.put(`/api/users/${id}`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+  delete: (id) => {
+    const token = localStorage.getItem('authToken');
+    return api.delete(`/api/users/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 };
 
 export default api;

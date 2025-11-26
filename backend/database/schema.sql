@@ -52,7 +52,7 @@ CREATE INDEX idx_belt_master_id ON belt_history(awarded_by_master_id);
 INSERT IGNORE INTO clubs (name) VALUES
 ('Randers Taekwondo Klub'),
 ('Midtdjurs Taekwondo Klub'),
-('Hwa Rang Aarhus');,
+('Hwa Rang Aarhus'),
 ('Nordjysk Taekwondo Center');
 
 -- Insert default admin user (password: admin123)

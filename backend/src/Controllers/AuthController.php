@@ -189,6 +189,7 @@ class AuthController
             'id' => $admin['id'],
             'email' => $admin['email'],
             'name' => $admin['name'],
+            'role' => $admin['role'],
             'iat' => time(),
             'exp' => time() + (24 * 60 * 60) // 24 hours
         ];

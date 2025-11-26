@@ -54,6 +54,11 @@ function UserList({ refreshTrigger, onEdit }) {
               <th>ID</th>
               <th>Name</th>
               <th>Email</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Club</th>
+              <th>HWA ID</th>
+              <th>Kukkiwon ID</th>
               <th>Created At</th>
               <th>Actions</th>
             </tr>
@@ -64,6 +69,11 @@ function UserList({ refreshTrigger, onEdit }) {
                 <td>{user.id}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
+                <td>{user.phone || '-'}</td>
+                <td>{user.address || '-'}</td>
+                <td>{user.club_name || '-'}</td>
+                <td>{user.hwa_id || '-'}</td>
+                <td>{user.kukkiwon_id || '-'}</td>
                 <td>{new Date(user.created_at).toLocaleDateString()}</td>
                 <td className="actions">
                   <button

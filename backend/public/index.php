@@ -104,5 +104,12 @@ $router->post('/api/users/{id}/belt', function($params) use ($userController) {
     return $userController->awardBelt($params);
 });
 
+// Club routes
+$clubController = new \App\Controllers\ClubController();
+
+$router->get('/api/clubs', function() use ($clubController) {
+    return $clubController->getAll();
+});
+
 // Dispatch the request
 $router->dispatch();

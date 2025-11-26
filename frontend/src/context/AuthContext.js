@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
       if (response.data.success) {
         const newToken = response.data.token;
         setToken(newToken);
-        setAdmin(response.data.admin);
+        setAdmin(response.data.user);
         localStorage.setItem('authToken', newToken);
         return { success: true };
       } else {

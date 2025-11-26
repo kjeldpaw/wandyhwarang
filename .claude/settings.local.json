@@ -11,7 +11,14 @@
       "Bash(docker-compose ps:*)",
       "Bash(docker-compose logs:*)",
       "Bash(curl:*)",
-      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2huQGV4YW1wbGUuY29tIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzYzNDAyNjI1LCJleHAiOjE3NjM0ODkwMjV9.XguLtTgrCrPu2YJ3zB5o99Ri58xy_kfMt6ouD2tgyws\")"
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2huQGV4YW1wbGUuY29tIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzYzNDAyNjI1LCJleHAiOjE3NjM0ODkwMjV9.XguLtTgrCrPu2YJ3zB5o99Ri58xy_kfMt6ouD2tgyws\")",
+      "Bash(docker exec:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker volume rm:*)",
+      "Bash(docker-compose restart:*)",
+      "Bash(cat:*)",
+      "Bash(jq:*)",
+      "Bash(python3:*)"
     ],
     "deny": [],
     "ask": []
