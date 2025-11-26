@@ -33,13 +33,16 @@ class BeltHistory extends BaseModel
     /**
      * Add belt to user's history
      */
-    public function addBelt($userId, $beltLevel, $awardedByMasterId = null)
+    public function addBelt($userId, $beltLevel, $awardedByMasterId = null, $awardedDate = null)
     {
         $data = [
             'user_id' => $userId,
             'belt_level' => $beltLevel,
             'awarded_by_master_id' => $awardedByMasterId
         ];
+        if ($awardedDate) {
+            $data['awarded_date'] = $awardedDate;
+        }
         return $this->create($data);
     }
 

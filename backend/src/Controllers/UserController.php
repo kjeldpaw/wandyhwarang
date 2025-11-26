@@ -438,7 +438,7 @@ class UserController
                 return;
             }
 
-            $result = $this->beltModel->addBelt($params['id'], $data['belt_level'], $currentUser['id']);
+            $result = $this->beltModel->addBelt($params['id'], $data['belt_level'], $currentUser['id'], $data['awarded_date'] ?? null);
 
             if ($result) {
                 http_response_code(201);
@@ -451,6 +451,142 @@ class UserController
                 echo json_encode([
                     'success' => false,
                     'error' => 'Failed to award belt'
+                ]);
+            }
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * PUT /api/users/{userId}/belt/{beltId} - Update belt for user (Master and Admin only)
+     */
+    public function updateBelt($params)
+    {
+        try {
+            $currentUser = Auth::getCurrentUser();
+
+            if (!Auth::isMaster()) {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Forbidden: Master or Admin access required'
+                ]);
+                return;
+            }
+
+            $user = $this->userModel->getById($params['userId']);
+
+            if (!$user) {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'User not found'
+                ]);
+                return;
+            }
+
+            // Master can only update belt for users from their club
+            if ($currentUser['role'] === 'master' && $user['club_id'] !== $currentUser['club_id']) {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Forbidden: You can only update belts for users from your club'
+                ]);
+                return;
+            }
+
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!$data || !isset($data['belt_level'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Belt level is required'
+                ]);
+                return;
+            }
+
+            $result = $this->beltModel->update($params['beltId'], [
+                'belt_level' => $data['belt_level'],
+                'awarded_date' => $data['awarded_date'] ?? null
+            ]);
+
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Belt updated successfully'
+                ]);
+            } else {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Failed to update belt'
+                ]);
+            }
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * DELETE /api/users/{userId}/belt/{beltId} - Delete belt from user (Master and Admin only)
+     */
+    public function deleteBelt($params)
+    {
+        try {
+            $currentUser = Auth::getCurrentUser();
+
+            if (!Auth::isMaster()) {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Forbidden: Master or Admin access required'
+                ]);
+                return;
+            }
+
+            $user = $this->userModel->getById($params['userId']);
+
+            if (!$user) {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'User not found'
+                ]);
+                return;
+            }
+
+            // Master can only delete belt for users from their club
+            if ($currentUser['role'] === 'master' && $user['club_id'] !== $currentUser['club_id']) {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Forbidden: You can only delete belts for users from your club'
+                ]);
+                return;
+            }
+
+            $result = $this->beltModel->delete($params['beltId']);
+
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Belt deleted successfully'
+                ]);
+            } else {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Failed to delete belt'
                 ]);
             }
         } catch (\Exception $e) {

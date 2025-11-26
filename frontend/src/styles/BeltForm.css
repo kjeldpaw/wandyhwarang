@@ -1,0 +1,165 @@
+.belt-section {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.belt-section h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.3em;
+}
+
+.belt-section h4 {
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.belt-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.belt-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.belt-form label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.belt-form select,
+.belt-form input[type="date"] {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.belt-form select:focus,
+.belt-form input[type="date"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+.belt-form .form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.belt-form button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.belt-form button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  flex: 1;
+}
+
+.belt-form button[type="submit"]:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.belt-form button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.belt-form .cancel-btn,
+.belt-form .close-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.belt-form .cancel-btn:hover,
+.belt-form .close-btn:hover {
+  background-color: #5a6268;
+}
+
+.belt-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.belt-list table th {
+  background-color: #f0f0f0;
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+
+.belt-list table td {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.belt-list table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.belt-list .actions {
+  display: flex;
+  gap: 5px;
+}
+
+.belt-list .edit-btn,
+.belt-list .delete-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.belt-list .edit-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.belt-list .edit-btn:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.belt-list .delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.belt-list .delete-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.belt-list .edit-btn:disabled,
+.belt-list .delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  grid-column: 1 / -1;
+}

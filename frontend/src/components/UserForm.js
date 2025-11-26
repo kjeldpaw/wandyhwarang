@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { userAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import BeltForm from './BeltForm';
 import '../styles/UserForm.css';
 
 function UserForm({ user, onSave, onCancel }) {
@@ -17,6 +18,9 @@ function UserForm({ user, onSave, onCancel }) {
   const [clubs, setClubs] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showBeltForm, setShowBeltForm] = useState(false);
+  const [belts, setBelts] = useState([]);
+  const [beltRefreshKey, setBeltRefreshKey] = useState(0);
 
   useEffect(() => {
     // Fetch clubs
@@ -45,8 +49,14 @@ function UserForm({ user, onSave, onCancel }) {
         hwa_id: user.hwa_id || '',
         kukkiwon_id: user.kukkiwon_id || '',
       });
+      // Fetch belts for this user
+      if (user.beltHistory) {
+        setBelts(user.beltHistory);
+      }
+    } else {
+      setBelts([]);
     }
-  }, [user]);
+  }, [user, beltRefreshKey]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -178,7 +188,42 @@ function UserForm({ user, onSave, onCancel }) {
         <button type="button" onClick={onCancel} className="cancel-btn">
           Cancel
         </button>
+        {user && (
+          <button
+            type="button"
+            onClick={() => setShowBeltForm(!showBeltForm)}
+            className="belt-btn"
+          >
+            {showBeltForm ? 'Hide Belts' : 'Manage Belts'}
+          </button>
+        )}
       </div>
+
+      {user && showBeltForm && (
+        <BeltForm
+          userId={user.id}
+          belts={belts}
+          onSave={() => {
+            setBeltRefreshKey(beltRefreshKey + 1);
+            // Refetch user data to update belt history
+            const fetchUser = async () => {
+              try {
+                const response = await fetch(`/api/users/${user.id}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+                const data = await response.json();
+                if (data.success && data.data.beltHistory) {
+                  setBelts(data.data.beltHistory);
+                }
+              } catch (err) {
+                console.error('Failed to refresh user data:', err);
+              }
+            };
+            fetchUser();
+          }}
+          onClose={() => setShowBeltForm(false)}
+        />
+      )}
     </form>
   );
 }

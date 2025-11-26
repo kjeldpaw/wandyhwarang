@@ -104,6 +104,14 @@ $router->post('/api/users/{id}/belt', function($params) use ($userController) {
     return $userController->awardBelt($params);
 });
 
+$router->put('/api/users/{userId}/belt/{beltId}', function($params) use ($userController) {
+    return $userController->updateBelt($params);
+});
+
+$router->delete('/api/users/{userId}/belt/{beltId}', function($params) use ($userController) {
+    return $userController->deleteBelt($params);
+});
+
 // Club routes
 $clubController = new \App\Controllers\ClubController();
 
