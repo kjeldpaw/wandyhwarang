@@ -2,19 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Models\Admin;
 
 class AuthController
 {
-    private $adminModel;
-
-    public function __construct()
-    {
-        $this->adminModel = new Admin();
-    }
 
     /**
-     * POST /api/auth/login - Admin login
+     * POST /api/auth/login - User login (user, master, or admin)
      */
     public function login()
     {
@@ -30,9 +23,10 @@ class AuthController
                 return;
             }
 
-            $admin = $this->adminModel->getByEmail($data['email']);
+            $userModel = new \App\Models\User();
+            $user = $userModel->getByEmail($data['email']);
 
-            if (!$admin) {
+            if (!$user) {
                 http_response_code(401);
                 echo json_encode([
                     'success' => false,
@@ -42,7 +36,7 @@ class AuthController
             }
 
             // Verify password
-            if (!password_verify($data['password'], $admin['password'])) {
+            if (!password_verify($data['password'], $user['password'])) {
                 http_response_code(401);
                 echo json_encode([
                     'success' => false,
@@ -52,15 +46,16 @@ class AuthController
             }
 
             // Generate JWT token
-            $token = $this->generateToken($admin);
+            $token = $this->generateToken($user);
 
             echo json_encode([
                 'success' => true,
                 'token' => $token,
-                'admin' => [
-                    'id' => $admin['id'],
-                    'name' => $admin['name'],
-                    'email' => $admin['email']
+                'user' => [
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                    'role' => $user['role']
                 ]
             ]);
         } catch (\Exception $e) {
@@ -73,7 +68,7 @@ class AuthController
     }
 
     /**
-     * POST /api/auth/register - Register new admin (for initial setup)
+     * POST /api/auth/register - Register new user (user role only)
      */
     public function register()
     {
@@ -89,8 +84,9 @@ class AuthController
                 return;
             }
 
-            // Check if admin already exists
-            $existing = $this->adminModel->getByEmail($data['email']);
+            // Check if user already exists
+            $userModel = new \App\Models\User();
+            $existing = $userModel->getByEmail($data['email']);
             if ($existing) {
                 http_response_code(400);
                 echo json_encode([
@@ -103,20 +99,26 @@ class AuthController
             // Hash password
             $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
 
-            // Create admin
-            $result = $this->adminModel->create($data);
+            // Set default role as 'user' if not specified, and ensure user cannot set sensitive fields
+            $data['role'] = 'user';
+            unset($data['hwa_id']);
+            unset($data['kukkiwon_id']);
+            unset($data['club_id']);
+
+            // Create user
+            $result = $userModel->create($data);
 
             if ($result) {
                 http_response_code(201);
                 echo json_encode([
                     'success' => true,
-                    'message' => 'Admin registered successfully'
+                    'message' => 'User registered successfully'
                 ]);
             } else {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
-                    'error' => 'Failed to register admin'
+                    'error' => 'Failed to register user'
                 ]);
             }
         } catch (\Exception $e) {

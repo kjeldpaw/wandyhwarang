@@ -61,12 +61,18 @@ class Auth
     }
 
     /**
-     * Get current admin from token
+     * Get current user from token (admin, master, or user)
      */
-    public static function getCurrentAdmin()
+    public static function getCurrentUser()
     {
+        // Try getallheaders first, then fall back to $_SERVER
         $headers = getallheaders();
-        $token = $headers['Authorization'] ?? null;
+        $token = $headers['Authorization'] ?? ($headers['authorization'] ?? null);
+
+        // Fallback to $_SERVER for Apache/FastCGI environments
+        if (!$token && isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $token = $_SERVER['HTTP_AUTHORIZATION'];
+        }
 
         if (!$token) {
             return null;
@@ -74,6 +80,50 @@ class Auth
 
         $token = str_replace('Bearer ', '', $token);
         return self::validateToken($token);
+    }
+
+    /**
+     * Get current admin from token (for backward compatibility)
+     */
+    public static function getCurrentAdmin()
+    {
+        return self::getCurrentUser();
+    }
+
+    /**
+     * Check if current user has specific role
+     */
+    public static function checkRole($requiredRole)
+    {
+        $user = self::getCurrentUser();
+        if (!$user) {
+            return false;
+        }
+
+        // Admin can do everything
+        if ($user['role'] === 'admin') {
+            return true;
+        }
+
+        // Check if user has required role
+        return $user['role'] === $requiredRole;
+    }
+
+    /**
+     * Check if current user is admin
+     */
+    public static function isAdmin()
+    {
+        return self::checkRole('admin');
+    }
+
+    /**
+     * Check if current user is master
+     */
+    public static function isMaster()
+    {
+        $user = self::getCurrentUser();
+        return $user && ($user['role'] === 'master' || $user['role'] === 'admin');
     }
 
     /**

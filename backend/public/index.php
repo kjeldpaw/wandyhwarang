@@ -96,5 +96,13 @@ $router->delete('/api/users/{id}', function($params) use ($userController) {
     return $userController->delete($params);
 });
 
+$router->get('/api/users/search/{query}', function($params) use ($userController) {
+    return $userController->search($params);
+});
+
+$router->post('/api/users/{id}/belt', function($params) use ($userController) {
+    return $userController->awardBelt($params);
+});
+
 // Dispatch the request
 $router->dispatch();
