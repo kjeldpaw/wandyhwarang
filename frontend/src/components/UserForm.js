@@ -10,6 +10,8 @@ function UserForm({ user, onSave, onCancel }) {
     name: '',
     email: '',
     address: '',
+    zip_code: '',
+    city: '',
     phone: '',
     club_id: '',
     hwa_id: '',
@@ -44,6 +46,8 @@ function UserForm({ user, onSave, onCancel }) {
         name: user.name || '',
         email: user.email || '',
         address: user.address || '',
+        zip_code: user.zip_code || '',
+        city: user.city || '',
         phone: user.phone || '',
         club_id: user.club_id || '',
         hwa_id: user.hwa_id || '',
@@ -82,7 +86,7 @@ function UserForm({ user, onSave, onCancel }) {
         });
       }
       onSave();
-      setFormData({ name: '', email: '', address: '', phone: '', club_id: '', hwa_id: '', kukkiwon_id: '' });
+      setFormData({ name: '', email: '', address: '', zip_code: '', city: '', phone: '', club_id: '', hwa_id: '', kukkiwon_id: '' });
     } catch (err) {
       const errorMsg = err.response?.data?.error || 'An error occurred';
       setError(errorMsg);
@@ -127,6 +131,28 @@ function UserForm({ user, onSave, onCancel }) {
           id="address"
           name="address"
           value={formData.address}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="zip_code">Zip Code</label>
+        <input
+          type="text"
+          id="zip_code"
+          name="zip_code"
+          value={formData.zip_code}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="city">City</label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          value={formData.city}
           onChange={handleChange}
         />
       </div>

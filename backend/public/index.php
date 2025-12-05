@@ -73,6 +73,18 @@ $router->post('/api/auth/verify', function() use ($authController) {
     return $authController->verify();
 });
 
+$router->post('/api/auth/forgot-password', function() use ($authController) {
+    return $authController->forgotPassword();
+});
+
+$router->post('/api/auth/reset-password', function() use ($authController) {
+    return $authController->resetPassword();
+});
+
+$router->post('/api/auth/confirm-registration', function() use ($authController) {
+    return $authController->confirmRegistration();
+});
+
 // User routes
 $userController = new UserController();
 

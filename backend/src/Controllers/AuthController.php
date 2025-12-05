@@ -68,18 +68,18 @@ class AuthController
     }
 
     /**
-     * POST /api/auth/register - Register new user (user role only)
+     * POST /api/auth/register - Register new user with email only
      */
     public function register()
     {
         try {
             $data = json_decode(file_get_contents('php://input'), true);
 
-            if (!$data || !isset($data['name']) || !isset($data['email']) || !isset($data['password'])) {
+            if (!$data || !isset($data['email'])) {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
-                    'error' => 'Name, email, and password are required'
+                    'error' => 'Email is required'
                 ]);
                 return;
             }
@@ -96,29 +96,216 @@ class AuthController
                 return;
             }
 
-            // Hash password
-            $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+            // Generate a secure registration token
+            $registrationToken = bin2hex(random_bytes(32));
 
-            // Set default role as 'user' if not specified, and ensure user cannot set sensitive fields
-            $data['role'] = 'user';
-            unset($data['hwa_id']);
-            unset($data['kukkiwon_id']);
-            unset($data['club_id']);
+            // Create user with email only (no password yet, unverified)
+            $userData = [
+                'email' => $data['email'],
+                'name' => '', // Empty for now, will be set during confirmation
+                'password' => '', // Empty for now, will be set during confirmation
+                'role' => 'user',
+                'is_verified' => 0,
+                'registration_token' => $registrationToken,
+                'registration_token_expires' => date('Y-m-d H:i:s', time() + 86400) // 24 hours
+            ];
 
-            // Create user
-            $result = $userModel->create($data);
+            $result = $userModel->create($userData);
 
             if ($result) {
+                // Send confirmation email
+                try {
+                    $emailService = new \App\Services\EmailService();
+                    $emailService->sendRegistrationConfirmationEmail($data['email'], $registrationToken);
+                } catch (\Exception $e) {
+                    // If email fails, still return success but log the issue
+                    error_log('Failed to send registration email: ' . $e->getMessage());
+                }
+
                 http_response_code(201);
                 echo json_encode([
                     'success' => true,
-                    'message' => 'User registered successfully'
+                    'message' => 'Registration email sent. Please check your email to confirm.'
                 ]);
             } else {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
                     'error' => 'Failed to register user'
+                ]);
+            }
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * POST /api/auth/confirm-registration - Confirm registration and set password
+     */
+    public function confirmRegistration()
+    {
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!$data || !isset($data['token']) || !isset($data['name']) || !isset($data['password'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Token, name, and password are required'
+                ]);
+                return;
+            }
+
+            $userModel = new \App\Models\User();
+            $user = $userModel->getByRegistrationToken($data['token']);
+
+            if (!$user) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid or expired confirmation token'
+                ]);
+                return;
+            }
+
+            // Hash password and update user
+            $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
+            $result = $userModel->confirmRegistration($user['id'], $data['name'], $hashedPassword);
+
+            if ($result) {
+                http_response_code(200);
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Registration completed successfully. You can now login.'
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Failed to complete registration'
+                ]);
+            }
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * POST /api/auth/forgot-password - Request password reset
+     */
+    public function forgotPassword()
+    {
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!$data || !isset($data['email'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Email is required'
+                ]);
+                return;
+            }
+
+            $userModel = new \App\Models\User();
+            $user = $userModel->getByEmail($data['email']);
+
+            if (!$user) {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'User not found'
+                ]);
+                return;
+            }
+
+            // Generate a secure reset token
+            $resetToken = bin2hex(random_bytes(32));
+
+            // Store token in database
+            $userModel->setPasswordResetToken($data['email'], $resetToken);
+
+            // Send email
+            try {
+                $emailService = new \App\Services\EmailService();
+                $emailService->sendPasswordResetEmail($user['email'], $user['name'], $resetToken);
+            } catch (\Exception $e) {
+                http_response_code(500);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Failed to send reset email: ' . $e->getMessage()
+                ]);
+                return;
+            }
+
+            http_response_code(200);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Password reset email sent successfully'
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * POST /api/auth/reset-password - Reset password with token
+     */
+    public function resetPassword()
+    {
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!$data || !isset($data['token']) || !isset($data['password'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Token and password are required'
+                ]);
+                return;
+            }
+
+            $userModel = new \App\Models\User();
+            $user = $userModel->getByResetToken($data['token']);
+
+            if (!$user) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid or expired reset token'
+                ]);
+                return;
+            }
+
+            // Hash the new password
+            $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
+
+            // Update password and clear reset token
+            $result = $userModel->updatePassword($user['id'], $hashedPassword);
+
+            if ($result) {
+                http_response_code(200);
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Password reset successfully'
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Failed to reset password'
                 ]);
             }
         } catch (\Exception $e) {

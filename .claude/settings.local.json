@@ -18,7 +18,16 @@
       "Bash(docker-compose restart:*)",
       "Bash(cat:*)",
       "Bash(jq:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(xargs ls:*)",
+      "Bash(git -C /Users/pfk/Projects/wandyhwarang log --oneline -10)",
+      "Bash(npm install)",
+      "Bash(docker buildx prune:*)",
+      "Bash(docker system prune:*)",
+      "Bash(docker pull:*)",
+      "Bash(docker-compose build:*)",
+      "Bash(npm ci:*)",
+      "Bash(composer update:*)"
     ],
     "deny": [],
     "ask": []

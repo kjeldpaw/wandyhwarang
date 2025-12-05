@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/LoginPage.css';
 
 function LoginPage({ onLoginSuccess }) {
+  const navigate = useNavigate();
   const { login, loading, error } = useAuth();
   const [formData, setFormData] = useState({
     email: 'admin@example.com',
@@ -77,7 +79,28 @@ function LoginPage({ onLoginSuccess }) {
           <button type="submit" disabled={loading} className="login-button">
             {loading ? 'Logging in...' : 'Login'}
           </button>
+
+          <div className="forgot-password-link">
+            <button
+              type="button"
+              onClick={() => navigate('/forgot-password')}
+              className="link-button"
+            >
+              Forgot Password?
+            </button>
+          </div>
         </form>
+
+        <div className="login-footer">
+          <p>Don't have an account?</p>
+          <button
+            type="button"
+            onClick={() => navigate('/register')}
+            className="register-link-button"
+          >
+            Register Here
+          </button>
+        </div>
 
         <div className="login-info">
           <p>Demo Credentials:</p>

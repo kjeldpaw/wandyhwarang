@@ -56,6 +56,8 @@ function UserList({ refreshTrigger, onEdit }) {
               <th>Email</th>
               <th>Phone</th>
               <th>Address</th>
+              <th>Zip Code</th>
+              <th>City</th>
               <th>Club</th>
               <th>HWA ID</th>
               <th>Kukkiwon ID</th>
@@ -71,6 +73,8 @@ function UserList({ refreshTrigger, onEdit }) {
                 <td>{user.email}</td>
                 <td>{user.phone || '-'}</td>
                 <td>{user.address || '-'}</td>
+                <td>{user.zip_code || '-'}</td>
+                <td>{user.city || '-'}</td>
                 <td>{user.club_name || '-'}</td>
                 <td>{user.hwa_id || '-'}</td>
                 <td>{user.kukkiwon_id || '-'}</td>
