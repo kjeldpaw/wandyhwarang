@@ -42,7 +42,6 @@ function LoginPage({ onLoginSuccess }) {
     <div className="login-container">
       <div className="login-box">
         <h1>Wandy Hwa Rang</h1>
-        <p className="login-subtitle">Admin Login</p>
 
         <form onSubmit={handleSubmit} className="login-form">
           {(error || localError) && (
@@ -100,12 +99,6 @@ function LoginPage({ onLoginSuccess }) {
           >
             Register Here
           </button>
-        </div>
-
-        <div className="login-info">
-          <p>Demo Credentials:</p>
-          <p>Email: <strong>admin@example.com</strong></p>
-          <p>Password: <strong>admin123</strong></p>
         </div>
       </div>
     </div>

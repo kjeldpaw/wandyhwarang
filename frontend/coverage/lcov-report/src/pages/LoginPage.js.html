@@ -289,7 +289,6 @@ function LoginPage({ onLoginSuccess }) {
     &lt;div className="login-container"&gt;
       &lt;div className="login-box"&gt;
         &lt;h1&gt;Wandy Hwa Rang&lt;/h1&gt;
-        &lt;p className="login-subtitle"&gt;Admin Login&lt;/p&gt;
 &nbsp;
         &lt;form onSubmit={handleSubmit} className="login-form"&gt;
           {(error || localError) &amp;&amp; (
@@ -327,12 +326,6 @@ function LoginPage({ onLoginSuccess }) {
             {loading ? 'Logging in...' : 'Login'}
           &lt;/button&gt;
         &lt;/form&gt;
-&nbsp;
-        &lt;div className="login-info"&gt;
-          &lt;p&gt;Demo Credentials:&lt;/p&gt;
-          &lt;p&gt;Email: &lt;strong&gt;admin@example.com&lt;/strong&gt;&lt;/p&gt;
-          &lt;p&gt;Password: &lt;strong&gt;admin123&lt;/strong&gt;&lt;/p&gt;
-        &lt;/div&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   );
