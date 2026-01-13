@@ -85,7 +85,13 @@ Create a `.env` file from the example:
 cp .env.example .env
 ```
 
-Update `.env` with your database credentials if needed.
+Alternatively, if your hosting doesn't support environment variables, you can use a property file:
+
+```bash
+cp config.php.example config.php
+```
+
+Update `.env` (or `config.php`) with your database credentials if needed.
 
 Start the PHP development server:
 
@@ -186,7 +192,7 @@ Response:
 1. Create a new model in `backend/src/Models/` extending `BaseModel`
 2. Specify the table name in the model
 3. Create corresponding controller in `backend/src/Controllers/`
-4. Add routes in `backend/public/index.php`
+4. Add routes in `backend/src/index.php`
 
 ### Adding New Components
 

@@ -167,6 +167,18 @@ JWT_SECRET=your-long-random-secret-key
 MYSQL_ROOT_PASSWORD=root-password
 ```
 
+### Property File Configuration (Alternative)
+
+If your hosting environment does not support environment variables, you can use a property file instead.
+
+1. Copy `config.php.example` to `config.php` in the `backend/` directory:
+   ```bash
+   cp backend/config.php.example backend/config.php
+   ```
+2. Edit `backend/config.php` with your configuration values.
+
+The application will first look for values in `config.php`, and if not found, it will fall back to environment variables.
+
 ### Using Environment Files
 
 **For development:**

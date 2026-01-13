@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Config\Config;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -16,17 +17,17 @@ class EmailService
         try {
             // Server settings
             $this->mail->isSMTP();
-            $this->mail->Host = getenv('MAIL_HOST') ?: 'smtp.mailtrap.io';
-            $this->mail->Port = getenv('MAIL_PORT') ?: 2525;
+            $this->mail->Host = Config::get('mail.host', 'smtp.mailtrap.io');
+            $this->mail->Port = Config::get('mail.port', 2525);
             $this->mail->SMTPAuth = true;
-            $this->mail->Username = getenv('MAIL_USERNAME') ?: '';
-            $this->mail->Password = getenv('MAIL_PASSWORD') ?: '';
+            $this->mail->Username = Config::get('mail.username', '');
+            $this->mail->Password = Config::get('mail.password', '');
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 
             // Set sender
             $this->mail->setFrom(
-                getenv('MAIL_FROM_ADDRESS') ?: 'noreply@wandyhwarang.com',
-                getenv('MAIL_FROM_NAME') ?: 'Wandy Hwarang'
+                Config::get('mail.from_address', 'noreply@wandyhwarang.com'),
+                Config::get('mail.from_name', 'Wandy Hwarang')
             );
         } catch (Exception $e) {
             throw new \Exception("Email service configuration error: {$e->getMessage()}");
@@ -39,7 +40,7 @@ class EmailService
     public function sendPasswordResetEmail($email, $name, $resetToken)
     {
         try {
-            $resetUrl = getenv('FRONTEND_URL') . "/reset-password?token=" . urlencode($resetToken);
+            $resetUrl = Config::get('app.frontend_url', 'http://localhost:8000') . "/reset-password?token=" . urlencode($resetToken);
 
             $htmlBody = $this->getPasswordResetEmailTemplate($name, $resetUrl);
 
@@ -66,7 +67,7 @@ class EmailService
     public function sendRegistrationConfirmationEmail($email, $confirmationToken)
     {
         try {
-            $confirmationUrl = getenv('FRONTEND_URL') . "/confirm-registration?token=" . urlencode($confirmationToken);
+            $confirmationUrl = Config::get('app.frontend_url', 'http://localhost:8000') . "/confirm-registration?token=" . urlencode($confirmationToken);
 
             $htmlBody = $this->getRegistrationConfirmationEmailTemplate($confirmationUrl);
 

@@ -33,7 +33,7 @@ spl_autoload_register(function ($class) {
     $relative_class = substr($class, $len);
 
     // Try src directory first
-    $base_dir = __DIR__ . '/../src/';
+    $base_dir = getenv('APP_SRC_DIR') ?: __DIR__ . '/../src/';
     $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
 
     if (file_exists($file)) {

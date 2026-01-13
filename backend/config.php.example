@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'database' => [
+        'host' => 'localhost',
+        'port' => 3306,
+        'name' => 'wandyhwarang',
+        'user' => 'root',
+        'password' => '',
+    ],
+    'jwt' => [
+        'secret' => 'your-secret-key-change-in-production',
+    ],
+    'mail' => [
+        'host' => 'smtp.mailtrap.io',
+        'port' => 2525,
+        'username' => 'your-mailtrap-username',
+        'password' => 'your-mailtrap-password',
+        'from_address' => 'noreply@wandyhwarang.dk',
+        'from_name' => 'Wandy Hwa Rang',
+    ],
+    'app' => [
+        'url' => 'https://localhost:8000',
+        'frontend_url' => 'http://localhost:8000',
+        'src_dir' => __DIR__ . '/src/',
+    ]
+];

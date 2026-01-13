@@ -2,6 +2,8 @@
 
 namespace App\Middleware;
 
+use App\Config\Config;
+
 class Auth
 {
     /**
@@ -37,7 +39,7 @@ class Auth
         $payload_encoded = $parts[1];
         $signature_encoded = $parts[2];
 
-        $secret = getenv('JWT_SECRET') ?: 'your-secret-key-change-in-production';
+        $secret = Config::get('jwt.secret', 'your-secret-key-change-in-production');
 
         $signature = hash_hmac(
             'sha256',

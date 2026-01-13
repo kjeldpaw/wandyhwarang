@@ -34,3 +34,5 @@ composer.lock
 # OS
 Thumbs.db
 .DS_Store
+.htaccess
+backend/config.php

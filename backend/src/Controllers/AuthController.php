@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Config\Config;
+
 
 class AuthController
 {
@@ -381,7 +383,7 @@ class AuthController
             'exp' => time() + (24 * 60 * 60) // 24 hours
         ];
 
-        $secret = getenv('JWT_SECRET') ?: 'your-secret-key-change-in-production';
+        $secret = Config::get('jwt.secret', 'your-secret-key-change-in-production');
 
         $header_encoded = $this->base64UrlEncode(json_encode($header));
         $payload_encoded = $this->base64UrlEncode(json_encode($payload));
@@ -412,7 +414,7 @@ class AuthController
         $payload_encoded = $parts[1];
         $signature_encoded = $parts[2];
 
-        $secret = getenv('JWT_SECRET') ?: 'your-secret-key-change-in-production';
+        $secret = Config::get('jwt.secret', 'your-secret-key-change-in-production');
 
         $signature = hash_hmac(
             'sha256',
