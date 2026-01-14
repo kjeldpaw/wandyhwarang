@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Load Config class first (before autoloader)
-require_once __DIR__ . '/../src/Config/Config.php';
+require_once __DIR__ . '/src/Config/Config.php';
 
 // Include autoloader (manual PSR-4 autoloading)
 spl_autoload_register(function ($class) {
@@ -36,7 +36,7 @@ spl_autoload_register(function ($class) {
     $relative_class = substr($class, $len);
 
     // Try src directory first
-    $base_dir = \App\Config\Config::get('app.src_dir', __DIR__ . '/../src/');
+    $base_dir = \App\Config\Config::get('app.src_dir', __DIR__ . '/src/');
     $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
 
     if (file_exists($file)) {
@@ -45,7 +45,7 @@ spl_autoload_register(function ($class) {
     }
 
     // Try config directory
-    $base_dir = __DIR__ . '/../config/';
+    $base_dir = __DIR__ . '/config/';
     $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
 
     if (file_exists($file)) {

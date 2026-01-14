@@ -22,6 +22,6 @@ return [
     'app' => [
         'url' => 'http://localhost:8000',
         'frontend_url' => 'http://localhost:8000',
-        'src_dir' => '/var/www/html/src/',
+        'src_dir' => '/webroots/src/',
     ]
 ];

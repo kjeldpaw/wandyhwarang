@@ -63,23 +63,29 @@ prod:
 	cd frontend && npm ci && npm run build
 	@echo "Step 2: Installing PHP dependencies (production)..."
 	cd backend && composer install --no-dev --optimize-autoloader
-	@echo "Step 3: Creating production zip file..."
-	@mkdir -p dist
+	@echo "Step 3: Creating production directory structure..."
+	@mkdir -p dist/webroots
+	@rm -rf dist/webroots/*
+	@echo "Step 4: Copying files to /webroots structure..."
+	@cp -r frontend/build/* dist/webroots/
+	@cp -r backend/public/* dist/webroots/
+	@cp -r backend/src dist/webroots/
+	@cp -r backend/database dist/webroots/
+	@cp -r backend/vendor dist/webroots/
+	@cp backend/composer.json dist/webroots/
+	@cp backend/composer.lock dist/webroots/
+	@cp backend/config.php.example dist/webroots/config.php.example
+	@cp README.md dist/webroots/
+	@cp DEPLOYMENT.md dist/webroots/
+	@echo "Step 5: Creating production zip file..."
 	@rm -f dist/wandyhwarang-prod.zip
-	zip -r dist/wandyhwarang-prod.zip \
-		backend/public \
-		backend/src \
-		backend/database \
-		backend/composer.json \
-		backend/composer.lock \
-		backend/.env.example \
-		frontend/build \
-		.env.example \
-		README.md \
-		DEPLOYMENT.md \
-		-x "*.DS_Store" "*.git*" "*.idea*" "*node_modules*" "*vendor*" "*tests*" "*.phpunit.cache*"
-	@echo "Step 4: Reinstalling dev dependencies..."
+	cd dist && zip -r wandyhwarang-prod.zip webroots \
+		-x "*.DS_Store" "*.git*" "*.idea*" "*node_modules*" "*tests*" "*.phpunit.cache*"
+	@echo "Step 6: Cleaning up staging directory..."
+	@rm -rf dist/webroots
+	@echo "Step 7: Reinstalling dev dependencies..."
 	cd backend && composer install
 	@echo ""
 	@echo "Production package created: dist/wandyhwarang-prod.zip"
-	@echo "Ready to upload to your hosting partner!"
+	@echo "Extract and upload the 'webroots' folder to your server!"
+	@echo "Note: Remember to create config.php from config.php.example with your settings"

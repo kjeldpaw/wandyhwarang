@@ -203,22 +203,23 @@ make up-prod
 After production build, the container includes:
 
 ```
-/var/www/html/
-├── public/               # Apache document root
-│   ├── index.php        # PHP router
-│   ├── app/             # React production build (static files)
-│   │   ├── index.html
-│   │   ├── js/
-│   │   ├── css/
-│   │   └── ...
-│   └── ...
+/webroots/               # Apache document root
+├── index.php            # PHP router
+├── index.html           # React app entry point
+├── static/              # React production build (JS/CSS)
+│   ├── js/
+│   ├── css/
+│   └── media/
+├── favicon.ico
+├── manifest.json
 ├── src/                 # PHP source code
 │   ├── Controllers/
 │   ├── Models/
 │   ├── Middleware/
 │   └── ...
-├── config/              # PHP configuration
+├── config.php           # PHP configuration (mounted via volume)
 ├── database/            # Database schema
+├── composer.json
 └── vendor/              # PHP dependencies (from Composer)
 ```
 
@@ -234,21 +235,21 @@ After production build, the container includes:
 
 - **PHP API Server** (port 8000)
   - Handles `/api/*` requests
-  - Uses custom router in `public/index.php`
+  - Uses custom router in `index.php`
 
 ### Production Routing
 
 Apache handles routing via `mod_rewrite`:
 
-- **Static Files** (`/app/*`, `*.js`, `*.css`, etc.)
-  - Served directly by Apache from `/public/app/`
+- **Static Files** (`/static/*`, `*.js`, `*.css`, etc.)
+  - Served directly by Apache from `/webroots/static/`
 
 - **API Requests** (`/api/*`)
-  - Routed to PHP via `public/index.php`
+  - Routed to PHP via `index.php`
   - PHP router dispatches to controllers
 
 - **Other Requests**
-  - Routed to PHP for handling (e.g., React app entry)
+  - Routed to PHP for handling (e.g., React app entry via index.html)
 
 ---
 
@@ -364,7 +365,7 @@ docker-compose -f docker-compose.prod.yml logs app | grep apache
 
 **Verify React build:**
 - Check that frontend `/build` directory exists (build should create it)
-- React app should be copied to `/public/app`
+- React app should be copied to `/webroots` with static files in `/webroots/static/`
 
 ### API not responding
 
@@ -382,7 +383,7 @@ docker-compose -f docker-compose.prod.yml exec mysql mysql -u wandyhwarang -p -h
 
 Reset permissions:
 ```bash
-docker-compose -f docker-compose.prod.yml exec app chown -R www-data:www-data /var/www/html
+docker-compose -f docker-compose.prod.yml exec app chown -R www-data:www-data /webroots
 ```
 
 ---

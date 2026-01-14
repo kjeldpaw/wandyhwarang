@@ -28,14 +28,14 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
-WORKDIR /var/www/html
+# Set working directory to match production structure
+WORKDIR /webroots
 
-# Copy React build files first
-COPY --from=frontend-builder /app/frontend/build ./public
+# Copy React build files directly to /webroots
+COPY --from=frontend-builder /app/frontend/build ./
 
-# Copy PHP backend (this will add index.php to the public directory)
-COPY backend/public ./public
+# Copy PHP backend files directly to /webroots (index.php will be at root)
+COPY backend/public/ ./
 COPY backend/src ./src
 COPY backend/database ./database
 COPY backend/composer.json ./
@@ -54,9 +54,9 @@ RUN a2enmod proxy_fcgi
 RUN cat > /etc/apache2/sites-available/000-default.conf <<'APACHE_CONFIG'
 <VirtualHost *:80>
     ServerName localhost
-    DocumentRoot /var/www/html/public
+    DocumentRoot /webroots
 
-    <Directory /var/www/html/public>
+    <Directory /webroots>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
@@ -70,7 +70,7 @@ RUN cat > /etc/apache2/sites-available/000-default.conf <<'APACHE_CONFIG'
     </Directory>
 
     # Static files for React app - serve directly
-    <Directory /var/www/html/public/app>
+    <Directory /webroots/static>
         RewriteEngine Off
     </Directory>
 
@@ -83,8 +83,8 @@ APACHE_CONFIG
 EXPOSE 80
 
 # Set proper permissions
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 755 /var/www/html
+RUN chown -R www-data:www-data /webroots && \
+    chmod -R 755 /webroots
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \

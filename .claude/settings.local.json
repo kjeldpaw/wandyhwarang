@@ -27,7 +27,9 @@
       "Bash(docker pull:*)",
       "Bash(docker-compose build:*)",
       "Bash(npm ci:*)",
-      "Bash(composer update:*)"
+      "Bash(composer update:*)",
+      "Bash(make prod:*)",
+      "Bash(unzip:*)"
     ],
     "deny": [],
     "ask": []

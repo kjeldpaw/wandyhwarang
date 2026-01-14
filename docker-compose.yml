@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend/config.php.compose:/var/www/html/config.php
+      - ./backend/config.php.compose:/webroots/config.php
     restart: unless-stopped
 
   db:
