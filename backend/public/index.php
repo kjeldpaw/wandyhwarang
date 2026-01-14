@@ -21,6 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+// Load Config class first (before autoloader)
+require_once __DIR__ . '/../src/Config/Config.php';
+
 // Include autoloader (manual PSR-4 autoloading)
 spl_autoload_register(function ($class) {
     $prefix = 'App\\';
