@@ -75,8 +75,11 @@ prod:
 	@cp backend/composer.json dist/webroots/
 	@cp backend/composer.lock dist/webroots/
 	@cp backend/config.php.example dist/webroots/config.php.example
+	@cp debug.php dist/webroots/debug.php
+	@cp .htaccess dist/webroots/.htaccess
 	@cp README.md dist/webroots/
 	@cp DEPLOYMENT.md dist/webroots/
+	@cp ONE.COM-DEPLOYMENT.md dist/webroots/ONE.COM-DEPLOYMENT.md
 	@echo "Step 5: Creating production zip file..."
 	@rm -f dist/wandyhwarang-prod.zip
 	cd dist && zip -r wandyhwarang-prod.zip webroots \

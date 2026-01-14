@@ -2,26 +2,27 @@
 
 return [
     'database' => [
-        'host' => 'localhost',
+        'host' => 'localhost',  // For one.com, use 'localhost'
         'port' => 3306,
-        'name' => 'wandyhwarang',
-        'user' => 'root',
-        'password' => '',
+        'name' => 'wandyhwarang',  // Your database name on one.com
+        'user' => 'wandyhwarang',  // Your database username on one.com
+        'password' => '',  // Your database password on one.com
     ],
     'jwt' => [
-        'secret' => 'your-secret-key-change-in-production',
+        'secret' => 'your-secret-key-change-in-production',  // Generate a random string
     ],
     'mail' => [
-        'host' => 'smtp.mailtrap.io',
-        'port' => 2525,
-        'username' => 'your-mailtrap-username',
-        'password' => 'your-mailtrap-password',
+        'host' => 'send.one.com',
+        'port' => 465,
+        'username' => 'your-email@wandyhwarang.dk',
+        'password' => 'your-email-password',
         'from_address' => 'noreply@wandyhwarang.dk',
         'from_name' => 'Wandy Hwa Rang',
     ],
     'app' => [
-        'url' => 'https://localhost:8000',
-        'frontend_url' => 'http://localhost:8000',
+        'url' => 'https://wandywharang.dk',
+        'frontend_url' => 'https://wandywharang.dk',
+        // Use relative path - works both locally and in production
         'src_dir' => __DIR__ . '/src/',
     ]
 ];

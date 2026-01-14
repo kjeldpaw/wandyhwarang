@@ -1,0 +1,60 @@
+# Apache configuration for Wandyhwarang
+# This file should be in the same directory as index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Don't rewrite requests for existing files or directories
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Rewrite everything else to index.php
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Security: Prevent directory browsing
+Options -Indexes
+
+# Security: Protect sensitive files
+<FilesMatch "(^config\.php|composer\.json|composer\.lock|\.git|\.env)">
+    Require all denied
+</FilesMatch>
+
+# PHP Configuration (adjust if needed)
+<IfModule mod_php.c>
+    # Disable display_errors in production (errors logged instead)
+    php_flag display_errors Off
+    php_flag log_errors On
+
+    # Set maximum execution time (in seconds)
+    php_value max_execution_time 300
+
+    # Set maximum file upload size
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+</IfModule>
+
+# Enable gzip compression for better performance
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Set caching headers for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Images
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # CSS and JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+
+    # HTML
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
