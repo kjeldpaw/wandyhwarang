@@ -79,15 +79,6 @@ RUN cat > /etc/apache2/sites-available/000-default.conf <<'APACHE_CONFIG'
 </VirtualHost>
 APACHE_CONFIG
 
-# Set environment variables
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-ENV DB_HOST=mysql
-ENV DB_PORT=3306
-ENV DB_NAME=wandyhwarang
-ENV DB_USER=wandyhwarang
-ENV DB_PASSWORD=wandyhwarang
-ENV JWT_SECRET=change-me-in-production
-
 # Expose port
 EXPOSE 80
 

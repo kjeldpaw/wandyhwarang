@@ -8,14 +8,8 @@ services:
       - "8000:80" # host:container => access at http://localhost:8000
     depends_on:
       - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_NAME: wandyhwarang
-      DB_USER: wandyhwarang
-      DB_PASSWORD: wandyhwarang
-      JWT_SECRET: your-secret-key-change-in-production
-      API_URL: http://localhost:8000
+    volumes:
+      - ./backend/config.php.compose:/var/www/html/config.php
     restart: unless-stopped
 
   db:

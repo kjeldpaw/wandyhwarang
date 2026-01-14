@@ -13,10 +13,8 @@ require PROJECT_ROOT . '/vendor/autoload.php';
 // Load the mock Database class for testing
 require PROJECT_ROOT . '/tests/DatabaseMock.php';
 
-// Set up environment variables for testing
-putenv('DB_HOST=localhost');
-putenv('DB_PORT=3306');
-putenv('DB_NAME=wandyhwarang_test');
-putenv('DB_USER=root');
-putenv('DB_PASSWORD=');
-putenv('JWT_SECRET=test-secret-key');
+// Set up the app for testing
+require_once PROJECT_ROOT . '/src/Config/Config.php';
+
+// The Config class will load backend/config.php automatically.
+// We should ensure tests don't rely on environment variables.
