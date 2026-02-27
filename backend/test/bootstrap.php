@@ -14,7 +14,7 @@ require PROJECT_ROOT . '/vendor/autoload.php';
 require PROJECT_ROOT . '/test/DatabaseMock.php';
 
 // Set up the app for testing
-require_once PROJECT_ROOT . '/src/Config/Config.php';
+require_once PROJECT_ROOT . '/src/App/Config/Config.php';
 
 // The Config class will load backend/config.php automatically.
 // We should ensure test don't rely on environment variables.

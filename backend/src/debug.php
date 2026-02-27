@@ -28,10 +28,9 @@ $files_to_check = [
     'index.html',
     'config.php',
     'config.php.example',
-    'src/Config/Config.php',
-    'src/Router.php',
-    'src/Controllers/AuthController.php',
-    'database/schema.sql',
+    'App/Config/Config.php',
+    'App/Router.php',
+    'App/Controllers/AuthController.php',
     'vendor/autoload.php',
 ];
 
