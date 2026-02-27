@@ -1,7 +1,9 @@
 # Dependencies
-src/main/node/node_modules/
-backend/src/vendor/
-backend/src/composer.lock
+frontend/node_modules/
+frontend/package-lock.json
+
+backend/vendor/
+backend/composer.lock
 backend/src/config.php
 
 # Environment files
@@ -10,7 +12,8 @@ backend/src/config.php
 .env.*.local
 
 # Build outputs
-/target
+backend/build
+frontend/build
 
 # IDE
 .vscode/
@@ -33,3 +36,6 @@ composer.lock
 Thumbs.db
 .DS_Store
 .htaccess
+
+# AI
+.claude

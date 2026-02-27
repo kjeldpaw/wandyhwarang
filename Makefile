@@ -18,6 +18,8 @@ help:
 	@echo "make prod        - Build production zip file for deployment"
 
 build:
+	./build-frontend.sh
+	./build-backend.sh
 	docker-compose build
 
 up:

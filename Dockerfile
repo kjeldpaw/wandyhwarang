@@ -1,16 +1,3 @@
-# Multi-stage build: First build React app
-FROM node:18-alpine AS frontend-builder
-
-WORKDIR /app/frontend
-
-# Copy frontend files
-COPY src/main/node ./
-RUN npm install
-
-# Build React app for production
-RUN npm run build
-
-# Main stage: PHP with both React and API
 FROM php:8.1-apache
 
 # Install system dependencies
@@ -23,24 +10,14 @@ RUN apt-get update && apt-get install -y \
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 # Set working directory to match production structure
 WORKDIR /webroots
 
 # Copy React build files directly to /webroots
-COPY --from=frontend-builder /app/frontend/build ./
+COPY frontend/build/ ./
 
 # Copy PHP backend files directly to /webroots (index.php will be at root)
-COPY backend/public/ ./
-COPY src ./src
-COPY backend/database ./database
-COPY backend/src/composer.json ./
-COPY backend/src/composer.lock ./
-
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+COPY backend/build/ ./
 
 # Configure Apache
 RUN a2enmod rewrite
