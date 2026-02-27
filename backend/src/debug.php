@@ -36,7 +36,7 @@ $files_to_check = [
 ];
 
 foreach ($files_to_check as $file) {
-    $path = __DIR__ . '/' . $file;
+    $path = __DIR__ . 'debug.php/' . $file;
     $exists = file_exists($path) ? '✓ EXISTS' : '✗ MISSING';
     $readable = is_readable($path) ? '(readable)' : '(not readable)';
     echo "$exists $readable - $file\n";
@@ -47,7 +47,7 @@ echo "\n=== Directory Contents ===\n";
 $items = scandir(__DIR__);
 foreach ($items as $item) {
     if ($item === '.' || $item === '..') continue;
-    $type = is_dir(__DIR__ . '/' . $item) ? '[DIR] ' : '[FILE]';
+    $type = is_dir(__DIR__ . 'debug.php/' . $item) ? '[DIR] ' : '[FILE]';
     echo "$type $item\n";
 }
 
@@ -89,7 +89,7 @@ if (file_exists($config_class_path)) {
         echo "✓ Config class loaded successfully\n";
 
         // Try to use it
-        $test_value = \App\Config\Config::get('app.url', 'DEFAULT');
+        $test_value = \App\main\php\api\Config\Config::get('app.url', 'DEFAULT');
         echo "✓ Config::get() works: app.url = $test_value\n";
     } catch (Exception $e) {
         echo "✗ Error loading Config class: " . $e->getMessage() . "\n";

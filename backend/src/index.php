@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Load Config class first (before autoloader)
-require_once __DIR__ . '/src/Config/Config.php';
+require_once __DIR__ . '/App/Config/Config.php';
 
 // Include autoloader (manual PSR-4 autoloading)
 spl_autoload_register(function ($class) {
@@ -36,27 +36,17 @@ spl_autoload_register(function ($class) {
     $relative_class = substr($class, $len);
 
     // Try src directory first
-    $base_dir = \App\Config\Config::get('app.src_dir', __DIR__ . '/src/');
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+    $file = __DIR__ . str_replace('\\', '/', $relative_class) . '.php';
 
     if (file_exists($file)) {
         require $file;
-        return;
-    }
-
-    // Try config directory
-    $base_dir = __DIR__ . '/config/';
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
-
-    if (file_exists($file)) {
-        require $file;
-        return;
     }
 });
 
-use App\Router;
-use App\Controllers\UserController;
 use App\Controllers\AuthController;
+use App\Controllers\UserController;
+use App\Controllers\ClubController;
+use App\Router;
 
 // Initialize router
 $router = new Router();
@@ -128,7 +118,7 @@ $router->delete('/api/users/{userId}/belt/{beltId}', function($params) use ($use
 });
 
 // Club routes
-$clubController = new \App\Controllers\ClubController();
+$clubController = new ClubController();
 
 $router->get('/api/clubs', function() use ($clubController) {
     return $clubController->getAll();

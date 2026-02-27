@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\User;
-use App\Models\BeltHistory;
 use App\Middleware\Auth;
+use App\Models\BeltHistory;
+use App\Models\User;
 
 class UserController
 {

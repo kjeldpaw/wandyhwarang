@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests;
 
+use App\main\php\api\Models\User;
 use PHPUnit\Framework\TestCase;
-use App\Models\User;
 
 class UserControllerTest extends TestCase
 {

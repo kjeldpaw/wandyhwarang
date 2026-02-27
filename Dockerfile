@@ -4,10 +4,8 @@ FROM node:18-alpine AS frontend-builder
 WORKDIR /app/frontend
 
 # Copy frontend files
-COPY frontend/package*.json ./
+COPY src/main/node ./
 RUN npm install
-
-COPY frontend .
 
 # Build React app for production
 RUN npm run build
@@ -36,10 +34,10 @@ COPY --from=frontend-builder /app/frontend/build ./
 
 # Copy PHP backend files directly to /webroots (index.php will be at root)
 COPY backend/public/ ./
-COPY backend/src ./src
+COPY src ./src
 COPY backend/database ./database
-COPY backend/composer.json ./
-COPY backend/composer.lock ./
+COPY backend/src/composer.json ./
+COPY backend/src/composer.lock ./
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader

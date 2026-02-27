@@ -1,8 +1,8 @@
 # Dependencies
-node_modules/
-/frontend/node_modules/
-vendor/
-/backend/vendor/
+src/main/node/node_modules/
+backend/src/vendor/
+backend/src/composer.lock
+backend/src/config.php
 
 # Environment files
 .env
@@ -10,9 +10,7 @@ vendor/
 .env.*.local
 
 # Build outputs
-/frontend/build/
-/backend/dist/
-/dist/
+/target
 
 # IDE
 .vscode/
@@ -35,4 +33,3 @@ composer.lock
 Thumbs.db
 .DS_Store
 .htaccess
-backend/config.php

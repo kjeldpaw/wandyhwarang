@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Config;
 
-use PDO;
-use PDOException;
+use App\Config\Exception;
 
 /**
  * Mock Database class for testing
