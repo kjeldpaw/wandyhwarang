@@ -63,5 +63,5 @@ INSERT IGNORE INTO clubs (name) VALUES
 ('Nordjysk Taekwondo Center');
 
 -- Insert default admin user (password: admin123)
-INSERT IGNORE INTO users (name, email, password, role) VALUES
-('Administrator', 'admin@example.com', '$2y$12$AJl.d2/byLRklqpNm9OQPeyNer4C5EjXRi5d89lOFXC4v7sRh2G66', 'admin');
+INSERT IGNORE INTO users (name, email, password, role, is_verified) VALUES
+('Administrator', 'admin@example.com', '$2y$12$AJl.d2/byLRklqpNm9OQPeyNer4C5EjXRi5d89lOFXC4v7sRh2G66', 'admin', 1);

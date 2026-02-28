@@ -36,7 +36,7 @@ spl_autoload_register(function ($class) {
     $relative_class = substr($class, $len);
 
     // Try src directory first
-    $file = __DIR__ . str_replace('\\', '/', $relative_class) . '.php';
+    $file = __DIR__ . '/App/' . str_replace('\\', '/', $relative_class) . '.php';
 
     if (file_exists($file)) {
         require $file;

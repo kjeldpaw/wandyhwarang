@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Config\Config;
+use App\Models\User;
+use App\Services\EmailService;
 
 
 class AuthController
@@ -25,7 +27,7 @@ class AuthController
                 return;
             }
 
-            $userModel = new \App\main\php\api\Models\User();
+            $userModel = new User();
             $user = $userModel->getByEmail($data['email']);
 
             if (!$user) {
@@ -87,7 +89,7 @@ class AuthController
             }
 
             // Check if user already exists
-            $userModel = new \App\main\php\api\Models\User();
+            $userModel = new User();
             $existing = $userModel->getByEmail($data['email']);
             if ($existing) {
                 http_response_code(400);
@@ -117,7 +119,7 @@ class AuthController
             if ($result) {
                 // Send confirmation email
                 try {
-                    $emailService = new \App\main\php\api\Services\EmailService();
+                    $emailService = new EmailService();
                     $emailService->sendRegistrationConfirmationEmail($data['email'], $registrationToken);
                 } catch (\Exception $e) {
                     // If email fails, still return success but log the issue
@@ -162,7 +164,7 @@ class AuthController
                 return;
             }
 
-            $userModel = new \App\main\php\api\Models\User();
+            $userModel = new User();
             $user = $userModel->getByRegistrationToken($data['token']);
 
             if (!$user) {
@@ -217,7 +219,7 @@ class AuthController
                 return;
             }
 
-            $userModel = new \App\main\php\api\Models\User();
+            $userModel = new User();
             $user = $userModel->getByEmail($data['email']);
 
             if (!$user) {
@@ -237,7 +239,7 @@ class AuthController
 
             // Send email
             try {
-                $emailService = new \App\main\php\api\Services\EmailService();
+                $emailService = new EmailService();
                 $emailService->sendPasswordResetEmail($user['email'], $user['name'], $resetToken);
             } catch (\Exception $e) {
                 http_response_code(500);
@@ -279,7 +281,7 @@ class AuthController
                 return;
             }
 
-            $userModel = new \App\main\php\api\Models\User();
+            $userModel = new User();
             $user = $userModel->getByResetToken($data['token']);
 
             if (!$user) {
@@ -450,6 +452,6 @@ class AuthController
      */
     private function base64UrlDecode($data)
     {
-        return base64_decode(AuthController . phpstrtr($data, '-_', '+/') . str_repeat('=', 4 - strlen($data) % 4));
+        return base64_decode(strtr($data, '-_', '+/') . str_repeat('=', 4 - strlen($data) % 4));
     }
 }

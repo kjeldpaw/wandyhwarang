@@ -23,7 +23,9 @@ build:
 	docker-compose build
 
 up:
-	docker-compose up -d
+	./build-frontend.sh
+	./build-backend.sh
+	docker-compose up -d --build
 
 down:
 	docker-compose down
