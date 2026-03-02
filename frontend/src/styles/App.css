@@ -61,7 +61,7 @@ body {
   font-weight: 500;
 }
 
-.logout-btn {
+.logout-btn, .create-user-btn, .back-btn {
   padding: 0.5rem 1.5rem;
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
@@ -71,9 +71,11 @@ body {
   font-size: 0.9rem;
   font-weight: 600;
   transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
 }
 
-.logout-btn:hover {
+.logout-btn:hover, .create-user-btn:hover, .back-btn:hover {
   background-color: white;
   color: #667eea;
 }

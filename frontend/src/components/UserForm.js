@@ -16,6 +16,7 @@ function UserForm({ user, onSave, onCancel }) {
     club_id: '',
     hwa_id: '',
     kukkiwon_id: '',
+    role: 'user',
   });
   const [clubs, setClubs] = useState([]);
   const [error, setError] = useState('');
@@ -52,6 +53,7 @@ function UserForm({ user, onSave, onCancel }) {
         club_id: user.club_id || '',
         hwa_id: user.hwa_id || '',
         kukkiwon_id: user.kukkiwon_id || '',
+        role: user.role || 'user',
       });
       // Fetch belts for this user
       if (user.beltHistory) {
@@ -86,7 +88,7 @@ function UserForm({ user, onSave, onCancel }) {
         });
       }
       onSave();
-      setFormData({ name: '', email: '', address: '', zip_code: '', city: '', phone: '', club_id: '', hwa_id: '', kukkiwon_id: '' });
+      setFormData({ name: '', email: '', address: '', zip_code: '', city: '', phone: '', club_id: '', hwa_id: '', kukkiwon_id: '', role: 'user' });
     } catch (err) {
       const errorMsg = err.response?.data?.error || 'An error occurred';
       setError(errorMsg);
@@ -94,6 +96,9 @@ function UserForm({ user, onSave, onCancel }) {
       setLoading(false);
     }
   };
+
+  const isAdmin = admin?.role === 'admin';
+  const isMaster = admin?.role === 'master';
 
   return (
     <form className="user-form" onSubmit={handleSubmit}>
@@ -168,22 +173,40 @@ function UserForm({ user, onSave, onCancel }) {
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="club_id">Club</label>
-        <select
-          id="club_id"
-          name="club_id"
-          value={formData.club_id}
-          onChange={handleChange}
-        >
-          <option value="">Select a club</option>
-          {clubs.map((club) => (
-            <option key={club.id} value={club.id}>
-              {club.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      {isAdmin && (
+        <div className="form-group">
+          <label htmlFor="club_id">Club</label>
+          <select
+            id="club_id"
+            name="club_id"
+            value={formData.club_id}
+            onChange={handleChange}
+          >
+            <option value="">Select a club</option>
+            {clubs.map((club) => (
+              <option key={club.id} value={club.id}>
+                {club.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {(isAdmin || isMaster) && (
+        <div className="form-group">
+          <label htmlFor="role">Role</label>
+          <select
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+          >
+            <option value="user">User (Default)</option>
+            <option value="master">Master</option>
+            {isAdmin && <option value="admin">Admin</option>}
+          </select>
+        </div>
+      )}
 
       <div className="form-group">
         <label htmlFor="hwa_id">HWA ID</label>

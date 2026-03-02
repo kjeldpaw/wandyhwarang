@@ -133,16 +133,17 @@ class UserController
     }
 
     /**
-     * POST /api/users - Create new user (Admin only)
+     * POST /api/users - Create new user (Admin and Master only)
      */
     public function create()
     {
         try {
-            if (!Auth::isAdmin()) {
+            $currentUser = Auth::getCurrentUser();
+            if (!$currentUser || ($currentUser['role'] !== 'admin' && $currentUser['role'] !== 'master')) {
                 http_response_code(403);
                 echo json_encode([
                     'success' => false,
-                    'error' => 'Forbidden: Admin access required'
+                    'error' => 'Forbidden: Admin or Master access required'
                 ]);
                 return;
             }
@@ -168,6 +169,18 @@ class UserController
                 ]);
                 return;
             }
+
+            // Role management
+            if ($currentUser['role'] === 'master') {
+                // Master can only create users for their club
+                $data['club_id'] = $currentUser['club_id'];
+                
+                // Master can only set 'master' or 'user' roles
+                if (isset($data['role']) && !in_array($data['role'], ['master', 'user'])) {
+                    $data['role'] = 'user';
+                }
+            }
+            // Admin can set any role and any club
 
             // Hash password if provided
             if (isset($data['password'])) {
@@ -203,7 +216,7 @@ class UserController
     /**
      * PUT /api/users/{id} - Update user
      * User can update their own data (except sensitive fields)
-     * Master can update users from their club (except club, hwa_id, kukkiwon_id)
+     * Master can update users from their club (can set role to master/user)
      * Admin can update all users
      */
     public function update($params)
@@ -269,11 +282,15 @@ class UserController
                 unset($data['club_id']);
             }
 
-            // Prevent masters from changing club or setting sensitive fields
+            // Master role management
             if ($currentUser['role'] === 'master') {
-                unset($data['role']);
-                unset($data['hwa_id']);
-                unset($data['kukkiwon_id']);
+                // Master can only set 'master' or 'user' roles for users in their club
+                if (isset($data['role'])) {
+                    if (!in_array($data['role'], ['master', 'user'])) {
+                        unset($data['role']);
+                    }
+                }
+                // Master cannot change club or certain IDs (unless specified otherwise)
                 unset($data['club_id']);
             }
 

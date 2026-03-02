@@ -91,13 +91,42 @@ class AuthController
             // Check if user already exists
             $userModel = new User();
             $existing = $userModel->getByEmail($data['email']);
+            
             if ($existing) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'error' => 'Email already registered'
-                ]);
-                return;
+                if ($existing['is_verified']) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Email already registered'
+                    ]);
+                    return;
+                }
+                
+                // If user exists but is not verified, we can re-send the registration email
+                // Generate a new secure registration token
+                $registrationToken = bin2hex(random_bytes(32));
+                $updateData = [
+                    'registration_token' => $registrationToken,
+                    'registration_token_expires' => date('Y-m-d H:i:s', time() + 86400) // 24 hours
+                ];
+                
+                $result = $userModel->update($existing['id'], $updateData);
+                
+                if ($result) {
+                    try {
+                        $emailService = new EmailService();
+                        $emailService->sendRegistrationConfirmationEmail($data['email'], $registrationToken);
+                    } catch (\Exception $e) {
+                        error_log('Failed to re-send registration email: ' . $e->getMessage());
+                    }
+                    
+                    http_response_code(200);
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Registration email re-sent. Please check your email to confirm.'
+                    ]);
+                    return;
+                }
             }
 
             // Generate a secure registration token

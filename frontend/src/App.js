@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import UserForm from './components/UserForm';
 import UserList from './components/UserList';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import CreateUserPage from './pages/CreateUserPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ConfirmRegistrationPage from './pages/ConfirmRegistrationPage';
 import './styles/App.css';
 
 function App() {
+  const navigate = useNavigate();
   const { isAuthenticated, admin, logout, loading } = useAuth();
   const [selectedUser, setSelectedUser] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -32,6 +34,8 @@ function App() {
     logout();
   };
 
+  const canCreateUser = admin?.role === 'admin' || admin?.role === 'master';
+
   if (loading) {
     return (
       <div className="app">
@@ -47,6 +51,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage onLoginSuccess={() => {}} />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/create-user" element={<CreateUserPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/confirm-registration" element={<ConfirmRegistrationPage />} />
@@ -62,6 +67,15 @@ function App() {
                     <p className="subtitle">User Management System</p>
                   </div>
                   <div className="header-user">
+                    {canCreateUser && (
+                      <button 
+                        onClick={() => navigate('/create-user')} 
+                        className="create-user-btn"
+                        style={{ marginRight: '10px' }}
+                      >
+                        Create User
+                      </button>
+                    )}
                     <span className="admin-name">Hello, {admin?.name}!</span>
                     <button onClick={handleLogout} className="logout-btn">
                       Logout
@@ -71,11 +85,13 @@ function App() {
               </header>
               <main className="app-main">
                 <div className="container">
-                  <UserForm
-                    user={selectedUser}
-                    onSave={handleSave}
-                    onCancel={handleCancel}
-                  />
+                  {selectedUser && (
+                    <UserForm
+                      user={selectedUser}
+                      onSave={handleSave}
+                      onCancel={handleCancel}
+                    />
+                  )}
                   <UserList
                     refreshTrigger={refreshKey}
                     onEdit={handleEdit}
