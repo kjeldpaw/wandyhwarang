@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766486624976" clover="3.2.0">
-  <project timestamp="1766486624977" name="All files">
-    <metrics statements="386" coveredstatements="0" conditionals="220" coveredconditionals="0" methods="80" coveredmethods="0" elements="686" coveredelements="0" complexity="0" loc="386" ncloc="386" packages="6" files="13" classes="13"/>
+<coverage generated="1772457367983" clover="3.2.0">
+  <project timestamp="1772457367983" name="All files">
+    <metrics statements="387" coveredstatements="54" conditionals="222" coveredconditionals="25" methods="80" coveredmethods="8" elements="689" coveredelements="87" complexity="0" loc="387" ncloc="387" packages="6" files="13" classes="13"/>
     <package name="src">
       <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="0"/>
-      <file name="App.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/App.js">
+      <file name="App.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/App.js">
         <metrics statements="15" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
@@ -22,7 +22,7 @@
         <line num="36" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
       </file>
-      <file name="index.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/index.js">
+      <file name="index.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/index.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -30,7 +30,7 @@
     </package>
     <package name="src.components">
       <metrics statements="132" coveredstatements="0" conditionals="106" coveredconditionals="0" methods="30" coveredmethods="0"/>
-      <file name="BeltForm.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/components/BeltForm.js">
+      <file name="BeltForm.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/components/BeltForm.js">
         <metrics statements="54" coveredstatements="0" conditionals="31" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -87,7 +87,7 @@
         <line num="190" count="0" type="stmt"/>
         <line num="197" count="0" type="stmt"/>
       </file>
-      <file name="UserForm.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/components/UserForm.js">
+      <file name="UserForm.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/components/UserForm.js">
         <metrics statements="52" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -142,7 +142,7 @@
         <line num="248" count="0" type="stmt"/>
         <line num="250" count="0" type="stmt"/>
       </file>
-      <file name="UserList.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/components/UserList.js">
+      <file name="UserList.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/components/UserList.js">
         <metrics statements="26" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -174,25 +174,25 @@
     </package>
     <package name="src.constants">
       <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="belts.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/constants/belts.js">
+      <file name="belts.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/constants/belts.js">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.context">
-      <metrics statements="63" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="7" coveredmethods="0"/>
-      <file name="AuthContext.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/context/AuthContext.js">
-        <metrics statements="63" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="cond" truecount="0" falsecount="2"/>
+      <metrics statements="63" coveredstatements="31" conditionals="18" coveredconditionals="7" methods="7" coveredmethods="4"/>
+      <file name="AuthContext.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/context/AuthContext.js">
+        <metrics statements="63" coveredstatements="31" conditionals="18" coveredconditionals="7" methods="7" coveredmethods="4"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="24" type="stmt"/>
+        <line num="8" count="24" type="stmt"/>
+        <line num="9" count="24" type="stmt"/>
+        <line num="10" count="24" type="stmt"/>
+        <line num="13" count="24" type="stmt"/>
+        <line num="14" count="9" type="cond" truecount="1" falsecount="1"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <line num="17" count="9" type="stmt"/>
+        <line num="21" count="24" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
@@ -202,30 +202,30 @@
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
+        <line num="40" count="24" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="43" count="4" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+        <line num="49" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
         <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="61" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="69" count="24" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
+        <line num="76" count="24" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
@@ -240,17 +240,17 @@
         <line num="96" count="0" type="stmt"/>
         <line num="97" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="119" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="103" count="24" type="stmt"/>
+        <line num="114" count="24" type="stmt"/>
+        <line num="118" count="180" type="stmt"/>
+        <line num="119" count="180" type="cond" truecount="1" falsecount="1"/>
         <line num="120" count="0" type="stmt"/>
-        <line num="122" count="0" type="stmt"/>
+        <line num="122" count="180" type="stmt"/>
       </file>
     </package>
     <package name="src.pages">
-      <metrics statements="160" coveredstatements="0" conditionals="90" coveredconditionals="0" methods="30" coveredmethods="0"/>
-      <file name="ConfirmRegistrationPage.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/pages/ConfirmRegistrationPage.js">
+      <metrics statements="161" coveredstatements="20" conditionals="92" coveredconditionals="16" methods="30" coveredmethods="4"/>
+      <file name="ConfirmRegistrationPage.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/pages/ConfirmRegistrationPage.js">
         <metrics statements="42" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -295,7 +295,7 @@
         <line num="94" count="0" type="stmt"/>
         <line num="166" count="0" type="stmt"/>
       </file>
-      <file name="ForgotPasswordPage.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/pages/ForgotPasswordPage.js">
+      <file name="ForgotPasswordPage.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/pages/ForgotPasswordPage.js">
         <metrics statements="29" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -327,31 +327,32 @@
         <line num="48" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
       </file>
-      <file name="LoginPage.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/pages/LoginPage.js">
-        <metrics statements="21" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
+      <file name="LoginPage.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/pages/LoginPage.js">
+        <metrics statements="22" coveredstatements="20" conditionals="17" coveredconditionals="16" methods="6" coveredmethods="4"/>
+        <line num="7" count="180" type="stmt"/>
+        <line num="8" count="180" type="stmt"/>
+        <line num="9" count="180" type="stmt"/>
+        <line num="13" count="180" type="stmt"/>
+        <line num="15" count="180" type="stmt"/>
+        <line num="16" count="153" type="stmt"/>
+        <line num="17" count="153" type="stmt"/>
+        <line num="21" count="153" type="stmt"/>
+        <line num="24" count="180" type="stmt"/>
+        <line num="25" count="7" type="stmt"/>
+        <line num="26" count="7" type="stmt"/>
+        <line num="28" count="7" type="cond" truecount="4" falsecount="0"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="30" count="3" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="34" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="38" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="42" count="180" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
       </file>
-      <file name="RegisterPage.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/pages/RegisterPage.js">
+      <file name="RegisterPage.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/pages/RegisterPage.js">
         <metrics statements="29" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -383,7 +384,7 @@
         <line num="48" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
       </file>
-      <file name="ResetPasswordPage.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/pages/ResetPasswordPage.js">
+      <file name="ResetPasswordPage.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/pages/ResetPasswordPage.js">
         <metrics statements="39" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -427,12 +428,12 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="13" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
-      <file name="api.js" path="/Users/pfk/Projects/wandyhwarang/frontend/src/services/api.js">
-        <metrics statements="13" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="3" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
+      <metrics statements="13" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="5" coveredmethods="0"/>
+      <file name="api.js" path="/Users/pfk/Workspace/wandyhwarang/frontend/src/services/api.js">
+        <metrics statements="13" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="5" coveredmethods="0"/>
+        <line num="3" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>

@@ -7,7 +7,7 @@ function LoginPage({ onLoginSuccess }) {
   const navigate = useNavigate();
   const { login, loading, error } = useAuth();
   const [formData, setFormData] = useState({
-    email: 'admin@example.com',
+    email: localStorage.getItem('rememberedEmail') || '',
     password: '',
   });
   const [localError, setLocalError] = useState('');
@@ -32,6 +32,7 @@ function LoginPage({ onLoginSuccess }) {
 
     const result = await login(formData.email, formData.password);
     if (result.success) {
+      localStorage.setItem('rememberedEmail', formData.email);
       onLoginSuccess();
     } else {
       setLocalError(result.error || 'Login failed');

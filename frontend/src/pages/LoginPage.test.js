@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import { AuthProvider } from '../context/AuthContext';
 import '@testing-library/jest-dom';
@@ -16,13 +17,16 @@ describe('LoginPage Component', () => {
     api = require('../services/api').default;
     mockOnLoginSuccess = jest.fn();
     jest.clearAllMocks();
+    localStorage.clear();
   });
 
   const renderLoginPage = () => {
     return render(
-      <AuthProvider>
-        <LoginPage onLoginSuccess={mockOnLoginSuccess} />
-      </AuthProvider>
+      <MemoryRouter>
+        <AuthProvider>
+          <LoginPage onLoginSuccess={mockOnLoginSuccess} />
+        </AuthProvider>
+      </MemoryRouter>
     );
   };
 
@@ -34,11 +38,39 @@ describe('LoginPage Component', () => {
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
   });
 
-  test('displays demo credentials', () => {
+  test('loads remembered email from localStorage', () => {
+    localStorage.setItem('rememberedEmail', 'remembered@example.com');
     renderLoginPage();
 
-    expect(screen.getByText(/admin@example.com/)).toBeInTheDocument();
-    expect(screen.getByText(/admin123/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i).value).toBe('remembered@example.com');
+  });
+
+  test('saves email to localStorage on successful login', async () => {
+    api.post.mockResolvedValueOnce({
+      data: {
+        success: true,
+        token: 'test-token',
+        admin: { id: 1, email: 'user@example.com', name: 'User' }
+      }
+    });
+
+    renderLoginPage();
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const loginButton = screen.getByRole('button', { name: /login/i });
+
+    await userEvent.clear(emailInput);
+    await userEvent.type(emailInput, 'newuser@example.com');
+    await userEvent.type(passwordInput, 'password123');
+
+    fireEvent.click(loginButton);
+
+    await waitFor(() => {
+      expect(mockOnLoginSuccess).toHaveBeenCalled();
+    });
+
+    expect(localStorage.getItem('rememberedEmail')).toBe('newuser@example.com');
   });
 
   test('shows error when email is empty', async () => {
@@ -122,7 +154,7 @@ describe('LoginPage Component', () => {
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
-    const loginButton = screen.getByRole('button');
+    const loginButton = screen.getByRole('button', { name: /login/i });
 
     await userEvent.clear(emailInput);
     await userEvent.type(emailInput, 'admin@example.com');
