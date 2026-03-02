@@ -17,19 +17,40 @@ class EmailService
         try {
             // Server settings
             $this->mail->isSMTP();
-            $this->mail->Host = Config::get('mail.host', 'smtp.mailtrap.io');
-            $this->mail->Port = Config::get('mail.port', 2525);
+            
+            $host = Config::get('mail.host', 'smtp.mailtrap.io');
+            $this->mail->Host = $host;
+            
             $this->mail->SMTPAuth = true;
             $this->mail->Username = Config::get('mail.username', '');
             $this->mail->Password = Config::get('mail.password', '');
-            $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            
+            $port = (int)Config::get('mail.port', 2525);
+            $this->mail->Port = $port;
+            
+            // Set encryption based on port
+            if ($port === 465) {
+                $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            } else {
+                $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            }
+            
+            // Add SMTPOptions to ignore certificate errors
+            $this->mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
 
             // Set sender
-            $this->mail->setFrom(
-                Config::get('mail.from_address', 'noreply@wandyhwarang.com'),
-                Config::get('mail.from_name', 'Wandy Hwarang')
-            );
+            $from_address = Config::get('mail.from_address', 'noreply@wandyhwarang.com');
+            $from_name = Config::get('mail.from_name', 'Wandy Hwarang');
+            $this->mail->setFrom($from_address, $from_name);
+            
         } catch (Exception $e) {
+            error_log("Email service configuration error: {$e->getMessage()}");
             throw new \Exception("Email service configuration error: {$e->getMessage()}");
         }
     }
@@ -73,7 +94,7 @@ class EmailService
 
             $this->mail->addAddress($email);
             $this->mail->isHTML(true);
-            $this->mail->Subject = 'Confirm Your Registration - Wandy Hwarang';
+            $this->mail->Subject = 'Confirm Your Registration - Wandy Hwa Rang';
             $this->mail->Body = $htmlBody;
             $this->mail->AltBody = "Click this link to confirm your registration: $confirmationUrl";
 

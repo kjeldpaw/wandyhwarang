@@ -31,6 +31,7 @@ class AuthController
             $user = $userModel->getByEmail($data['email']);
 
             if (!$user) {
+                error_log("Login failed: User not found for email: " . $data['email']);
                 http_response_code(401);
                 echo json_encode([
                     'success' => false,
@@ -39,8 +40,13 @@ class AuthController
                 return;
             }
 
+            error_log("Login attempt: User found. Email: " . $user['email'] . ", Verified: " . $user['is_verified']);
+
             // Verify password
             if (!password_verify($data['password'], $user['password'])) {
+                error_log("Login failed: Password mismatch for email: " . $data['email']);
+                // Log hash info (safely)
+                error_log("Hash length in DB: " . strlen($user['password']));
                 http_response_code(401);
                 echo json_encode([
                     'success' => false,
@@ -88,9 +94,11 @@ class AuthController
                 return;
             }
 
+            $email = trim($data['email']);
+
             // Check if user already exists
             $userModel = new User();
-            $existing = $userModel->getByEmail($data['email']);
+            $existing = $userModel->getByEmail($email);
             
             if ($existing) {
                 if ($existing['is_verified']) {
@@ -115,7 +123,7 @@ class AuthController
                 if ($result) {
                     try {
                         $emailService = new EmailService();
-                        $emailService->sendRegistrationConfirmationEmail($data['email'], $registrationToken);
+                        $emailService->sendRegistrationConfirmationEmail($email, $registrationToken);
                     } catch (\Exception $e) {
                         error_log('Failed to re-send registration email: ' . $e->getMessage());
                     }
@@ -134,7 +142,7 @@ class AuthController
 
             // Create user with email only (no password yet, unverified)
             $userData = [
-                'email' => $data['email'],
+                'email' => $email,
                 'name' => '', // Empty for now, will be set during confirmation
                 'password' => '', // Empty for now, will be set during confirmation
                 'role' => 'user',
@@ -143,24 +151,33 @@ class AuthController
                 'registration_token_expires' => date('Y-m-d H:i:s', time() + 86400) // 24 hours
             ];
 
+            error_log("Attempting to register email: " . $email);
+            
             $result = $userModel->create($userData);
 
             if ($result) {
+                error_log("Successfully created user record for email: " . $data['email']);
                 // Send confirmation email
                 try {
                     $emailService = new EmailService();
                     $emailService->sendRegistrationConfirmationEmail($data['email'], $registrationToken);
+                    
+                    http_response_code(201);
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Registration email sent. Please check your email to confirm.'
+                    ]);
                 } catch (\Exception $e) {
-                    // If email fails, still return success but log the issue
+                    // If email fails, return failure to let user know they should try again
                     error_log('Failed to send registration email: ' . $e->getMessage());
+                    http_response_code(500);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Registration created but failed to send email. Please use Forgot Password to reset and verify.'
+                    ]);
                 }
-
-                http_response_code(201);
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Registration email sent. Please check your email to confirm.'
-                ]);
             } else {
+                error_log("Failed to create user record for email: " . $data['email']);
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,

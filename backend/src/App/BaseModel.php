@@ -56,8 +56,19 @@ abstract class BaseModel
         $values = implode(', ', array_fill(0, count($data), '?'));
         $query = "INSERT INTO {$this->table} ({$columns}) VALUES ({$values})";
 
-        $stmt = $this->db->prepare($query);
-        return $stmt->execute(array_values($data));
+        try {
+            $stmt = $this->db->prepare($query);
+            $result = $stmt->execute(array_values($data));
+            if (!$result) {
+                error_log("SQL Error (create) in {$this->table}: " . implode(", ", $stmt->errorInfo()));
+            }
+            return $result;
+        } catch (\PDOException $e) {
+            error_log("PDO Exception (create) in {$this->table}: " . $e->getMessage());
+            error_log("Query: $query");
+            error_log("Params: " . json_encode(array_values($data)));
+            throw $e;
+        }
     }
 
     /**
@@ -73,8 +84,19 @@ abstract class BaseModel
         $values = array_values($data);
         $values[] = $id;
 
-        $stmt = $this->db->prepare($query);
-        return $stmt->execute($values);
+        try {
+            $stmt = $this->db->prepare($query);
+            $result = $stmt->execute($values);
+            if (!$result) {
+                error_log("SQL Error (update) in {$this->table}: " . implode(", ", $stmt->errorInfo()));
+            }
+            return $result;
+        } catch (\PDOException $e) {
+            error_log("PDO Exception (update) in {$this->table}: " . $e->getMessage());
+            error_log("Query: $query");
+            error_log("Params: " . json_encode($values));
+            throw $e;
+        }
     }
 
     /**
