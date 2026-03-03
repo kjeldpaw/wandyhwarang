@@ -37,21 +37,12 @@ class UserController
 
             $role = $currentUser['role'] ?? 'user';
 
-            if ($role === 'user') {
-                http_response_code(403);
-                echo json_encode([
-                    'success' => false,
-                    'error' => 'Forbidden: Users cannot list all users'
-                ]);
-                return;
-            }
-
-            if ($role === 'master') {
-                // Master sees only users from their club
-                $users = $this->userModel->getByClubId($currentUser['club_id'] ?? null);
-            } else {
+            if ($role === 'admin') {
                 // Admin sees all users
                 $users = $this->userModel->getAllWithClub();
+            } else {
+                // Master and User see only members of their own club
+                $users = $this->userModel->getByClubId($currentUser['club_id'] ?? null);
             }
 
             echo json_encode([
@@ -98,12 +89,15 @@ class UserController
 
             // Check authorization
             if ($currentUser['role'] === 'user' && $currentUser['id'] != $params['id']) {
-                http_response_code(403);
-                echo json_encode([
-                    'success' => false,
-                    'error' => 'Forbidden: You can only view your own profile'
-                ]);
-                return;
+                // Users can view other members of their own club
+                if ($user['club_id'] === null || $user['club_id'] !== $currentUser['club_id']) {
+                    http_response_code(403);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Forbidden: You can only view users from your club'
+                    ]);
+                    return;
+                }
             }
 
             if ($currentUser['role'] === 'master' && $user['club_id'] !== $currentUser['club_id']) {
@@ -290,8 +284,10 @@ class UserController
                         unset($data['role']);
                     }
                 }
-                // Master cannot change club or certain IDs (unless specified otherwise)
+                // Master cannot change club, HWA ID, or Kukkiwon ID
                 unset($data['club_id']);
+                unset($data['hwa_id']);
+                unset($data['kukkiwon_id']);
             }
 
             // Hash password if provided
@@ -375,19 +371,10 @@ class UserController
                 return;
             }
 
-            if ($currentUser['role'] === 'user') {
-                http_response_code(403);
-                echo json_encode([
-                    'success' => false,
-                    'error' => 'Forbidden: Users cannot search'
-                ]);
-                return;
-            }
-
             $results = $this->userModel->search($params['query'] ?? '');
 
-            // Filter results for masters (show only their club)
-            if ($currentUser['role'] === 'master') {
+            // Filter results for masters and users (show only their club)
+            if ($currentUser['role'] === 'master' || $currentUser['role'] === 'user') {
                 $results = array_filter($results, function($user) use ($currentUser) {
                     return $user['club_id'] === $currentUser['club_id'];
                 });

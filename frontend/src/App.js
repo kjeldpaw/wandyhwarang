@@ -49,7 +49,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage onLoginSuccess={() => {}} />} />
+      <Route path="/login" element={<LoginPage onLoginSuccess={() => navigate('/')} />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/create-user" element={<CreateUserPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />

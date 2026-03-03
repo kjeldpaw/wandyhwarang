@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import '../styles/UserList.css';
 
 function UserList({ refreshTrigger, onEdit }) {
-  const { token } = useAuth();
+  const { token, admin } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -80,18 +80,22 @@ function UserList({ refreshTrigger, onEdit }) {
                 <td>{user.kukkiwon_id || '-'}</td>
                 <td>{new Date(user.created_at).toLocaleDateString()}</td>
                 <td className="actions">
-                  <button
-                    className="edit-btn"
-                    onClick={() => onEdit(user)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(user.id)}
-                  >
-                    Delete
-                  </button>
+                  {(admin?.role !== 'user' || user.id === admin?.id) && (
+                    <button
+                      className="edit-btn"
+                      onClick={() => onEdit(user)}
+                    >
+                      Edit
+                    </button>
+                  )}
+                  {admin?.role === 'admin' && (
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(user.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

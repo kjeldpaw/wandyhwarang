@@ -208,27 +208,31 @@ function UserForm({ user, onSave, onCancel }) {
         </div>
       )}
 
-      <div className="form-group">
-        <label htmlFor="hwa_id">HWA ID</label>
-        <input
-          type="text"
-          id="hwa_id"
-          name="hwa_id"
-          value={formData.hwa_id}
-          onChange={handleChange}
-        />
-      </div>
+      {isAdmin && (
+        <div className="form-group">
+          <label htmlFor="hwa_id">HWA ID</label>
+          <input
+            type="text"
+            id="hwa_id"
+            name="hwa_id"
+            value={formData.hwa_id}
+            onChange={handleChange}
+          />
+        </div>
+      )}
 
-      <div className="form-group">
-        <label htmlFor="kukkiwon_id">Kukkiwon ID</label>
-        <input
-          type="text"
-          id="kukkiwon_id"
-          name="kukkiwon_id"
-          value={formData.kukkiwon_id}
-          onChange={handleChange}
-        />
-      </div>
+      {isAdmin && (
+        <div className="form-group">
+          <label htmlFor="kukkiwon_id">Kukkiwon ID</label>
+          <input
+            type="text"
+            id="kukkiwon_id"
+            name="kukkiwon_id"
+            value={formData.kukkiwon_id}
+            onChange={handleChange}
+          />
+        </div>
+      )}
 
       <div className="form-actions">
         <button type="submit" disabled={loading}>
@@ -237,7 +241,7 @@ function UserForm({ user, onSave, onCancel }) {
         <button type="button" onClick={onCancel} className="cancel-btn">
           Cancel
         </button>
-        {user && (
+        {user && (isAdmin || isMaster) && (
           <button
             type="button"
             onClick={() => setShowBeltForm(!showBeltForm)}

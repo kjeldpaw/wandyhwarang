@@ -11,6 +11,7 @@ This system manages users, belt rankings, and club memberships for a Taekwondo o
 - Cannot edit HWA ID, Kukkiwon ID, or belt information
 - Can update personal information (name, address, contact details)
 - Can register for a new account
+- Can search and view all users from their club
 
 ### 2.2 Master (Club Instructor)
 - Can search and view all users

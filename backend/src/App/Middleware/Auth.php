@@ -76,6 +76,11 @@ class Auth
             $token = $_SERVER['HTTP_AUTHORIZATION'];
         }
 
+        // Fallback for Apache mod_rewrite environments (one.com shared hosting)
+        if (!$token && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            $token = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+        }
+
         if (!$token) {
             return null;
         }
@@ -141,6 +146,6 @@ class Auth
      */
     private static function base64UrlDecode($data)
     {
-        return base64_decode(Auth . phpstrtr($data, '-_', '+/') . str_repeat('=', 4 - strlen($data) % 4));
+        return base64_decode(strtr($data, '-_', '+/') . str_repeat('=', 4 - strlen($data) % 4));
     }
 }
