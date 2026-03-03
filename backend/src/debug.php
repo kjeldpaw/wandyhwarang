@@ -27,7 +27,6 @@ $files_to_check = [
     'index.php',
     'index.html',
     'config.php',
-    'config.php.example',
     'App/Config/Config.php',
     'App/Router.php',
     'App/Controllers/AuthController.php',
@@ -35,7 +34,7 @@ $files_to_check = [
 ];
 
 foreach ($files_to_check as $file) {
-    $path = __DIR__ . 'debug.php/' . $file;
+    $path = __DIR__ . '/' . $file;
     $exists = file_exists($path) ? '✓ EXISTS' : '✗ MISSING';
     $readable = is_readable($path) ? '(readable)' : '(not readable)';
     echo "$exists $readable - $file\n";
@@ -46,7 +45,7 @@ echo "\n=== Directory Contents ===\n";
 $items = scandir(__DIR__);
 foreach ($items as $item) {
     if ($item === '.' || $item === '..') continue;
-    $type = is_dir(__DIR__ . 'debug.php/' . $item) ? '[DIR] ' : '[FILE]';
+    $type = is_dir(__DIR__ . '/' . $item) ? '[DIR] ' : '[FILE]';
     echo "$type $item\n";
 }
 
@@ -81,20 +80,20 @@ if (file_exists($config_path)) {
 
 // 6. Try to load Config class
 echo "\n=== Config Class Test ===\n";
-$config_class_path = __DIR__ . '/src/Config/Config.php';
+$config_class_path = __DIR__ . '/App/Config/Config.php';
 if (file_exists($config_class_path)) {
     try {
         require_once $config_class_path;
         echo "✓ Config class loaded successfully\n";
 
         // Try to use it
-        $test_value = \App\main\php\api\Config\Config::get('app.url', 'DEFAULT');
-        echo "✓ Config::get() works: app.url = $test_value\n";
+        $test_value = \App\Config\Config::get('app.frontend_url', 'DEFAULT');
+        echo "✓ Config::get() works: app.frontend_url = $test_value\n";
     } catch (Exception $e) {
         echo "✗ Error loading Config class: " . $e->getMessage() . "\n";
     }
 } else {
-    echo "✗ src/Config/Config.php NOT FOUND\n";
+    echo "✗ App/Config/Config.php NOT FOUND\n";
 }
 
 // 7. Database connection test
@@ -113,7 +112,7 @@ if (file_exists($config_path)) {
 
 // 8. PHP Extensions
 echo "\n=== PHP Extensions ===\n";
-$required_extensions = ['pdo', 'pdo_mysql', 'json', 'mbstring'];
+$required_extensions = ['pdo', 'pdo_mysql', 'json', 'mbstring', 'openssl'];
 foreach ($required_extensions as $ext) {
     $loaded = extension_loaded($ext) ? '✓' : '✗';
     echo "$loaded $ext\n";

@@ -47,7 +47,8 @@ logs-react:
 
 clean:
 	docker-compose down -v
-	docker system prune -f
+	rm -rf ./frontend/build
+	rm -rf ./backend/build
 
 test:
 	docker-compose exec php php -v
