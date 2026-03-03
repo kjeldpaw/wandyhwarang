@@ -13,7 +13,7 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\": "../src/"
+      "App\\": "src/App/"
     }
   },
   "autoload-dev": {
@@ -22,7 +22,7 @@
     }
   },
   "scripts": {
-    "start": " -S localhost:8000 -t ../../backend/public",
+    "start": "php -S localhost:8000 -t src/",
     "test": "vendor/bin/phpunit"
   }
 }

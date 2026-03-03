@@ -119,6 +119,27 @@ foreach ($required_extensions as $ext) {
     echo "$loaded $ext\n";
 }
 
+// 9. SMTP Connection Test
+echo "\n=== SMTP Connection Test ===\n";
+if (extension_loaded('openssl')) {
+    $smtp_host = 'send.one.com';
+    $smtp_port = 465;
+    $context = stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
+    $socket = @stream_socket_client("ssl://{$smtp_host}:{$smtp_port}", $errno, $errstr, 10, STREAM_CLIENT_CONNECT, $context);
+    if ($socket) {
+        $banner = fgets($socket, 1024);
+        fclose($socket);
+        echo "✓ Connected to {$smtp_host}:{$smtp_port}\n";
+        echo "  Server banner: " . trim($banner) . "\n";
+    } else {
+        echo "✗ Cannot connect to {$smtp_host}:{$smtp_port}: {$errstr} ({$errno})\n";
+        echo "  → Port 465 may be blocked by the server firewall.\n";
+        echo "  → Try contacting one.com support or switch to port 587.\n";
+    }
+} else {
+    echo "✗ openssl extension not loaded — SMTP SSL/TLS will not work\n";
+}
+
 echo "\n=== End of Debug Information ===\n";
 echo "\n⚠️  IMPORTANT: Delete this file after troubleshooting!\n";
 echo "</pre>";

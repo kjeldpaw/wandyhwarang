@@ -16,11 +16,14 @@ class Database
 
     public function __construct()
     {
-        $this->host = Config::get('database.host', 'localhost');
-        $this->db_name = Config::get('database.name', 'wandyhwarang');
-        $this->user = Config::get('database.user', 'root');
-        $this->pass = Config::get('database.password', '');
-        $this->port = Config::get('database.port', 3306);
+        // Try 'database' or 'db' as config keys
+        $dbConfig = Config::get('database', Config::get('db', []));
+
+        $this->host = $dbConfig['host'] ?? 'localhost';
+        $this->db_name = $dbConfig['name'] ?? 'wandyhwarang';
+        $this->user = $dbConfig['user'] ?? 'root';
+        $this->pass = $dbConfig['password'] ?? '';
+        $this->port = (int)($dbConfig['port'] ?? 3306);
     }
 
     public function connect()

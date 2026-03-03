@@ -20,8 +20,6 @@ return [
         'from_name' => 'Wandy Hwa Rang',
     ],
     'app' => [
-        'url' => 'http://localhost:8000',
         'frontend_url' => 'http://localhost:8000',
-        'src_dir' => '/webroots/src/',
     ]
 ];

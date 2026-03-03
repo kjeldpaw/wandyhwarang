@@ -28,11 +28,21 @@ class Config
 
     private static function load()
     {
-        $configPath = __DIR__ . '/../../config.php';
-        if (file_exists($configPath)) {
-            self::$config = require $configPath;
-        } else {
-            self::$config = [];
+        // Try multiple locations to find config.php
+        $possiblePaths = [
+            __DIR__ . '/../../config.php',       // Standard: App/Config/../../config.php
+            __DIR__ . '/../../../config.php',    // Root: App/Config/../../../config.php
+            dirname(dirname(dirname(__DIR__))) . '/config.php', // Project root
+        ];
+
+        foreach ($possiblePaths as $path) {
+            if (file_exists($path)) {
+                self::$config = require $path;
+                return;
+            }
         }
+
+        error_log("Config file NOT FOUND in any expected location: " . implode(", ", $possiblePaths));
+        self::$config = [];
     }
 }
