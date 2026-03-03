@@ -35,7 +35,6 @@ composer.lock
 # OS
 Thumbs.db
 .DS_Store
-.htaccess
 
 # AI
 .claude
