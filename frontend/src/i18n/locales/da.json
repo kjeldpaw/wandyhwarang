@@ -67,6 +67,20 @@
       "date": "Dato",
       "belt": "Bælte",
       "examiners": "Eksaminatorer"
+    },
+    "references": {
+      "add": "Tilføj reference",
+      "type": "Type",
+      "number": "Nummer",
+      "save": "Gem",
+      "cancel": "Annuller",
+      "edit": "Rediger",
+      "editLabel": "Rediger {{type}}",
+      "remove": "Fjern",
+      "removeLabel": "Fjern {{type}}",
+      "removeConfirm": "Fjern {{type}}-referencen {{reference}}?",
+      "confirmRemove": "Ja, fjern",
+      "numberRequired": "Udfyld nummeret."
     }
   },
   "notFound": {
