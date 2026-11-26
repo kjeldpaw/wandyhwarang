@@ -1,0 +1,28 @@
+{
+  "app": {
+    "loading": "Wird geladen…",
+    "loggingIn": "Anmeldung läuft…"
+  },
+  "header": {
+    "language": "Sprache",
+    "logout": "Abmelden",
+    "clubs": "Vereine"
+  },
+  "roles": {
+    "admin": "Admin",
+    "instructor": "Instruktor",
+    "member": "Mitglied"
+  },
+  "clubs": {
+    "title": "Vereine"
+  },
+  "errors": {
+    "network": "Keine Verbindung zu member-service. Bitte später erneut versuchen.",
+    "unauthorised": "Deine Sitzung ist abgelaufen. Du wirst zur Anmeldung weitergeleitet.",
+    "forbidden": "Du hast keinen Zugriff darauf.",
+    "notFound": "Das gibt es nicht, oder du hast keinen Zugriff darauf.",
+    "conflict": "Das ist nicht möglich, weil es im Widerspruch zu vorhandenen Daten steht.",
+    "validation": "Einige Angaben sind ungültig.",
+    "server": "member-service ist fehlgeschlagen. Bitte später erneut versuchen."
+  }
+}

@@ -46,6 +46,19 @@ The organisation is spelled **Wandy Wha Rang** (`wandywharang`). The repo
 name `wandyhwarang` is a legacy spelling kept for now; don't copy it into
 new code or UI text.
 
+## UI languages
+
+The app speaks Danish (default), English and German with `react-i18next`.
+Every UI text is a key in `frontend/src/i18n/locales/{da,en,de}.json`
+(read it with `const { t } = useTranslation()`); add each new key to all
+three files, which a test checks. Show dates with `useFormatDate()` from
+`frontend/src/i18n/formatDate.js`, and API errors with `<ApiErrorMessage>`,
+never member-service's text. Taekwondo terms (Kup, Dan, Kukkiwon) and Belt
+names are not translated. Translations of the glossary words: Member =
+Medlem / Mitglied, Club = Klub / Verein, Belt = Bælte / Gürtel, Graduation =
+Graduering / Graduierung, Examiner = Eksaminator / Prüfer, Reference =
+Reference / Referenz, Instructor = Instruktør / Instruktor, Admin = Admin.
+
 ## Layout and commands
 
 Everything runs from `frontend/`:
@@ -72,6 +85,11 @@ sessionStorage with an `oidc-client-ts` user whose fake access token carries
 their realm roles. MSW (`frontend/src/test/server.js`) stands in for
 member-service and Keycloak; override a handler in a test with
 `server.use(...)`. Don't mock app modules or assert on component internals.
+
+Tests run in Danish: `frontend/src/test/setup.js` pins the browser language
+to Danish before each test, so assert Danish texts. A test about language
+detection sets its own with `setBrowserLanguages([...])` from
+`frontend/src/test/browser.js`.
 
 ## Decisions
 

@@ -24,7 +24,9 @@ export function createUserManager({ navigator } = {}) {
   );
 }
 
-// Where to come back to after login: the route the visitor asked for.
-export const loginArgs = (location) => ({
+// signinRedirect arguments: come back to the route the visitor asked for, and show
+// Keycloak's login pages in the app's current language.
+export const loginArgs = (location, language) => ({
   state: { returnTo: `${location.pathname}${location.search}${location.hash}` },
+  ui_locales: language,
 });

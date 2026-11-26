@@ -1,22 +1,24 @@
+import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { NavLink } from 'react-router-dom';
 import { useSession } from './auth/useSession';
-
-const roleLabels = { admin: 'Admin', instructor: 'Instruktør', member: 'Medlem' };
+import LanguageSwitcher from './i18n/LanguageSwitcher';
 
 function SessionInfo() {
+  const { t } = useTranslation();
   const session = useSession();
   return (
     <div>
-      <span>{session.name}</span> <span>{roleLabels[session.role]}</span>{' '}
+      <span>{session.name}</span> <span>{session.role && t(`roles.${session.role}`)}</span>{' '}
       <button type="button" onClick={session.logout}>
-        Log ud
+        {t('header.logout')}
       </button>
     </div>
   );
 }
 
 export default function Header() {
+  const { t } = useTranslation();
   const auth = useAuth();
   return (
     <header>
@@ -24,11 +26,12 @@ export default function Header() {
       {auth.isAuthenticated && (
         <>
           <nav>
-            <NavLink to="/clubs">Klubber</NavLink>
+            <NavLink to="/clubs">{t('header.clubs')}</NavLink>
           </nav>
           <SessionInfo />
         </>
       )}
+      <LanguageSwitcher />
     </header>
   );
 }

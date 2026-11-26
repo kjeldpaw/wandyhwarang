@@ -1,0 +1,28 @@
+{
+  "app": {
+    "loading": "Loading…",
+    "loggingIn": "Logging in…"
+  },
+  "header": {
+    "language": "Language",
+    "logout": "Log out",
+    "clubs": "Clubs"
+  },
+  "roles": {
+    "admin": "Admin",
+    "instructor": "Instructor",
+    "member": "Member"
+  },
+  "clubs": {
+    "title": "Clubs"
+  },
+  "errors": {
+    "network": "Cannot connect to member-service. Please try again later.",
+    "unauthorised": "Your session has expired. You are being sent to the login.",
+    "forbidden": "You do not have access to this.",
+    "notFound": "It does not exist, or you do not have access to it.",
+    "conflict": "This is not possible because it conflicts with existing data.",
+    "validation": "Some of the information is not valid.",
+    "server": "member-service failed. Please try again later."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "app": {
+    "loading": "Henter…",
+    "loggingIn": "Logger ind…"
+  },
+  "header": {
+    "language": "Sprog",
+    "logout": "Log ud",
+    "clubs": "Klubber"
+  },
+  "roles": {
+    "admin": "Admin",
+    "instructor": "Instruktør",
+    "member": "Medlem"
+  },
+  "clubs": {
+    "title": "Klubber"
+  },
+  "errors": {
+    "network": "Kan ikke få forbindelse til member-service. Prøv igen senere.",
+    "unauthorised": "Din session er udløbet. Du sendes til login.",
+    "forbidden": "Du har ikke adgang til dette.",
+    "notFound": "Det findes ikke, eller du har ikke adgang til det.",
+    "conflict": "Det kan ikke lade sig gøre, fordi det strider mod eksisterende data.",
+    "validation": "Nogle af oplysningerne er ikke gyldige.",
+    "server": "member-service fejlede. Prøv igen senere."
+  }
+}
