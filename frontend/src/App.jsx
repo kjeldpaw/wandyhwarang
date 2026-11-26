@@ -4,6 +4,7 @@ import ClubsPage from './clubs/ClubsPage';
 import Header from './Header';
 import MemberListPage from './members/MemberListPage';
 import MemberPage from './members/MemberPage';
+import NewMemberPage from './members/NewMemberPage';
 import NotFound from './NotFound';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <RequireLogin>
           <Routes>
             <Route path="/" element={<MemberListPage />} />
+            <Route path="/members/new" element={<NewMemberPage />} />
             <Route path="/members/:id" element={<MemberPage />} />
             <Route path="/clubs" element={<ClubsPage />} />
             <Route path="*" element={<NotFound />} />

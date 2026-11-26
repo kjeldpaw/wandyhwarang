@@ -49,6 +49,9 @@ function MemberList({ session }) {
   return (
     <section>
       <h2 id="members-title">{t('members.list.title')}</h2>
+      <p>
+        <Link to="/members/new">{t('members.form.newTitle')}</Link>
+      </p>
       <div>
         <label>
           {t('members.list.club')}{' '}

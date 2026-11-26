@@ -53,6 +53,22 @@
       "date": "Datum",
       "belt": "Gürtel",
       "examiners": "Prüfer"
+    },
+    "form": {
+      "newTitle": "Neues Mitglied",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "street": "Straße",
+      "zipCode": "Postleitzahl",
+      "city": "Ort",
+      "optional": "{{field}} (optional)",
+      "clubs": "Vereine",
+      "create": "Mitglied anlegen",
+      "cancel": "Abbrechen",
+      "duplicateEmail": "Eine Person mit dieser E-Mail-Adresse gibt es bereits. Wende dich an einen Admin, um sie in deinen Verein aufzunehmen.",
+      "required": "Pflichtfeld.",
+      "invalidEmail": "Gib eine gültige E-Mail-Adresse ein.",
+      "noClub": "Wähle mindestens einen Verein."
     }
   },
   "notFound": {

@@ -1,0 +1,121 @@
+import { useId, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { sortClubs } from './member';
+
+/** Form values for a Member: every field a string, Clubs as a list of ids. */
+export const formValuesOf = (member) => ({
+  firstName: member?.firstName ?? '',
+  lastName: member?.lastName ?? '',
+  street: member?.address.street ?? '',
+  zipCode: member?.address.zipCode ?? '',
+  city: member?.address.city ?? '',
+  phone: member?.phone ?? '',
+  email: member?.email ?? '',
+  dateOfBirth: member?.dateOfBirth ?? '',
+  clubIds: [],
+});
+
+/** The personal details of a Member as member-service takes them (without Clubs). */
+export function personalDetailsOf(values) {
+  const text = (name) => values[name].trim();
+  return {
+    firstName: text('firstName'),
+    lastName: text('lastName'),
+    address: { street: text('street'), city: text('city'), zipCode: text('zipCode') },
+    phone: text('phone') || null,
+    email: text('email'),
+    dateOfBirth: values.dateOfBirth || null,
+  };
+}
+
+const REQUIRED = ['firstName', 'lastName', 'street', 'zipCode', 'city', 'email'];
+// Close to what member-service's @Email accepts: something@something, no spaces, a dot in the domain.
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Problems with the form values, as translation keys by field name (`clubIds` when Clubs are chosen). */
+function validate(values, { withClubs }) {
+  const errors = {};
+  for (const name of REQUIRED) if (!values[name].trim()) errors[name] = 'members.form.required';
+  if (!errors.email && !EMAIL.test(values.email.trim())) errors.email = 'members.form.invalidEmail';
+  if (withClubs && values.clubIds.length === 0) errors.clubIds = 'members.form.noClub';
+  return errors;
+}
+
+/**
+ * The create/edit form for a Member's personal details. `clubs` (create only) are the Clubs
+ * to choose from; without it the form has no Club choice. `emailReadOnly` on edit, since the
+ * email is the Keycloak username. `onSubmit(values)` is called with valid form values only.
+ */
+export default function MemberForm({ initial, clubs, emailReadOnly = false, submitLabel, onSubmit, busy, children }) {
+  const { t } = useTranslation();
+  const [values, setValues] = useState(() => formValuesOf(initial));
+  const [errors, setErrors] = useState({});
+  const idPrefix = useId();
+  const errorId = (name) => `${idPrefix}-${name}-error`;
+  const errorFor = (name) =>
+    errors[name] && (
+      <span id={errorId(name)} className="field-error">
+        {t(errors[name])}
+      </span>
+    );
+
+  const set = (name) => (event) => setValues((previous) => ({ ...previous, [name]: event.target.value }));
+  const toggleClub = (id) => (event) =>
+    setValues((previous) => ({
+      ...previous,
+      clubIds: event.target.checked ? [...previous.clubIds, id] : previous.clubIds.filter((c) => c !== id),
+    }));
+
+  const field = (name, label, props = {}) => (
+    <p>
+      <label>
+        {label}{' '}
+        <input
+          name={name}
+          value={values[name]}
+          onChange={set(name)}
+          aria-invalid={errors[name] ? true : undefined}
+          aria-describedby={errors[name] ? errorId(name) : undefined}
+          {...props}
+        />
+      </label>{' '}
+      {errorFor(name)}
+    </p>
+  );
+
+  const submit = (event) => {
+    event.preventDefault();
+    const problems = validate(values, { withClubs: Boolean(clubs) });
+    setErrors(problems);
+    if (Object.keys(problems).length === 0) onSubmit(values);
+  };
+
+  return (
+    <form onSubmit={submit} noValidate>
+      {field('firstName', t('members.form.firstName'), { autoComplete: 'given-name' })}
+      {field('lastName', t('members.form.lastName'), { autoComplete: 'family-name' })}
+      {field('street', t('members.form.street'), { autoComplete: 'street-address' })}
+      {field('zipCode', t('members.form.zipCode'), { autoComplete: 'postal-code' })}
+      {field('city', t('members.form.city'), { autoComplete: 'address-level2' })}
+      {field('phone', t('members.form.optional', { field: t('members.fields.phone') }), { type: 'tel' })}
+      {field('email', t('members.fields.email'), { type: 'email', readOnly: emailReadOnly })}
+      {field('dateOfBirth', t('members.form.optional', { field: t('members.fields.dateOfBirth') }), { type: 'date' })}
+      {clubs && (
+        <fieldset aria-describedby={errors.clubIds ? errorId('clubIds') : undefined}>
+          <legend>{t('members.form.clubs')}</legend>
+          {errorFor('clubIds')}
+          {sortClubs(clubs).map((club) => (
+            <label key={club.id}>
+              <input type="checkbox" checked={values.clubIds.includes(club.id)} onChange={toggleClub(club.id)} />{' '}
+              {club.name}
+            </label>
+          ))}
+        </fieldset>
+      )}
+      {children}
+      <button type="submit" disabled={busy}>
+        {submitLabel}
+      </button>
+    </form>
+  );
+}

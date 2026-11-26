@@ -53,6 +53,22 @@
       "date": "Dato",
       "belt": "Bælte",
       "examiners": "Eksaminatorer"
+    },
+    "form": {
+      "newTitle": "Nyt medlem",
+      "firstName": "Fornavn",
+      "lastName": "Efternavn",
+      "street": "Vej",
+      "zipCode": "Postnummer",
+      "city": "By",
+      "optional": "{{field}} (valgfri)",
+      "clubs": "Klubber",
+      "create": "Opret medlem",
+      "cancel": "Annuller",
+      "duplicateEmail": "Der findes allerede en person med denne e-mail. Kontakt en Admin for at få personen med i din klub.",
+      "required": "Skal udfyldes.",
+      "invalidEmail": "Indtast en gyldig e-mail-adresse.",
+      "noClub": "Vælg mindst én klub."
     }
   },
   "notFound": {

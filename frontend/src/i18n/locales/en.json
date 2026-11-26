@@ -53,6 +53,22 @@
       "date": "Date",
       "belt": "Belt",
       "examiners": "Examiners"
+    },
+    "form": {
+      "newTitle": "New Member",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "street": "Street",
+      "zipCode": "Zip code",
+      "city": "City",
+      "optional": "{{field}} (optional)",
+      "clubs": "Clubs",
+      "create": "Create Member",
+      "cancel": "Cancel",
+      "duplicateEmail": "A person with this email already exists. Contact an Admin to get them into your Club.",
+      "required": "Required.",
+      "invalidEmail": "Enter a valid email address.",
+      "noClub": "Choose at least one Club."
     }
   },
   "notFound": {
