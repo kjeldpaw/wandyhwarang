@@ -36,6 +36,20 @@
       "email": "E-mail",
       "dateOfBirth": "Fødselsdato"
     },
+    "clubs": {
+      "add": "Tilføj klub",
+      "choose": "Vælg klub",
+      "addButton": "Tilføj",
+      "remove": "Fjern",
+      "removeClub": "Fjern {{club}}",
+      "lastClub": "Et medlem skal være i mindst én klub. Tilføj en anden klub, før du fjerner denne."
+    },
+    "delete": {
+      "button": "Slet medlem",
+      "confirm": "Slet {{name}}? Medlemmets login, gradueringer og referencer slettes også. Det kan ikke fortrydes.",
+      "confirmButton": "Ja, slet",
+      "cancel": "Annuller"
+    },
     "detail": {
       "personal": "Personlige oplysninger",
       "notGiven": "Ikke oplyst",
@@ -76,6 +90,20 @@
       "dateRequired": "Vælg en dato.",
       "beltRequired": "Vælg et bælte.",
       "examinerRequired": "Vælg mindst én eksaminator."
+    },
+    "references": {
+      "add": "Tilføj reference",
+      "type": "Type",
+      "number": "Nummer",
+      "save": "Gem",
+      "cancel": "Annuller",
+      "edit": "Rediger",
+      "editLabel": "Rediger {{type}}",
+      "remove": "Fjern",
+      "removeLabel": "Fjern {{type}}",
+      "removeConfirm": "Fjern {{type}}-referencen {{reference}}?",
+      "confirmRemove": "Ja, fjern",
+      "numberRequired": "Udfyld nummeret."
     }
   },
   "notFound": {

@@ -29,7 +29,7 @@ test("an Instructor sees a Member's full record", async () => {
   expect(valueOf(personal, 'E-mail')).toBe('mads@example.com');
   expect(valueOf(personal, 'Fødselsdato')).toBe('1. april 2010');
 
-  expect(within(region('Klubber')).getAllByRole('listitem').map((item) => item.textContent)).toEqual([
+  expect(within(region('Klubber')).getAllByRole('listitem').map((item) => item.firstChild.textContent)).toEqual([
     'Randers Taekwondo Klub',
   ]);
 

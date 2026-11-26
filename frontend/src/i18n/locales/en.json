@@ -36,6 +36,20 @@
       "email": "Email",
       "dateOfBirth": "Date of birth"
     },
+    "clubs": {
+      "add": "Add Club",
+      "choose": "Choose Club",
+      "addButton": "Add",
+      "remove": "Remove",
+      "removeClub": "Remove {{club}}",
+      "lastClub": "A Member must belong to at least one Club. Add another Club before removing this one."
+    },
+    "delete": {
+      "button": "Delete Member",
+      "confirm": "Delete {{name}}? Their login, Graduations and References are deleted too. This cannot be undone.",
+      "confirmButton": "Yes, delete",
+      "cancel": "Cancel"
+    },
     "detail": {
       "personal": "Personal details",
       "notGiven": "Not given",
@@ -76,6 +90,20 @@
       "dateRequired": "Choose a date.",
       "beltRequired": "Choose a Belt.",
       "examinerRequired": "Choose at least one Examiner."
+    },
+    "references": {
+      "add": "Add reference",
+      "type": "Type",
+      "number": "Number",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "editLabel": "Edit {{type}}",
+      "remove": "Remove",
+      "removeLabel": "Remove {{type}}",
+      "removeConfirm": "Remove the {{type}} reference {{reference}}?",
+      "confirmRemove": "Yes, remove",
+      "numberRequired": "Enter the number."
     }
   },
   "notFound": {
