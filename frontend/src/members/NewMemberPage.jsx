@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApi } from '../api/ApiProvider';
 import ApiErrorMessage from '../api/ApiErrorMessage';
+import { ERROR_KINDS } from '../api/client';
 import { useApiData } from '../api/useApiData';
 import { useSession } from '../auth/useSession';
 import MemberForm, { personalDetailsOf } from './MemberForm';
@@ -13,9 +14,14 @@ const clubChoices = (api, session) =>
 
 /** /members/new: an Instructor or Admin registers a Member; member-service sends them a set-password email. */
 export default function NewMemberPage() {
+  const session = useSession();
+  if (!session.isInstructor) return <ApiErrorMessage error={{ kind: ERROR_KINDS.forbidden }} />;
+  return <NewMember session={session} />;
+}
+
+function NewMember({ session }) {
   const { t } = useTranslation();
   const api = useApi();
-  const session = useSession();
   const navigate = useNavigate();
   const { data: clubs, error: loadError, loading } = useApiData(
     (client) => clubChoices(client, session),

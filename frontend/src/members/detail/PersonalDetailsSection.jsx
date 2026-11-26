@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { useSession } from '../../auth/useSession';
 import { useFormatDate } from '../../i18n/formatDate';
 import Section from './Section';
 
@@ -7,9 +9,11 @@ export default function PersonalDetailsSection({ member }) {
   const { t } = useTranslation();
   const formatDate = useFormatDate();
   const { address } = member;
+  const { isInstructor } = useSession();
   const missing = t('members.detail.notGiven');
+  const edit = isInstructor && <Link to={`/members/${member.id}/edit`}>{t('members.form.edit')}</Link>;
   return (
-    <Section title={t('members.detail.personal')}>
+    <Section title={t('members.detail.personal')} actions={edit}>
       <dl>
         <dt>{t('members.fields.address')}</dt>
         <dd>

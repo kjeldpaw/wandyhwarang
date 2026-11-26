@@ -68,7 +68,10 @@
       "duplicateEmail": "Eine Person mit dieser E-Mail-Adresse gibt es bereits. Wende dich an einen Admin, um sie in deinen Verein aufzunehmen.",
       "required": "Pflichtfeld.",
       "invalidEmail": "Gib eine gültige E-Mail-Adresse ein.",
-      "noClub": "Wähle mindestens einen Verein."
+      "noClub": "Wähle mindestens einen Verein.",
+      "edit": "Bearbeiten",
+      "editTitle": "{{name}} bearbeiten",
+      "save": "Speichern"
     }
   },
   "notFound": {

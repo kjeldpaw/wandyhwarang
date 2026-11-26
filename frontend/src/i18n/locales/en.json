@@ -68,7 +68,10 @@
       "duplicateEmail": "A person with this email already exists. Contact an Admin to get them into your Club.",
       "required": "Required.",
       "invalidEmail": "Enter a valid email address.",
-      "noClub": "Choose at least one Club."
+      "noClub": "Choose at least one Club.",
+      "edit": "Edit",
+      "editTitle": "Edit {{name}}",
+      "save": "Save"
     }
   },
   "notFound": {
