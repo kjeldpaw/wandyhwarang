@@ -17,9 +17,10 @@ On a pushed tag matching `v*` it runs, in `frontend/`:
 5. Uploads `dist/` over SFTP with `lftp mirror --reverse` into the `www`
    directory of the SFTP account (the web root of wandywharang.dk).
 
-The upload overwrites files but deletes nothing on the server. Old hashed
-files in `assets/` and anything else already there stay until removed by
-hand.
+The upload overwrites files but deletes nothing on the server (it has no
+`--delete`, on purpose). Old hashed files in `assets/` and anything else
+already there, including the old PHP app, stay on the server and are still
+served until removed by hand.
 
 `frontend/public/.htaccess` is copied into the build. It makes `index.html`
 the directory index and rewrites every path that isn't an existing file to
@@ -61,4 +62,8 @@ After manual acceptance (log in as Admin, Instructor and Member, switch
 language, create a Member and receive the email, record a Graduation with an
 Examiner from another Club, reload a deep link, log out), delete the old PHP
 files from the web root and the old MySQL database in the one.com control
-panel.
+panel (go-live, wandyhwarang#11).
+
+No deploy does this for you: the upload never deletes, so the old PHP files
+(and the personal data the old app can still reach) stay served until they are
+removed by hand. Don't skip this step, or stale personal data is left behind.
