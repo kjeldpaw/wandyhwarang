@@ -104,10 +104,58 @@ export function createApiClient({ baseUrl, getAccessToken, renew, login }) {
     });
   }
 
+  const member = (id) => `/members/${encodeURIComponent(id)}`;
+
+  // Shapes are member-service's (see its api/*.java). Every write on a Member's Clubs,
+  // Graduations or References resolves with the whole updated Member.
   return {
+    members: {
+      /** Members the caller may see (Admin: all; Instructor: sharing a Club; Member: self): Member[] */
+      list: () => request('GET', '/members'),
+      /** One Member: {id, firstName, lastName, address, phone, email, dateOfBirth, clubs, graduation, references} */
+      get: (id) => request('GET', member(id)),
+      /** {firstName, lastName, address{street, city, zipCode}, phone?, email, dateOfBirth?, clubIds[]} -> Member (409: email exists) */
+      create: (body) => request('POST', '/members', body),
+      /** Same as create without clubIds; email is required but can't change -> Member */
+      update: (id, body) => request('PUT', member(id), body),
+      /** Admin only; resolves with nothing */
+      remove: (id) => request('DELETE', member(id)),
+      /** -> Member */
+      addClub: (id, clubId) => request('PUT', `${member(id)}/clubs/${encodeURIComponent(clubId)}`),
+      /** -> Member (409: it is the Member's last Club) */
+      removeClub: (id, clubId) => request('DELETE', `${member(id)}/clubs/${encodeURIComponent(clubId)}`),
+    },
+    graduations: {
+      /** {date, beltId, graduatedBy: examinerId[]} -> Member (the new one becomes member.graduation) */
+      add: (memberId, body) => request('POST', `${member(memberId)}/graduation`, body),
+      /** Same body; replaces date, Belt and Examiners -> Member */
+      update: (memberId, graduationId, body) =>
+        request('PUT', `${member(memberId)}/graduation/${encodeURIComponent(graduationId)}`, body),
+      /** -> Member */
+      remove: (memberId, graduationId) =>
+        request('DELETE', `${member(memberId)}/graduation/${encodeURIComponent(graduationId)}`),
+    },
+    references: {
+      /** {type: 'WandyWhaRang' | 'KukkiWon', reference} -> Member */
+      add: (memberId, body) => request('POST', `${member(memberId)}/reference`, body),
+      /** {reference} (the type can't change) -> Member */
+      update: (memberId, referenceId, body) =>
+        request('PUT', `${member(memberId)}/reference/${encodeURIComponent(referenceId)}`, body),
+      /** -> Member */
+      remove: (memberId, referenceId) =>
+        request('DELETE', `${member(memberId)}/reference/${encodeURIComponent(referenceId)}`),
+    },
     clubs: {
       /** All Clubs: Club[] {id, name, address{street, city, zipCode}} */
       list: () => request('GET', '/clubs'),
+    },
+    belts: {
+      /** All Belts, unordered: Belt[] {id, name, waitTime, rank}; show them with belts/belt.js */
+      list: () => request('GET', '/belts'),
+    },
+    examiners: {
+      /** Instructor/Admin: Members of any Club matching `text` (>= 2 chars, max 20): {id, firstName, lastName}[] */
+      search: (text) => request('GET', `/examiners?${new URLSearchParams({ q: text })}`),
     },
   };
 }
