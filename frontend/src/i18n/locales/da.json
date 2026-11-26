@@ -6,7 +6,9 @@
   "header": {
     "language": "Sprog",
     "logout": "Log ud",
-    "clubs": "Klubber"
+    "clubs": "Klubber",
+    "members": "Medlemmer",
+    "profile": "Min profil"
   },
   "roles": {
     "admin": "Admin",
@@ -15,6 +17,47 @@
   },
   "clubs": {
     "title": "Klubber"
+  },
+  "members": {
+    "list": {
+      "title": "Medlemmer",
+      "club": "Klub",
+      "allClubs": "Alle klubber",
+      "search": "Søg på navn",
+      "name": "Navn",
+      "clubs": "Klubber",
+      "belt": "Bælte",
+      "noBelt": "Intet bælte",
+      "none": "Ingen medlemmer matcher."
+    },
+    "fields": {
+      "address": "Adresse",
+      "phone": "Telefon",
+      "email": "E-mail",
+      "dateOfBirth": "Fødselsdato"
+    },
+    "detail": {
+      "personal": "Personlige oplysninger",
+      "notGiven": "Ikke oplyst",
+      "clubs": "Klubber",
+      "graduations": "Bælte og gradueringer",
+      "currentBelt": "Nuværende bælte",
+      "noBelt": "Intet bælte endnu",
+      "graduationHistory": "Gradueringer",
+      "noGraduations": "Ingen gradueringer endnu.",
+      "references": "Referencer",
+      "noReferences": "Ingen referencer.",
+      "notFound": "Medlemmet findes ikke, eller du har ikke adgang til det."
+    },
+    "graduation": {
+      "date": "Dato",
+      "belt": "Bælte",
+      "examiners": "Eksaminatorer"
+    }
+  },
+  "notFound": {
+    "title": "Ikke fundet",
+    "page": "Siden findes ikke."
   },
   "errors": {
     "network": "Kan ikke få forbindelse til member-service. Prøv igen senere.",

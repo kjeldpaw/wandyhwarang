@@ -1,0 +1,97 @@
+import { useTranslation } from 'react-i18next';
+import { Link, Navigate, useSearchParams } from 'react-router-dom';
+import ApiErrorMessage from '../api/ApiErrorMessage';
+import { useApiData } from '../api/useApiData';
+import { useSession } from '../auth/useSession';
+import { beltName } from '../belts/belt';
+import { byName, currentBelt, fullName, sortClubs } from './member';
+
+// Clubs the Club filter offers: an Admin any Club, anyone else the Clubs of their own Member record.
+const filterClubs = (api, session) =>
+  session.isAdmin ? api.clubs.list() : api.members.get(session.memberId).then((own) => own.clubs);
+
+function matches(member, { clubId, search }) {
+  if (clubId && !member.clubs.some((club) => club.id === clubId)) return false;
+  const text = search.trim().toLowerCase();
+  return !text || fullName(member).toLowerCase().includes(text);
+}
+
+/** The start page: Instructors and Admins get the Member list, a plain Member their own profile. */
+export default function MemberListPage() {
+  const session = useSession();
+  if (!session.isInstructor) return <Navigate to={`/members/${session.memberId}`} replace />;
+  return <MemberList session={session} />;
+}
+
+function MemberList({ session }) {
+  const { t } = useTranslation();
+  const [params, setParams] = useSearchParams();
+  const filter = { clubId: params.get('club') ?? '', search: params.get('q') ?? '' };
+  const { data, error, loading } = useApiData(
+    (api) => Promise.all([api.members.list(), filterClubs(api, session)]),
+    [session.isAdmin, session.memberId],
+  );
+  const [members, clubs] = data ?? [];
+
+  const setFilter = (name, value) =>
+    setParams(
+      (previous) => {
+        const next = new URLSearchParams(previous);
+        if (value) next.set(name, value);
+        else next.delete(name);
+        return next;
+      },
+      { replace: true },
+    );
+
+  const shown = members?.filter((member) => matches(member, filter)).sort(byName);
+
+  return (
+    <section>
+      <h2 id="members-title">{t('members.list.title')}</h2>
+      <div>
+        <label>
+          {t('members.list.club')}{' '}
+          <select value={filter.clubId} onChange={(event) => setFilter('club', event.target.value)}>
+            <option value="">{t('members.list.allClubs')}</option>
+            {clubs &&
+              sortClubs(clubs).map((club) => (
+                <option key={club.id} value={club.id}>
+                  {club.name}
+                </option>
+              ))}
+          </select>
+        </label>{' '}
+        <label>
+          {t('members.list.search')}{' '}
+          <input type="search" value={filter.search} onChange={(event) => setFilter('q', event.target.value)} />
+        </label>
+      </div>
+      {loading && <p role="status">{t('app.loading')}</p>}
+      <ApiErrorMessage error={error} />
+      {shown && shown.length === 0 && <p>{t('members.list.none')}</p>}
+      {shown && shown.length > 0 && (
+        <table aria-labelledby="members-title">
+          <thead>
+            <tr>
+              <th scope="col">{t('members.list.name')}</th>
+              <th scope="col">{t('members.list.clubs')}</th>
+              <th scope="col">{t('members.list.belt')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shown.map((member) => (
+              <tr key={member.id}>
+                <td>
+                  <Link to={`/members/${member.id}`}>{fullName(member)}</Link>
+                </td>
+                <td>{sortClubs(member.clubs).map((club) => club.name).join(', ')}</td>
+                <td>{currentBelt(member) ? beltName(currentBelt(member)) : t('members.list.noBelt')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </section>
+  );
+}

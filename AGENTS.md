@@ -71,9 +71,13 @@ Everything runs from `frontend/`:
 `AppProviders` (OIDC session and member-service client);
 `frontend/src/App.jsx` holds the routes. Code that talks to member-service
 goes through the client in `frontend/src/api/client.js` (`useApi()`), and
-roles come from `useSession()` in `frontend/src/auth/useSession.js`. Tests
-live next to the code as `*.test.jsx`; `frontend/src/test/` holds the setup
-file, the render helper and the MSW handlers.
+roles come from `useSession()` in `frontend/src/auth/useSession.js`. Show
+Belts with `beltName()` from `frontend/src/belts/belt.js`. The Member detail
+page (`frontend/src/members/MemberPage.jsx`) is one section component per
+part of the record in `frontend/src/members/detail/`. Tests live next to the
+code as `*.test.jsx`; `frontend/src/test/` holds the setup file, the render
+helper and the MSW handlers, with member-service fixtures (Clubs, Belts,
+Members) in `frontend/src/test/memberService.js`.
 
 ## Deploy
 

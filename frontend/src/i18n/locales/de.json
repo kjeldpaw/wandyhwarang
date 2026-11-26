@@ -6,7 +6,9 @@
   "header": {
     "language": "Sprache",
     "logout": "Abmelden",
-    "clubs": "Vereine"
+    "clubs": "Vereine",
+    "members": "Mitglieder",
+    "profile": "Mein Profil"
   },
   "roles": {
     "admin": "Admin",
@@ -15,6 +17,47 @@
   },
   "clubs": {
     "title": "Vereine"
+  },
+  "members": {
+    "list": {
+      "title": "Mitglieder",
+      "club": "Verein",
+      "allClubs": "Alle Vereine",
+      "search": "Nach Name suchen",
+      "name": "Name",
+      "clubs": "Vereine",
+      "belt": "Gürtel",
+      "noBelt": "Kein Gürtel",
+      "none": "Keine Mitglieder gefunden."
+    },
+    "fields": {
+      "address": "Adresse",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "dateOfBirth": "Geburtsdatum"
+    },
+    "detail": {
+      "personal": "Persönliche Angaben",
+      "notGiven": "Nicht angegeben",
+      "clubs": "Vereine",
+      "graduations": "Gürtel und Graduierungen",
+      "currentBelt": "Aktueller Gürtel",
+      "noBelt": "Noch kein Gürtel",
+      "graduationHistory": "Graduierungen",
+      "noGraduations": "Noch keine Graduierungen.",
+      "references": "Referenzen",
+      "noReferences": "Keine Referenzen.",
+      "notFound": "Dieses Mitglied gibt es nicht, oder du hast keinen Zugriff darauf."
+    },
+    "graduation": {
+      "date": "Datum",
+      "belt": "Gürtel",
+      "examiners": "Prüfer"
+    }
+  },
+  "notFound": {
+    "title": "Nicht gefunden",
+    "page": "Diese Seite gibt es nicht."
   },
   "errors": {
     "network": "Keine Verbindung zu member-service. Bitte später erneut versuchen.",

@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useApi } from './ApiProvider';
 
 /**
  * Loads data with the API client when the component mounts or `deps` change.
  *   const { data, error, loading } = useApiData((api) => api.clubs.list(), []);
  * `error` is an ApiError (see api/client.js); render it with <ApiErrorMessage error={error} />.
+ * `setData(value)` replaces the data, e.g. with the updated Member a write resolves with.
  */
 export function useApiData(load, deps) {
   const api = useApi();
@@ -22,5 +23,6 @@ export function useApiData(load, deps) {
     };
   }, [api, ...deps]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return state;
+  const setData = useCallback((data) => setState({ data, error: undefined, loading: false }), []);
+  return { ...state, setData };
 }

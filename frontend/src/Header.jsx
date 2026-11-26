@@ -4,6 +4,23 @@ import { NavLink } from 'react-router-dom';
 import { useSession } from './auth/useSession';
 import LanguageSwitcher from './i18n/LanguageSwitcher';
 
+function Navigation() {
+  const { t } = useTranslation();
+  const session = useSession();
+  return (
+    <nav>
+      {session.isInstructor ? (
+        <NavLink to="/" end>
+          {t('header.members')}
+        </NavLink>
+      ) : (
+        <NavLink to={`/members/${session.memberId}`}>{t('header.profile')}</NavLink>
+      )}{' '}
+      <NavLink to="/clubs">{t('header.clubs')}</NavLink>
+    </nav>
+  );
+}
+
 function SessionInfo() {
   const { t } = useTranslation();
   const session = useSession();
@@ -18,16 +35,13 @@ function SessionInfo() {
 }
 
 export default function Header() {
-  const { t } = useTranslation();
   const auth = useAuth();
   return (
     <header>
       <h1>Wandy Wha Rang</h1>
       {auth.isAuthenticated && (
         <>
-          <nav>
-            <NavLink to="/clubs">{t('header.clubs')}</NavLink>
-          </nav>
+          <Navigation />
           <SessionInfo />
         </>
       )}

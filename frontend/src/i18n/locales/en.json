@@ -6,7 +6,9 @@
   "header": {
     "language": "Language",
     "logout": "Log out",
-    "clubs": "Clubs"
+    "clubs": "Clubs",
+    "members": "Members",
+    "profile": "My profile"
   },
   "roles": {
     "admin": "Admin",
@@ -15,6 +17,47 @@
   },
   "clubs": {
     "title": "Clubs"
+  },
+  "members": {
+    "list": {
+      "title": "Members",
+      "club": "Club",
+      "allClubs": "All Clubs",
+      "search": "Search by name",
+      "name": "Name",
+      "clubs": "Clubs",
+      "belt": "Belt",
+      "noBelt": "No Belt",
+      "none": "No Members match."
+    },
+    "fields": {
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "dateOfBirth": "Date of birth"
+    },
+    "detail": {
+      "personal": "Personal details",
+      "notGiven": "Not given",
+      "clubs": "Clubs",
+      "graduations": "Belt and Graduations",
+      "currentBelt": "Current Belt",
+      "noBelt": "No Belt yet",
+      "graduationHistory": "Graduations",
+      "noGraduations": "No Graduations yet.",
+      "references": "References",
+      "noReferences": "No References.",
+      "notFound": "This Member does not exist, or you do not have access to them."
+    },
+    "graduation": {
+      "date": "Date",
+      "belt": "Belt",
+      "examiners": "Examiners"
+    }
+  },
+  "notFound": {
+    "title": "Not found",
+    "page": "This page does not exist."
   },
   "errors": {
     "network": "Cannot connect to member-service. Please try again later.",
