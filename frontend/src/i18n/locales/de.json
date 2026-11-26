@@ -53,6 +53,20 @@
       "date": "Datum",
       "belt": "Gürtel",
       "examiners": "Prüfer"
+    },
+    "references": {
+      "add": "Referenz hinzufügen",
+      "type": "Typ",
+      "number": "Nummer",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "edit": "Bearbeiten",
+      "editLabel": "{{type}} bearbeiten",
+      "remove": "Entfernen",
+      "removeLabel": "{{type}} entfernen",
+      "removeConfirm": "{{type}}-Referenz {{reference}} entfernen?",
+      "confirmRemove": "Ja, entfernen",
+      "numberRequired": "Bitte die Nummer eingeben."
     }
   },
   "notFound": {

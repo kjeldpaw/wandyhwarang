@@ -53,6 +53,20 @@
       "date": "Date",
       "belt": "Belt",
       "examiners": "Examiners"
+    },
+    "references": {
+      "add": "Add reference",
+      "type": "Type",
+      "number": "Number",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "editLabel": "Edit {{type}}",
+      "remove": "Remove",
+      "removeLabel": "Remove {{type}}",
+      "removeConfirm": "Remove the {{type}} reference {{reference}}?",
+      "confirmRemove": "Yes, remove",
+      "numberRequired": "Enter the number."
     }
   },
   "notFound": {
