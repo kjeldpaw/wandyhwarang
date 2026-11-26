@@ -14,7 +14,8 @@ function historyRows() {
   return within(table)
     .getAllByRole('row')
     .slice(1)
-    .map((row) => within(row).getAllByRole('cell').map((cell) => cell.textContent));
+    // Date, Belt, Examiners (Instructors and Admins also get an actions column).
+    .map((row) => within(row).getAllByRole('cell').slice(0, 3).map((cell) => cell.textContent));
 }
 
 test("an Instructor sees a Member's full record", async () => {

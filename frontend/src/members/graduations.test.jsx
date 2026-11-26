@@ -163,3 +163,128 @@ test('the Examiner picker shows only names, waits for 2 letters and allows sever
 async function waitForFormToClose(name) {
   await waitFor(() => expect(screen.queryByRole('form', { name })).not.toBeInTheDocument());
 }
+
+// The row of the Graduation on a date, as shown.
+const rowOf = (date) =>
+  within(within(section()).getByRole('table', { name: 'Gradueringer' })).getByRole('cell', { name: date }).closest('tr');
+
+test('an Instructor corrects the date, Belt and Examiners of a Graduation', async () => {
+  const mads = members.mads;
+  const middle = 'graduation-2023-11-15-11';
+  let body;
+  server.use(
+    http.put(api(`/members/${mads.id}/graduation/${middle}`), async ({ request }) => {
+      body = await request.json();
+      return HttpResponse.json({
+        ...mads,
+        graduation: graduations(
+          { date: '2024-05-01', belt: belts.kup8, graduatedBy: [members.ida, members.ole] },
+          { date: '2023-11-20', belt: belts.kup9, graduatedBy: [members.ole] },
+          { date: '2023-05-01', belt: belts.kup10, graduatedBy: [members.ida] },
+        ),
+      });
+    }),
+  );
+  const { user } = await openDetail(mads);
+
+  await user.click(within(rowOf('15. november 2023')).getByRole('button', { name: 'Ret gradueringen 15. november 2023' }));
+  const form = await screen.findByRole('form', { name: 'Ret graduering' });
+  // The form starts with the Graduation as recorded.
+  expect(within(form).getByLabelText('Dato')).toHaveValue('2023-11-15');
+  expect(await within(form).findByRole('option', { name: '9. Kup', selected: true })).toBeInTheDocument();
+  expect(within(form).getByRole('button', { name: 'Fjern Ida Instruktør' })).toBeInTheDocument();
+
+  await user.clear(within(form).getByLabelText('Dato'));
+  await user.type(within(form).getByLabelText('Dato'), '2023-11-20');
+  await user.click(within(form).getByRole('button', { name: 'Fjern Ida Instruktør' }));
+  await pickExaminer(user, form, 'hansen', 'Ole Hansen');
+  await user.click(within(form).getByRole('button', { name: 'Gem' }));
+
+  await waitForFormToClose('Ret graduering');
+  expect(body).toEqual({ date: '2023-11-20', beltId: belts.kup9.id, graduatedBy: [members.ole.id] });
+  expect(historyRows()).toEqual([
+    ['1. maj 2024', '8. Kup', 'Ole Hansen, Ida Instruktør'],
+    ['20. november 2023', '9. Kup', 'Ole Hansen'],
+    ['1. maj 2023', '10. Kup', 'Ida Instruktør'],
+  ]);
+});
+
+test('an Instructor deletes a Graduation after confirming', async () => {
+  const mads = members.mads;
+  const latest = 'graduation-2024-05-01-12';
+  let deleted = false;
+  server.use(
+    http.delete(api(`/members/${mads.id}/graduation/${latest}`), () => {
+      deleted = true;
+      return HttpResponse.json({
+        ...mads,
+        graduation: graduations(
+          { date: '2023-11-15', belt: belts.kup9, graduatedBy: [members.ida] },
+          { date: '2023-05-01', belt: belts.kup10, graduatedBy: [members.ida] },
+        ),
+      });
+    }),
+  );
+  const { user } = await openDetail(mads);
+
+  // Cancelling keeps it.
+  await user.click(within(rowOf('1. maj 2024')).getByRole('button', { name: 'Slet gradueringen 1. maj 2024' }));
+  expect(within(section()).getByText('Slet gradueringen 1. maj 2024 (8. Kup)?')).toBeInTheDocument();
+  await user.click(within(section()).getByRole('button', { name: 'Annuller' }));
+  expect(deleted).toBe(false);
+  expect(historyRows()).toHaveLength(3);
+
+  await user.click(within(rowOf('1. maj 2024')).getByRole('button', { name: 'Slet gradueringen 1. maj 2024' }));
+  await user.click(within(section()).getByRole('button', { name: 'Ja, slet' }));
+
+  expect(await within(section()).findByText('Nuværende bælte: 9. Kup')).toBeInTheDocument();
+  expect(deleted).toBe(true);
+  expect(historyRows()).toEqual([
+    ['15. november 2023', '9. Kup', 'Ida Instruktør'],
+    ['1. maj 2023', '10. Kup', 'Ida Instruktør'],
+  ]);
+});
+
+test('a failed save keeps the form open with a translated error', async () => {
+  server.use(
+    http.post(api(`/members/${members.kim.id}/graduation`), () => new HttpResponse(null, { status: 403 })),
+  );
+  const { user } = await openDetail(members.kim);
+  await user.click(within(section()).getByRole('button', { name: 'Tilføj graduering' }));
+  const form = await screen.findByRole('form', { name: 'Ny graduering' });
+  await user.type(within(form).getByLabelText('Dato'), '2024-06-01');
+  await user.selectOptions(await within(form).findByLabelText('Bælte'), '10. Kup');
+  await pickExaminer(user, form, 'ole', 'Ole Hansen');
+  await user.click(within(form).getByRole('button', { name: 'Gem' }));
+
+  expect(await within(form).findByRole('alert')).toHaveTextContent('Du har ikke adgang til dette.');
+  expect(within(form).getByLabelText('Dato')).toHaveValue('2024-06-01');
+});
+
+test('a failed delete shows a translated error and keeps the history', async () => {
+  const mads = members.mads;
+  server.use(
+    http.delete(api(`/members/${mads.id}/graduation/:graduationId`), () => HttpResponse.error()),
+  );
+  const { user } = await openDetail(mads);
+
+  await user.click(within(rowOf('1. maj 2023')).getByRole('button', { name: 'Slet gradueringen 1. maj 2023' }));
+  await user.click(within(section()).getByRole('button', { name: 'Ja, slet' }));
+
+  expect(await within(section()).findByRole('alert')).toHaveTextContent(
+    'Kan ikke få forbindelse til member-service. Prøv igen senere.',
+  );
+  expect(historyRows()).toHaveLength(3);
+});
+
+test('an Admin can record Graduations; a plain Member cannot', async () => {
+  const first = await openDetail(members.sofie, 'admin');
+  expect(within(section()).getByRole('button', { name: 'Tilføj graduering' })).toBeInTheDocument();
+  expect(within(rowOf('10. september 2022')).getByRole('button', { name: 'Slet gradueringen 10. september 2022' }))
+    .toBeInTheDocument();
+  first.unmount();
+
+  await openDetail(members.mads, 'member');
+  expect(within(section()).queryByRole('button')).not.toBeInTheDocument();
+  expect(within(section()).queryByRole('columnheader', { name: 'Handlinger' })).not.toBeInTheDocument();
+});
