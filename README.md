@@ -16,3 +16,8 @@ npm run dev      # dev server on http://localhost:3000
 npm test         # run the tests once
 npm run build    # static build in frontend/dist
 ```
+
+## Deploy
+
+Pushing a `v*` tag builds the app and uploads it to one.com. See
+[docs/deploy.md](docs/deploy.md).
