@@ -212,6 +212,13 @@ test('a plain Member is not offered to edit their profile', async () => {
   expect(within(personal).queryByRole('link', { name: 'Rediger' })).not.toBeInTheDocument();
 });
 
+test('a plain Member who opens the edit page of their own profile gets no form', async () => {
+  renderApp(`/members/${members.mads.id}/edit`, { as: 'member' });
+
+  expect(await screen.findByRole('alert')).toHaveTextContent('Du har ikke adgang til dette.');
+  expect(screen.queryByLabelText('Fornavn')).not.toBeInTheDocument();
+});
+
 test('a plain Member gets no create link or form', async () => {
   renderApp('/members/new', { as: 'member' });
 

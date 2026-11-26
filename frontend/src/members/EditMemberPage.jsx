@@ -5,12 +5,19 @@ import { useApi } from '../api/ApiProvider';
 import ApiErrorMessage from '../api/ApiErrorMessage';
 import { ERROR_KINDS } from '../api/client';
 import { useApiData } from '../api/useApiData';
+import { useSession } from '../auth/useSession';
 import NotFound from '../NotFound';
 import MemberForm, { personalDetailsOf } from './MemberForm';
 import { fullName } from './member';
 
 /** /members/:id/edit: an Instructor or Admin edits a Member's personal details (not Clubs, not email). */
 export default function EditMemberPage() {
+  const { isInstructor } = useSession();
+  if (!isInstructor) return <ApiErrorMessage error={{ kind: ERROR_KINDS.forbidden }} />;
+  return <EditMember />;
+}
+
+function EditMember() {
   const { t } = useTranslation();
   const api = useApi();
   const navigate = useNavigate();
