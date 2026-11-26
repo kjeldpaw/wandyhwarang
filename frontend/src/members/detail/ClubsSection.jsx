@@ -2,24 +2,19 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApi } from '../../api/ApiProvider';
 import ApiErrorMessage from '../../api/ApiErrorMessage';
-import { useApiData } from '../../api/useApiData';
+import { useOwnClubs } from '../../auth/useOwnClubs';
 import { useSession } from '../../auth/useSession';
 import { sortClubs } from '../member';
 import Section from './Section';
 
-// Clubs the session may add to or remove from a Member: an Admin any Club, an Instructor
-// the Clubs of their own Member record (member-service answers 403 for any other).
-const manageableClubs = (api, session) =>
-  session.isAdmin ? api.clubs.list() : api.members.get(session.memberId).then((own) => own.clubs);
-
 /** The Clubs the Member belongs to, by name. Instructors and Admins add and remove Clubs here. */
 export default function ClubsSection({ member, onChange }) {
   const { t } = useTranslation();
-  const session = useSession();
+  const { isInstructor } = useSession();
   return (
     <Section title={t('members.detail.clubs')}>
-      {session.isInstructor ? (
-        <ManageClubs member={member} onChange={onChange} session={session} />
+      {isInstructor ? (
+        <ManageClubs member={member} onChange={onChange} />
       ) : (
         <ul>
           {sortClubs(member.clubs).map((club) => (
@@ -33,13 +28,11 @@ export default function ClubsSection({ member, onChange }) {
   );
 }
 
-function ManageClubs({ member, onChange, session }) {
+function ManageClubs({ member, onChange }) {
   const { t } = useTranslation();
   const api = useApi();
-  const { data: manageable = [] } = useApiData((api) => manageableClubs(api, session), [
-    session.isAdmin,
-    session.memberId,
-  ]);
+  // The session may add or remove only the Clubs it works with.
+  const { data: manageable = [] } = useOwnClubs();
   const [clubId, setClubId] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState();

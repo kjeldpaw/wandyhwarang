@@ -2,13 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import ApiErrorMessage from '../api/ApiErrorMessage';
 import { useApiData } from '../api/useApiData';
+import { useOwnClubs } from '../auth/useOwnClubs';
 import { useSession } from '../auth/useSession';
 import { beltName } from '../belts/belt';
 import { byName, currentBelt, fullName, sortClubs } from './member';
-
-// Clubs the Club filter offers: an Admin any Club, anyone else the Clubs of their own Member record.
-const filterClubs = (api, session) =>
-  session.isAdmin ? api.clubs.list() : api.members.get(session.memberId).then((own) => own.clubs);
 
 function matches(member, { clubId, search }) {
   if (clubId && !member.clubs.some((club) => club.id === clubId)) return false;
@@ -20,18 +17,19 @@ function matches(member, { clubId, search }) {
 export default function MemberListPage() {
   const session = useSession();
   if (!session.isInstructor) return <Navigate to={`/members/${session.memberId}`} replace />;
-  return <MemberList session={session} />;
+  return <MemberList />;
 }
 
-function MemberList({ session }) {
+function MemberList() {
   const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const filter = { clubId: params.get('club') ?? '', search: params.get('q') ?? '' };
-  const { data, error, loading } = useApiData(
-    (api) => Promise.all([api.members.list(), filterClubs(api, session)]),
-    [session.isAdmin, session.memberId],
-  );
-  const [members, clubs] = data ?? [];
+  const list = useApiData((api) => api.members.list(), []);
+  const ownClubs = useOwnClubs();
+  const loading = list.loading || ownClubs.loading;
+  const error = list.error ?? ownClubs.error;
+  const members = list.data;
+  const clubs = ownClubs.data;
 
   const setFilter = (name, value) =>
     setParams(

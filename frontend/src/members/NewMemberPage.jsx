@@ -4,29 +4,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useApi } from '../api/ApiProvider';
 import ApiErrorMessage from '../api/ApiErrorMessage';
 import { ERROR_KINDS } from '../api/client';
-import { useApiData } from '../api/useApiData';
+import { useOwnClubs } from '../auth/useOwnClubs';
 import { useSession } from '../auth/useSession';
 import MemberForm, { personalDetailsOf } from './MemberForm';
 
-// Clubs a new Member can join: an Admin any Club, an Instructor the Clubs of their own Member record.
-const clubChoices = (api, session) =>
-  session.isAdmin ? api.clubs.list() : api.members.get(session.memberId).then((own) => own.clubs);
-
 /** /members/new: an Instructor or Admin registers a Member; member-service sends them a set-password email. */
 export default function NewMemberPage() {
-  const session = useSession();
-  if (!session.isInstructor) return <ApiErrorMessage error={{ kind: ERROR_KINDS.forbidden }} />;
-  return <NewMember session={session} />;
+  const { isInstructor } = useSession();
+  if (!isInstructor) return <ApiErrorMessage error={{ kind: ERROR_KINDS.forbidden }} />;
+  return <NewMember />;
 }
 
-function NewMember({ session }) {
+function NewMember() {
   const { t } = useTranslation();
   const api = useApi();
   const navigate = useNavigate();
-  const { data: clubs, error: loadError, loading } = useApiData(
-    (client) => clubChoices(client, session),
-    [session.isAdmin, session.memberId],
-  );
+  // A new Member can join only the Clubs the Instructor works with (any Club for an Admin).
+  const { data: clubs, error: loadError, loading } = useOwnClubs();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState();
 
