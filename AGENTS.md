@@ -21,6 +21,13 @@ their own profile.
   in-app password reset.
 - Keycloak and member-service URLs and the client id are set at build time
   through Vite environment variables, not a runtime config file.
+  `frontend/.env` holds the production values; override them in
+  `frontend/.env.local` (gitignored) or the build environment. Read them only
+  through `frontend/src/config.js`:
+  - `VITE_OIDC_AUTHORITY`: Keycloak realm URL,
+    `https://keycloak.k3s.figge.dk/realms/wandywharang`
+  - `VITE_OIDC_CLIENT_ID`: `wandywharang-frontend`
+  - `VITE_MEMBER_SERVICE_URL`: `https://member-service.k3s.figge.dk/api/v1`
 
 The PHP backend and MySQL database this repo used to hold are retired; see
 [docs/adr/0001](docs/adr/0001-static-spa-backed-by-member-service-and-keycloak.md).
@@ -47,16 +54,24 @@ Everything runs from `frontend/`:
 - `npm test`: Vitest, runs once (use `npm run test:watch` to watch)
 - `npm run build`: static build into `frontend/dist`
 
-`frontend/src/main.jsx` mounts `App` inside a `BrowserRouter`;
-`frontend/src/App.jsx` holds the routes. Tests live next to the code as
-`*.test.jsx`; `frontend/src/test/setup.js` is the Vitest setup file.
+`frontend/src/main.jsx` mounts `App` inside a `BrowserRouter` and
+`AppProviders` (OIDC session and member-service client);
+`frontend/src/App.jsx` holds the routes. Code that talks to member-service
+goes through the client in `frontend/src/api/client.js` (`useApi()`), and
+roles come from `useSession()` in `frontend/src/auth/useSession.js`. Tests
+live next to the code as `*.test.jsx`; `frontend/src/test/` holds the setup
+file, the render helper and the MSW handlers.
 
 ## Testing
 
 Tests check what a user sees and does, and which HTTP requests reach
-member-service. Render the whole `App` at a route (inside a `MemoryRouter`)
-with React Testing Library, and let MSW stand in for member-service. Don't
-mock app modules or assert on component internals.
+member-service. Render the whole app at a route with
+`renderApp(path, { as: 'admin' | 'instructor' | 'member' | null })` from
+`frontend/src/test/renderApp.jsx`: it logs the person in by seeding
+sessionStorage with an `oidc-client-ts` user whose fake access token carries
+their realm roles. MSW (`frontend/src/test/server.js`) stands in for
+member-service and Keycloak; override a handler in a test with
+`server.use(...)`. Don't mock app modules or assert on component internals.
 
 ## Decisions
 

@@ -1,15 +1,19 @@
 import { Route, Routes } from 'react-router-dom';
+import RequireLogin from './auth/RequireLogin';
+import ClubsPage from './clubs/ClubsPage';
+import Header from './Header';
 
 function App() {
   return (
     <>
-      <header>
-        <h1>Wandy Wha Rang</h1>
-      </header>
+      <Header />
       <main>
-        <Routes>
-          <Route path="*" element={null} />
-        </Routes>
+        <RequireLogin>
+          <Routes>
+            <Route path="/" element={null} />
+            <Route path="/clubs" element={<ClubsPage />} />
+          </Routes>
+        </RequireLogin>
       </main>
     </>
   );
