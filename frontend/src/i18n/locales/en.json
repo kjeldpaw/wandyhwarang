@@ -52,7 +52,30 @@
     "graduation": {
       "date": "Date",
       "belt": "Belt",
-      "examiners": "Examiners"
+      "examiners": "Examiners",
+      "add": "Add Graduation",
+      "new": "New Graduation",
+      "editTitle": "Edit Graduation",
+      "actions": "Actions",
+      "edit": "Edit",
+      "editOne": "Edit the Graduation of {{date}}",
+      "delete": "Delete",
+      "deleteOne": "Delete the Graduation of {{date}}",
+      "deleteConfirm": "Delete the Graduation of {{date}} ({{belt}})?",
+      "confirmDelete": "Yes, delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "chooseBelt": "Choose a Belt",
+      "searchExaminer": "Search Examiner",
+      "searchResults": "Search results",
+      "chosenExaminers": "Chosen Examiners",
+      "noExaminers": "No Examiners chosen.",
+      "removeExaminer": "Remove {{name}}",
+      "typeMore": "Type at least 2 letters.",
+      "noExaminersFound": "No Examiners found.",
+      "dateRequired": "Choose a date.",
+      "beltRequired": "Choose a Belt.",
+      "examinerRequired": "Choose at least one Examiner."
     }
   },
   "notFound": {

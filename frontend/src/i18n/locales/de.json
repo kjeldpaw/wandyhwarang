@@ -52,7 +52,30 @@
     "graduation": {
       "date": "Datum",
       "belt": "Gürtel",
-      "examiners": "Prüfer"
+      "examiners": "Prüfer",
+      "add": "Graduierung hinzufügen",
+      "new": "Neue Graduierung",
+      "editTitle": "Graduierung bearbeiten",
+      "actions": "Aktionen",
+      "edit": "Bearbeiten",
+      "editOne": "Graduierung vom {{date}} bearbeiten",
+      "delete": "Löschen",
+      "deleteOne": "Graduierung vom {{date}} löschen",
+      "deleteConfirm": "Graduierung vom {{date}} ({{belt}}) löschen?",
+      "confirmDelete": "Ja, löschen",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "chooseBelt": "Gürtel wählen",
+      "searchExaminer": "Prüfer suchen",
+      "searchResults": "Suchergebnisse",
+      "chosenExaminers": "Gewählte Prüfer",
+      "noExaminers": "Keine Prüfer gewählt.",
+      "removeExaminer": "{{name}} entfernen",
+      "typeMore": "Mindestens 2 Buchstaben eingeben.",
+      "noExaminersFound": "Keine Prüfer gefunden.",
+      "dateRequired": "Bitte ein Datum wählen.",
+      "beltRequired": "Bitte einen Gürtel wählen.",
+      "examinerRequired": "Bitte mindestens einen Prüfer wählen."
     }
   },
   "notFound": {

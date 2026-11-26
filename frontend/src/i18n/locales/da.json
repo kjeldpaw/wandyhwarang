@@ -52,7 +52,30 @@
     "graduation": {
       "date": "Dato",
       "belt": "Bælte",
-      "examiners": "Eksaminatorer"
+      "examiners": "Eksaminatorer",
+      "add": "Tilføj graduering",
+      "new": "Ny graduering",
+      "editTitle": "Ret graduering",
+      "actions": "Handlinger",
+      "edit": "Ret",
+      "editOne": "Ret gradueringen {{date}}",
+      "delete": "Slet",
+      "deleteOne": "Slet gradueringen {{date}}",
+      "deleteConfirm": "Slet gradueringen {{date}} ({{belt}})?",
+      "confirmDelete": "Ja, slet",
+      "save": "Gem",
+      "cancel": "Annuller",
+      "chooseBelt": "Vælg bælte",
+      "searchExaminer": "Søg eksaminator",
+      "searchResults": "Søgeresultater",
+      "chosenExaminers": "Valgte eksaminatorer",
+      "noExaminers": "Ingen eksaminatorer valgt.",
+      "removeExaminer": "Fjern {{name}}",
+      "typeMore": "Skriv mindst 2 bogstaver.",
+      "noExaminersFound": "Ingen eksaminatorer fundet.",
+      "dateRequired": "Vælg en dato.",
+      "beltRequired": "Vælg et bælte.",
+      "examinerRequired": "Vælg mindst én eksaminator."
     }
   },
   "notFound": {
