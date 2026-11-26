@@ -62,6 +62,16 @@ roles come from `useSession()` in `frontend/src/auth/useSession.js`. Tests
 live next to the code as `*.test.jsx`; `frontend/src/test/` holds the setup
 file, the render helper and the MSW handlers.
 
+## Deploy
+
+Pushing a tag matching `v*` runs `.github/workflows/deploy.yml`: install,
+test, build with `frontend/.env`, then upload `frontend/dist` to one.com over
+SFTP. Failing tests stop it before any upload. `frontend/public/.htaccess`
+rewrites every non-file path to `index.html` so SPA routes survive a reload.
+The SFTP connection comes from the repository secrets `SFTP_HOST`,
+`SFTP_USER` and `SFTP_PASSWORD`. Steps and first-deploy notes are in
+[docs/deploy.md](docs/deploy.md). Don't push tags unless asked to deploy.
+
 ## Testing
 
 Tests check what a user sees and does, and which HTTP requests reach
