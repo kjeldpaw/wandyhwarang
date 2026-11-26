@@ -36,6 +36,20 @@
       "email": "E-mail",
       "dateOfBirth": "Fødselsdato"
     },
+    "clubs": {
+      "add": "Tilføj klub",
+      "choose": "Vælg klub",
+      "addButton": "Tilføj",
+      "remove": "Fjern",
+      "removeClub": "Fjern {{club}}",
+      "lastClub": "Et medlem skal være i mindst én klub. Tilføj en anden klub, før du fjerner denne."
+    },
+    "delete": {
+      "button": "Slet medlem",
+      "confirm": "Slet {{name}}? Medlemmets login, gradueringer og referencer slettes også. Det kan ikke fortrydes.",
+      "confirmButton": "Ja, slet",
+      "cancel": "Annuller"
+    },
     "detail": {
       "personal": "Personlige oplysninger",
       "notGiven": "Ikke oplyst",

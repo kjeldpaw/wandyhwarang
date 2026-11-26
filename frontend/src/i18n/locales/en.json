@@ -36,6 +36,20 @@
       "email": "Email",
       "dateOfBirth": "Date of birth"
     },
+    "clubs": {
+      "add": "Add Club",
+      "choose": "Choose Club",
+      "addButton": "Add",
+      "remove": "Remove",
+      "removeClub": "Remove {{club}}",
+      "lastClub": "A Member must belong to at least one Club. Add another Club before removing this one."
+    },
+    "delete": {
+      "button": "Delete Member",
+      "confirm": "Delete {{name}}? Their login, Graduations and References are deleted too. This cannot be undone.",
+      "confirmButton": "Yes, delete",
+      "cancel": "Cancel"
+    },
     "detail": {
       "personal": "Personal details",
       "notGiven": "Not given",
