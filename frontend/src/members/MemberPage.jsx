@@ -5,6 +5,7 @@ import { ERROR_KINDS } from '../api/client';
 import { useApiData } from '../api/useApiData';
 import NotFound from '../NotFound';
 import ClubsSection from './detail/ClubsSection';
+import DeleteMember from './detail/DeleteMember';
 import GraduationsSection from './detail/GraduationsSection';
 import PersonalDetailsSection from './detail/PersonalDetailsSection';
 import ReferencesSection from './detail/ReferencesSection';
@@ -28,6 +29,7 @@ export default function MemberPage() {
   return (
     <article>
       <h2>{fullName(member)}</h2>
+      <DeleteMember member={member} />
       <PersonalDetailsSection member={member} onChange={setMember} />
       <ClubsSection member={member} onChange={setMember} />
       <GraduationsSection member={member} onChange={setMember} />
