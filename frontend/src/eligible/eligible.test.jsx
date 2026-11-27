@@ -1,6 +1,6 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { api, eligible, eligibleDate, eligibleHandler } from '../test/memberService';
+import { api, eligible, eligibleDate, eligibleHandler, memberHandlers, members } from '../test/memberService';
 import { renderApp } from '../test/renderApp';
 import { server } from '../test/server';
 
@@ -108,6 +108,32 @@ test('the Club filter offers the Clubs in the list and shows that Club’s Membe
 
   await user.selectOptions(filter, 'Taekwondoklubben Hwa Rang Aarhus');
   expect(await listedNames()).toEqual(['Emil Jensen', 'Laura Poulsen']);
+});
+
+test('picking another date clears the Club filter, so no one is hidden by a Club the new list lacks', async () => {
+  const { user } = renderApp('/eligible', { as: 'admin' });
+  await pickDate(user);
+  await table();
+  await user.selectOptions(screen.getByRole('combobox', { name: 'Klub' }), 'Nordjysk Taekwondo Center');
+  expect(await listedNames()).toEqual(['Ole Hansen']);
+
+  server.use(eligibleHandler([eligible.emil]));
+  const date = screen.getByLabelText('Dato for gradueringen');
+  await user.clear(date);
+  await user.type(date, '2027-09-01');
+
+  await waitFor(async () => expect(await listedNames()).toEqual(['Emil Jensen']));
+  expect(screen.getByRole('combobox', { name: 'Klub' })).toHaveValue('');
+});
+
+test('an Instructor without a Member record gets the list without links and without an error', async () => {
+  server.use(...memberHandlers(Object.values(members).filter((member) => member.id !== members.ida.id)));
+  const { user } = renderApp('/eligible', { as: 'instructor' });
+  await pickDate(user);
+
+  expect(await listedNames()).toEqual(['Ida Instruktør', 'Ole Hansen', 'Emil Jensen', 'Laura Poulsen']);
+  expect(within(await table()).queryByRole('link')).not.toBeInTheDocument();
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 });
 
 test('an Instructor sees Eligible Members of every Club, linked only when they share a Club', async () => {

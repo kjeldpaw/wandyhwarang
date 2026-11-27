@@ -113,15 +113,15 @@ test('every Belt member-service has is offered in rank order', async () => {
 });
 
 test('a Poom in the Graduation history shows as n. Poom with a red-and-black badge', async () => {
-  const young = {
+  const poomHolder = {
     ...members.kim,
     graduation: graduations(
       { date: '2025-06-01', belt: belts.poom1, graduatedBy: [members.ida] },
       { date: '2024-06-01', belt: belts.kup1, graduatedBy: [members.ida] },
     ),
   };
-  server.use(...memberHandlers([...Object.values(members).filter((m) => m.id !== young.id), young]));
-  const { container } = await openDetail(young);
+  server.use(...memberHandlers([...Object.values(members).filter((m) => m.id !== poomHolder.id), poomHolder]));
+  const { container } = await openDetail(poomHolder);
 
   expect(within(section()).getByText('Nuværende bælte: 1. Poom')).toBeInTheDocument();
   expect(historyRows()).toEqual([

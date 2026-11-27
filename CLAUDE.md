@@ -90,7 +90,7 @@ or Poom on a date the Instructor or Admin picks, from member-service's
 `/eligible`. Tests live next to the
 code as `*.test.jsx`; `frontend/src/test/` holds the setup file, the render
 helper and the MSW handlers, with member-service fixtures (Clubs, Belts,
-Members) in `frontend/src/test/memberService.js`.
+Members, the Eligible list) in `frontend/src/test/memberService.js`.
 
 ## Deploy
 
