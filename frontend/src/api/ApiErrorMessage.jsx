@@ -10,5 +10,9 @@ export default function ApiErrorMessage({ error, messages: overrides = {} }) {
   const { t } = useTranslation();
   if (!error) return null;
   const kind = ERROR_KINDS[error.kind] ?? ERROR_KINDS.server;
-  return <p role="alert">{overrides[kind] ?? t(`errors.${kind}`)}</p>;
+  return (
+    <p role="alert" className="error-message">
+      {overrides[kind] ?? t(`errors.${kind}`)}
+    </p>
+  );
 }

@@ -8,13 +8,13 @@ import ApiErrorMessage from '../../api/ApiErrorMessage';
 export default function ConfirmPanel({ message, confirmLabel, busy, error, onConfirm, onCancel }) {
   const { t } = useTranslation();
   return (
-    <div>
+    <div className="confirm-panel">
       <p>{message}</p>
       <ApiErrorMessage error={error} />
-      <button type="button" disabled={busy} onClick={onConfirm}>
+      <button type="button" className="btn-danger" disabled={busy} onClick={onConfirm}>
         {confirmLabel}
       </button>{' '}
-      <button type="button" disabled={busy} onClick={onCancel}>
+      <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
         {t('app.cancel')}
       </button>
     </div>

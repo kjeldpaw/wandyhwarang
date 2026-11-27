@@ -56,7 +56,7 @@ export default function GraduationsSection({ member, onChange }) {
 
   return (
     <Section title={t('members.detail.graduations')} actions={actions}>
-      <p>
+      <p className="current-belt">
         {t('members.detail.currentBelt')}: {belt ? beltName(belt) : t('members.detail.noBelt')}
       </p>
       {panel?.kind === 'add' && <GraduationForm title={t('members.graduation.new')} onSave={add} onCancel={close} />}
@@ -83,9 +83,9 @@ export default function GraduationsSection({ member, onChange }) {
         />
       )}
       {history.length === 0 ? (
-        <p>{t('members.detail.noGraduations')}</p>
+        <p className="empty">{t('members.detail.noGraduations')}</p>
       ) : (
-        <table aria-label={t('members.detail.graduationHistory')}>
+        <table aria-label={t('members.detail.graduationHistory')} className="data-table">
           <thead>
             <tr>
               <th scope="col">{t('members.graduation.date')}</th>
@@ -101,9 +101,10 @@ export default function GraduationsSection({ member, onChange }) {
                 <td>{beltName(graduation.belt)}</td>
                 <td>{[...graduation.graduatedBy].sort(byName).map(fullName).join(', ')}</td>
                 {isInstructor && (
-                  <td>
+                  <td className="actions">
                     <button
                       type="button"
+                      className="btn-edit btn-small"
                       aria-label={t('members.graduation.editOne', { date: formatDate(graduation.date) })}
                       onClick={() => start({ kind: 'edit', id: graduation.id })}
                     >
@@ -111,6 +112,7 @@ export default function GraduationsSection({ member, onChange }) {
                     </button>{' '}
                     <button
                       type="button"
+                      className="btn-danger btn-small"
                       aria-label={t('members.graduation.deleteOne', { date: formatDate(graduation.date) })}
                       onClick={() => start({ kind: 'delete', id: graduation.id })}
                     >

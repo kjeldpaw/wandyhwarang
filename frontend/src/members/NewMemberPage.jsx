@@ -30,17 +30,23 @@ function NewMember() {
     });
 
   return (
-    <section>
+    <section className="card form-page">
       <h2>{t('members.form.newTitle')}</h2>
-      {loading && <p role="status">{t('app.loading')}</p>}
+      {loading && (
+        <p role="status" className="loading">
+          {t('app.loading')}
+        </p>
+      )}
       <ApiErrorMessage error={loadError} />
       {clubs && (
         <MemberForm clubs={clubs} submitLabel={t('members.form.create')} onSubmit={create} busy={busy}>
           <ApiErrorMessage error={error} messages={{ conflict: t('members.form.duplicateEmail') }} />
         </MemberForm>
       )}
-      <p>
-        <Link to="/">{t('app.cancel')}</Link>
+      <p className="page-actions">
+        <Link to="/" className="btn btn-secondary">
+          {t('app.cancel')}
+        </Link>
       </p>
     </section>
   );

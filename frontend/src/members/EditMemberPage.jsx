@@ -25,7 +25,12 @@ function EditMember() {
   const { data: member, error: loadError, loading } = useApiData((client) => client.members.get(id), [id]);
   const { busy, error, run } = useWrite();
 
-  if (loading) return <p role="status">{t('app.loading')}</p>;
+  if (loading)
+    return (
+      <p role="status" className="loading">
+        {t('app.loading')}
+      </p>
+    );
   if (loadError?.kind === ERROR_KINDS.notFound) return <NotFound message={t('members.detail.notFound')} />;
   if (loadError) return <ApiErrorMessage error={loadError} />;
 
@@ -37,13 +42,15 @@ function EditMember() {
     });
 
   return (
-    <section>
+    <section className="card form-page">
       <h2>{t('members.form.editTitle', { name: fullName(member) })}</h2>
       <MemberForm initial={member} emailReadOnly submitLabel={t('app.save')} onSubmit={save} busy={busy}>
         <ApiErrorMessage error={error} />
       </MemberForm>
-      <p>
-        <Link to={`/members/${id}`}>{t('app.cancel')}</Link>
+      <p className="page-actions">
+        <Link to={`/members/${id}`} className="btn btn-secondary">
+          {t('app.cancel')}
+        </Link>
       </p>
     </section>
   );

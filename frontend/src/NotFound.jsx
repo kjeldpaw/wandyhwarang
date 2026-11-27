@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 export default function NotFound({ message }) {
   const { t } = useTranslation();
   return (
-    <section>
+    <section className="card not-found">
       <h2>{t('notFound.title')}</h2>
       <p>{message ?? t('notFound.page')}</p>
     </section>
