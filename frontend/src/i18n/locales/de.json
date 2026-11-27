@@ -1,7 +1,9 @@
 {
   "app": {
     "loading": "Wird geladen…",
-    "loggingIn": "Anmeldung läuft…"
+    "loggingIn": "Anmeldung läuft…",
+    "save": "Speichern",
+    "cancel": "Abbrechen"
   },
   "header": {
     "language": "Sprache",
@@ -47,8 +49,7 @@
     "delete": {
       "button": "Mitglied löschen",
       "confirm": "{{name}} löschen? Login, Graduierungen und Referenzen werden ebenfalls gelöscht. Das kann nicht rückgängig gemacht werden.",
-      "confirmButton": "Ja, löschen",
-      "cancel": "Abbrechen"
+      "confirmButton": "Ja, löschen"
     },
     "detail": {
       "personal": "Persönliche Angaben",
@@ -77,8 +78,6 @@
       "deleteOne": "Graduierung vom {{date}} löschen",
       "deleteConfirm": "Graduierung vom {{date}} ({{belt}}) löschen?",
       "confirmDelete": "Ja, löschen",
-      "save": "Speichern",
-      "cancel": "Abbrechen",
       "chooseBelt": "Gürtel wählen",
       "searchExaminer": "Prüfer suchen",
       "searchResults": "Suchergebnisse",
@@ -95,8 +94,6 @@
       "add": "Referenz hinzufügen",
       "type": "Typ",
       "number": "Nummer",
-      "save": "Speichern",
-      "cancel": "Abbrechen",
       "edit": "Bearbeiten",
       "editLabel": "{{type}} bearbeiten",
       "remove": "Entfernen",
@@ -115,14 +112,12 @@
       "optional": "{{field}} (optional)",
       "clubs": "Vereine",
       "create": "Mitglied anlegen",
-      "cancel": "Abbrechen",
       "duplicateEmail": "Eine Person mit dieser E-Mail-Adresse gibt es bereits. Wende dich an einen Admin, um sie in deinen Verein aufzunehmen.",
       "required": "Pflichtfeld.",
       "invalidEmail": "Gib eine gültige E-Mail-Adresse ein.",
       "noClub": "Wähle mindestens einen Verein.",
       "edit": "Bearbeiten",
-      "editTitle": "{{name}} bearbeiten",
-      "save": "Speichern"
+      "editTitle": "{{name}} bearbeiten"
     }
   },
   "notFound": {

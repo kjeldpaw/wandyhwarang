@@ -91,10 +91,10 @@ export default function GraduationForm({ title, graduation, onSave, onCancel }) 
       {fieldError('examiners')}
       <ApiErrorMessage error={error} />
       <button type="submit" disabled={busy}>
-        {t('members.graduation.save')}
+        {t('app.save')}
       </button>
       <button type="button" onClick={onCancel}>
-        {t('members.graduation.cancel')}
+        {t('app.cancel')}
       </button>
     </form>
   );

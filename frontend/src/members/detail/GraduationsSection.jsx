@@ -81,7 +81,7 @@ export default function GraduationsSection({ member, onChange }) {
             {t('members.graduation.confirmDelete')}
           </button>
           <button type="button" disabled={removal.busy} onClick={close}>
-            {t('members.graduation.cancel')}
+            {t('app.cancel')}
           </button>
         </div>
       )}

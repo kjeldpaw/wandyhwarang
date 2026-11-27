@@ -39,7 +39,7 @@ function DeleteAction({ member }) {
             {t('members.delete.confirmButton')}
           </button>{' '}
           <button type="button" disabled={busy} onClick={() => setConfirming(false)}>
-            {t('members.delete.cancel')}
+            {t('app.cancel')}
           </button>
         </p>
       ) : (

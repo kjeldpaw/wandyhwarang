@@ -1,7 +1,9 @@
 {
   "app": {
     "loading": "Henter…",
-    "loggingIn": "Logger ind…"
+    "loggingIn": "Logger ind…",
+    "save": "Gem",
+    "cancel": "Annuller"
   },
   "header": {
     "language": "Sprog",
@@ -47,8 +49,7 @@
     "delete": {
       "button": "Slet medlem",
       "confirm": "Slet {{name}}? Medlemmets login, gradueringer og referencer slettes også. Det kan ikke fortrydes.",
-      "confirmButton": "Ja, slet",
-      "cancel": "Annuller"
+      "confirmButton": "Ja, slet"
     },
     "detail": {
       "personal": "Personlige oplysninger",
@@ -77,8 +78,6 @@
       "deleteOne": "Slet gradueringen {{date}}",
       "deleteConfirm": "Slet gradueringen {{date}} ({{belt}})?",
       "confirmDelete": "Ja, slet",
-      "save": "Gem",
-      "cancel": "Annuller",
       "chooseBelt": "Vælg bælte",
       "searchExaminer": "Søg eksaminator",
       "searchResults": "Søgeresultater",
@@ -95,8 +94,6 @@
       "add": "Tilføj reference",
       "type": "Type",
       "number": "Nummer",
-      "save": "Gem",
-      "cancel": "Annuller",
       "edit": "Rediger",
       "editLabel": "Rediger {{type}}",
       "remove": "Fjern",
@@ -115,14 +112,12 @@
       "optional": "{{field}} (valgfri)",
       "clubs": "Klubber",
       "create": "Opret medlem",
-      "cancel": "Annuller",
       "duplicateEmail": "Der findes allerede en person med denne e-mail. Kontakt en Admin for at få personen med i din klub.",
       "required": "Skal udfyldes.",
       "invalidEmail": "Indtast en gyldig e-mail-adresse.",
       "noClub": "Vælg mindst én klub.",
       "edit": "Rediger",
-      "editTitle": "Rediger {{name}}",
-      "save": "Gem"
+      "editTitle": "Rediger {{name}}"
     }
   },
   "notFound": {

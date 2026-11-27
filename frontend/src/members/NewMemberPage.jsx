@@ -40,7 +40,7 @@ function NewMember() {
         </MemberForm>
       )}
       <p>
-        <Link to="/">{t('members.form.cancel')}</Link>
+        <Link to="/">{t('app.cancel')}</Link>
       </p>
     </section>
   );

@@ -80,7 +80,7 @@ export default function ReferencesSection({ member, onChange }) {
                       {t('members.references.confirmRemove')}
                     </button>
                     <button type="button" disabled={busy} onClick={() => start(null)}>
-                      {t('members.references.cancel')}
+                      {t('app.cancel')}
                     </button>
                   </dd>
                 )}
@@ -158,10 +158,10 @@ function ReferenceForm({ initial, busy, onSave, onCancel }) {
       />
       {missing && <p id={`${id}-missing`}>{t('members.references.numberRequired')}</p>}
       <button type="submit" disabled={busy}>
-        {t('members.references.save')}
+        {t('app.save')}
       </button>
       <button type="button" disabled={busy} onClick={onCancel}>
-        {t('members.references.cancel')}
+        {t('app.cancel')}
       </button>
     </form>
   );

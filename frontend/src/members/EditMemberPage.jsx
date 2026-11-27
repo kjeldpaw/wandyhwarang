@@ -39,11 +39,11 @@ function EditMember() {
   return (
     <section>
       <h2>{t('members.form.editTitle', { name: fullName(member) })}</h2>
-      <MemberForm initial={member} emailReadOnly submitLabel={t('members.form.save')} onSubmit={save} busy={busy}>
+      <MemberForm initial={member} emailReadOnly submitLabel={t('app.save')} onSubmit={save} busy={busy}>
         <ApiErrorMessage error={error} />
       </MemberForm>
       <p>
-        <Link to={`/members/${id}`}>{t('members.form.cancel')}</Link>
+        <Link to={`/members/${id}`}>{t('app.cancel')}</Link>
       </p>
     </section>
   );

@@ -1,7 +1,9 @@
 {
   "app": {
     "loading": "Loading…",
-    "loggingIn": "Logging in…"
+    "loggingIn": "Logging in…",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "header": {
     "language": "Language",
@@ -47,8 +49,7 @@
     "delete": {
       "button": "Delete Member",
       "confirm": "Delete {{name}}? Their login, Graduations and References are deleted too. This cannot be undone.",
-      "confirmButton": "Yes, delete",
-      "cancel": "Cancel"
+      "confirmButton": "Yes, delete"
     },
     "detail": {
       "personal": "Personal details",
@@ -77,8 +78,6 @@
       "deleteOne": "Delete the Graduation of {{date}}",
       "deleteConfirm": "Delete the Graduation of {{date}} ({{belt}})?",
       "confirmDelete": "Yes, delete",
-      "save": "Save",
-      "cancel": "Cancel",
       "chooseBelt": "Choose a Belt",
       "searchExaminer": "Search Examiner",
       "searchResults": "Search results",
@@ -95,8 +94,6 @@
       "add": "Add reference",
       "type": "Type",
       "number": "Number",
-      "save": "Save",
-      "cancel": "Cancel",
       "edit": "Edit",
       "editLabel": "Edit {{type}}",
       "remove": "Remove",
@@ -115,14 +112,12 @@
       "optional": "{{field}} (optional)",
       "clubs": "Clubs",
       "create": "Create Member",
-      "cancel": "Cancel",
       "duplicateEmail": "A person with this email already exists. Contact an Admin to get them into your Club.",
       "required": "Required.",
       "invalidEmail": "Enter a valid email address.",
       "noClub": "Choose at least one Club.",
       "edit": "Edit",
-      "editTitle": "Edit {{name}}",
-      "save": "Save"
+      "editTitle": "Edit {{name}}"
     }
   },
   "notFound": {
