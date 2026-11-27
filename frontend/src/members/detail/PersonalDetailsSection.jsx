@@ -6,9 +6,10 @@ import Section from './Section';
 
 /**
  * Name is the page heading; this shows address, phone, email and date of birth.
- * `actions` replace the Edit link Instructors and Admins get to /members/:id/edit.
+ * `editAction` replaces the Edit link Instructors and Admins get to /members/:id/edit, e.g.
+ * with the Profile's own Edit button.
  */
-export default function PersonalDetailsSection({ member, actions }) {
+export default function PersonalDetailsSection({ member, editAction }) {
   const { t } = useTranslation();
   const formatDate = useFormatDate();
   const { address } = member;
@@ -20,7 +21,7 @@ export default function PersonalDetailsSection({ member, actions }) {
     </Link>
   );
   return (
-    <Section title={t('members.detail.personal')} actions={actions ?? edit}>
+    <Section title={t('members.detail.personal')} actions={editAction ?? edit}>
       <dl className="details">
         <dt>{t('members.fields.address')}</dt>
         <dd>

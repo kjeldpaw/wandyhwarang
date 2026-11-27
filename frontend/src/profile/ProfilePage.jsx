@@ -61,7 +61,7 @@ export default function ProfilePage() {
   return (
     <article className="card member-detail">
       <h2>{fullName(profile)}</h2>
-      <PersonalDetailsSection member={profile} actions={edit} />
+      <PersonalDetailsSection member={profile} editAction={edit} />
       {/* Read-only for every role: Instructors and Admins change their own on /members/:id. */}
       <ClubsSection member={profile} readOnly />
       <GraduationsSection member={profile} readOnly />
