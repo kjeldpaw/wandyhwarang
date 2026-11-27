@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useApi } from '../../api/ApiProvider';
 import ApiErrorMessage from '../../api/ApiErrorMessage';
+import { useWrite } from '../../api/useWrite';
 import { useSession } from '../../auth/useSession';
 import { fullName } from '../member';
 
@@ -21,20 +22,13 @@ function DeleteAction({ member }) {
   const api = useApi();
   const navigate = useNavigate();
   const [confirming, setConfirming] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState();
+  const { busy, error, run } = useWrite();
 
-  async function remove() {
-    setBusy(true);
-    setError(undefined);
-    try {
+  const remove = () =>
+    run(async () => {
       await api.members.remove(member.id);
       navigate('/');
-    } catch (e) {
-      setError(e);
-      setBusy(false);
-    }
-  }
+    });
 
   return (
     <div>

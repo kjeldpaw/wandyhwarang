@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApi } from '../api/ApiProvider';
 import ApiErrorMessage from '../api/ApiErrorMessage';
 import { ERROR_KINDS } from '../api/client';
+import { useWrite } from '../api/useWrite';
 import { useOwnClubs } from '../auth/useOwnClubs';
 import { useSession } from '../auth/useSession';
 import MemberForm, { personalDetailsOf } from './MemberForm';
@@ -21,20 +21,13 @@ function NewMember() {
   const navigate = useNavigate();
   // A new Member can join only the Clubs the Instructor works with (any Club for an Admin).
   const { data: clubs, error: loadError, loading } = useOwnClubs();
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState();
+  const { busy, error, run } = useWrite();
 
-  const create = async (values) => {
-    setSaving(true);
-    setError(undefined);
-    try {
+  const create = (values) =>
+    run(async () => {
       const member = await api.members.create({ ...personalDetailsOf(values), clubIds: values.clubIds });
       navigate(`/members/${member.id}`);
-    } catch (e) {
-      setError(e);
-      setSaving(false);
-    }
-  };
+    });
 
   return (
     <section>
@@ -42,7 +35,7 @@ function NewMember() {
       {loading && <p role="status">{t('app.loading')}</p>}
       <ApiErrorMessage error={loadError} />
       {clubs && (
-        <MemberForm clubs={clubs} submitLabel={t('members.form.create')} onSubmit={create} busy={saving}>
+        <MemberForm clubs={clubs} submitLabel={t('members.form.create')} onSubmit={create} busy={busy}>
           <ApiErrorMessage error={error} messages={{ conflict: t('members.form.duplicateEmail') }} />
         </MemberForm>
       )}

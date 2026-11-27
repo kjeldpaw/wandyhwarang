@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ApiErrorMessage from '../../api/ApiErrorMessage';
+import { useWrite } from '../../api/useWrite';
 import { useApi } from '../../api/ApiProvider';
 import { useSession } from '../../auth/useSession';
 import Section from './Section';
@@ -21,28 +22,20 @@ export default function ReferencesSection({ member, onChange }) {
   const { isInstructor } = useSession();
   // null | { kind: 'add' } | { kind: 'edit', id } | { kind: 'remove', id }
   const [open, setOpen] = useState(null);
-  const [error, setError] = useState(null);
-  const [busy, setBusy] = useState(false);
+  const { busy, error, run: runWrite, reset } = useWrite();
   const references = member.references ?? [];
 
   const start = (next) => {
-    setError(null);
+    reset();
     setOpen(next);
   };
 
-  const run = async (write) => {
-    setBusy(true);
-    setError(null);
-    try {
+  const run = (write) =>
+    runWrite(async () => {
       const updated = await write();
       setOpen(null);
       onChange(updated);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setBusy(false);
-    }
-  };
+    });
 
   const add = ({ type, reference }) => run(() => api.references.add(member.id, { type, reference }));
   const update = (id, { reference }) => run(() => api.references.update(member.id, id, { reference }));

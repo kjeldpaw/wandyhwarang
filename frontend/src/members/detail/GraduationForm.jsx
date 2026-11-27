@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ApiErrorMessage from '../../api/ApiErrorMessage';
+import { useWrite } from '../../api/useWrite';
 import { useApiData } from '../../api/useApiData';
 import { beltName, sortBelts } from '../../belts/belt';
 import ExaminerPicker from './ExaminerPicker';
@@ -19,8 +20,7 @@ export default function GraduationForm({ title, graduation, onSave, onCancel }) 
   const [beltId, setBeltId] = useState(graduation?.belt.id ?? '');
   const [examiners, setExaminers] = useState(graduation?.graduatedBy ?? []);
   const [submitted, setSubmitted] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState();
+  const { busy, error, run } = useWrite();
 
   const problems = {
     date: !date && t('members.graduation.dateRequired'),
@@ -33,14 +33,7 @@ export default function GraduationForm({ title, graduation, onSave, onCancel }) 
     event.preventDefault();
     setSubmitted(true);
     if (Object.values(problems).some(Boolean)) return;
-    setSaving(true);
-    setError(undefined);
-    try {
-      await onSave({ date, beltId, graduatedBy: examiners.map((examiner) => examiner.id) });
-    } catch (failure) {
-      setError(failure);
-      setSaving(false);
-    }
+    await run(() => onSave({ date, beltId, graduatedBy: examiners.map((examiner) => examiner.id) }));
   }
 
   const errorId = (field) => shown[field] && `${ids.errors}-${field}`;
@@ -97,7 +90,7 @@ export default function GraduationForm({ title, graduation, onSave, onCancel }) 
       />
       {fieldError('examiners')}
       <ApiErrorMessage error={error} />
-      <button type="submit" disabled={saving}>
+      <button type="submit" disabled={busy}>
         {t('members.graduation.save')}
       </button>
       <button type="button" onClick={onCancel}>

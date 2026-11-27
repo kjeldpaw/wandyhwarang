@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApi } from '../../api/ApiProvider';
 import ApiErrorMessage from '../../api/ApiErrorMessage';
+import { useWrite } from '../../api/useWrite';
 import { useOwnClubs } from '../../auth/useOwnClubs';
 import { useSession } from '../../auth/useSession';
 import { sortClubs } from '../member';
@@ -34,24 +35,16 @@ function ManageClubs({ member, onChange }) {
   // The session may add or remove only the Clubs it works with.
   const { data: manageable = [] } = useOwnClubs();
   const [clubId, setClubId] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState();
+  const { busy, error, run } = useWrite();
 
   const canManage = (club) => manageable.some((c) => c.id === club.id);
   const addable = sortClubs(manageable.filter((club) => !member.clubs.some((c) => c.id === club.id)));
 
-  async function write(call) {
-    setBusy(true);
-    setError(undefined);
-    try {
+  const write = (call) =>
+    run(async () => {
       onChange(await call());
       setClubId('');
-    } catch (e) {
-      setError(e);
-    } finally {
-      setBusy(false);
-    }
-  }
+    });
 
   const add = (event) => {
     event.preventDefault();

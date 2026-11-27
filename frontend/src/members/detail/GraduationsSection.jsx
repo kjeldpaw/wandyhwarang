@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ApiErrorMessage from '../../api/ApiErrorMessage';
 import { useApi } from '../../api/ApiProvider';
+import { useWrite } from '../../api/useWrite';
 import { useSession } from '../../auth/useSession';
 import { beltName } from '../../belts/belt';
 import { useFormatDate } from '../../i18n/formatDate';
@@ -23,10 +24,10 @@ export default function GraduationsSection({ member, onChange }) {
   const belt = currentBelt(member);
   // What's open: nothing, { adding }, { editing: graduation } or { deleting: graduation }.
   const [open, setOpen] = useState({});
-  const [deleteError, setDeleteError] = useState();
+  const removal = useWrite();
   const close = () => setOpen({});
   const openOnly = (next) => {
-    setDeleteError(undefined);
+    removal.reset();
     setOpen(next);
   };
 
@@ -40,15 +41,11 @@ export default function GraduationsSection({ member, onChange }) {
     close();
   }
 
-  async function remove() {
-    setDeleteError(undefined);
-    try {
+  const remove = () =>
+    removal.run(async () => {
       onChange(await api.graduations.remove(member.id, open.deleting.id));
       close();
-    } catch (error) {
-      setDeleteError(error);
-    }
-  }
+    });
 
   const actions = isInstructor && !open.adding && (
     <button type="button" onClick={() => openOnly({ adding: true })}>
@@ -79,11 +76,11 @@ export default function GraduationsSection({ member, onChange }) {
               belt: beltName(open.deleting.belt),
             })}
           </p>
-          <ApiErrorMessage error={deleteError} />
-          <button type="button" onClick={remove}>
+          <ApiErrorMessage error={removal.error} />
+          <button type="button" disabled={removal.busy} onClick={remove}>
             {t('members.graduation.confirmDelete')}
           </button>
-          <button type="button" onClick={close}>
+          <button type="button" disabled={removal.busy} onClick={close}>
             {t('members.graduation.cancel')}
           </button>
         </div>

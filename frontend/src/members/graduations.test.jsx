@@ -245,6 +245,28 @@ test('an Instructor deletes a Graduation after confirming', async () => {
   ]);
 });
 
+test('while a delete is on its way the confirmation buttons are disabled', async () => {
+  const mads = members.mads;
+  let answer;
+  server.use(
+    http.delete(
+      api(`/members/${mads.id}/graduation/:graduationId`),
+      () => new Promise((resolve) => (answer = resolve)),
+    ),
+  );
+  const { user } = await openDetail(mads);
+
+  await user.click(within(rowOf('1. maj 2024')).getByRole('button', { name: 'Slet gradueringen 1. maj 2024' }));
+  await user.click(within(section()).getByRole('button', { name: 'Ja, slet' }));
+
+  await waitFor(() => expect(answer).toBeDefined());
+  expect(within(section()).getByRole('button', { name: 'Ja, slet' })).toBeDisabled();
+  expect(within(section()).getByRole('button', { name: 'Annuller' })).toBeDisabled();
+
+  answer(HttpResponse.json(mads));
+  await waitFor(() => expect(within(section()).queryByRole('button', { name: 'Ja, slet' })).not.toBeInTheDocument());
+});
+
 test('a failed save keeps the form open with a translated error', async () => {
   server.use(
     http.post(api(`/members/${members.kim.id}/graduation`), () => new HttpResponse(null, { status: 403 })),
