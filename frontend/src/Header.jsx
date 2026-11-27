@@ -14,6 +14,9 @@ function Navigation() {
           <NavLink to="/" end className="nav-link">
             {t('header.members')}
           </NavLink>{' '}
+          <NavLink to="/eligible" className="nav-link">
+            {t('header.eligible')}
+          </NavLink>{' '}
         </>
       )}
       <NavLink to="/profile" className="nav-link">

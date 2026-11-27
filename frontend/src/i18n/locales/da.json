@@ -10,7 +10,8 @@
     "logout": "Log ud",
     "clubs": "Klubber",
     "members": "Medlemmer",
-    "profile": "Min profil"
+    "profile": "Min profil",
+    "eligible": "Berettiget"
   },
   "roles": {
     "admin": "Admin",
@@ -119,6 +120,21 @@
       "edit": "Rediger",
       "editTitle": "Rediger {{name}}"
     }
+  },
+  "eligible": {
+    "title": "Berettigede",
+    "date": "Dato for gradueringen",
+    "intro": "Vælg datoen for den næste sortbæltegraduering for at se, hvem der er berettiget til en Dan eller Poom.",
+    "club": "Klub",
+    "allClubs": "Alle klubber",
+    "name": "Navn",
+    "clubs": "Klubber",
+    "belt": "Bælte",
+    "graduated": "Gradueret",
+    "nextBelt": "Næste bælte",
+    "eligibleSince": "Berettiget fra",
+    "eligibleFrom": "Berettiget fra {{date}}",
+    "none": "Ingen er berettigede på denne dato."
   },
   "profile": {
     "emailHint": "Kontakt en Admin for at ændre din e-mail.",

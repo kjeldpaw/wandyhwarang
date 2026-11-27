@@ -10,7 +10,8 @@
     "logout": "Log out",
     "clubs": "Clubs",
     "members": "Members",
-    "profile": "My Profile"
+    "profile": "My Profile",
+    "eligible": "Eligible"
   },
   "roles": {
     "admin": "Admin",
@@ -119,6 +120,21 @@
       "edit": "Edit",
       "editTitle": "Edit {{name}}"
     }
+  },
+  "eligible": {
+    "title": "Eligible",
+    "date": "Date of the Graduation",
+    "intro": "Pick the date of the next black-belt Graduation to see who is Eligible for a Dan or Poom.",
+    "club": "Club",
+    "allClubs": "All Clubs",
+    "name": "Name",
+    "clubs": "Clubs",
+    "belt": "Belt",
+    "graduated": "Graduated",
+    "nextBelt": "Next Belt",
+    "eligibleSince": "Eligible from",
+    "eligibleFrom": "Eligible from {{date}}",
+    "none": "No one is Eligible on this date."
   },
   "profile": {
     "emailHint": "Contact an Admin to change your email.",
