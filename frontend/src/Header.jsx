@@ -9,15 +9,16 @@ function Navigation() {
   const session = useSession();
   return (
     <nav className="app-nav">
-      {session.isInstructor ? (
-        <NavLink to="/" end className="nav-link">
-          {t('header.members')}
-        </NavLink>
-      ) : (
-        <NavLink to={`/members/${session.memberId}`} className="nav-link">
-          {t('header.profile')}
-        </NavLink>
-      )}{' '}
+      {session.isInstructor && (
+        <>
+          <NavLink to="/" end className="nav-link">
+            {t('header.members')}
+          </NavLink>{' '}
+        </>
+      )}
+      <NavLink to="/profile" className="nav-link">
+        {t('header.profile')}
+      </NavLink>{' '}
       <NavLink to="/clubs" className="nav-link">
         {t('header.clubs')}
       </NavLink>

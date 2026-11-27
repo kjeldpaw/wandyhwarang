@@ -123,5 +123,5 @@ test('a plain Member is taken straight to their own profile, without a Member li
   expect(screen.queryByRole('table', { name: 'Medlemmer' })).not.toBeInTheDocument();
   const nav = screen.getByRole('navigation');
   expect(within(nav).queryByRole('link', { name: 'Medlemmer' })).not.toBeInTheDocument();
-  expect(within(nav).getByRole('link', { name: 'Min profil' })).toHaveAttribute('href', `/members/${members.mads.id}`);
+  expect(within(nav).getByRole('link', { name: 'Min profil' })).toHaveAttribute('href', '/profile');
 });

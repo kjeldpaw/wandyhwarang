@@ -167,7 +167,7 @@ function callerOf(request) {
   }
 }
 
-// member-service's read rules (v1.1.0): an Admin sees everyone; an Instructor sees Members
+// member-service's read rules (v1.2.0): an Admin sees everyone; an Instructor sees Members
 // sharing a Club with their own record; a plain Member sees only themselves.
 export function visibleTo(caller, member, all = Object.values(members)) {
   if (caller.roles.includes('admin')) return true;
@@ -196,6 +196,13 @@ export function memberHandlers(list = Object.values(members)) {
       if (!caller) return unauthorised();
       const member = list.find((m) => m.id === params.id);
       return member && visibleTo(caller, member, list) ? HttpResponse.json(member) : notFound();
+    }),
+    // The caller's own Member record (member-service v1.2.0), or 404 if they have none.
+    http.get(api('/profile'), ({ request }) => {
+      const caller = callerOf(request);
+      if (!caller) return unauthorised();
+      const own = list.find((m) => m.id === caller.id);
+      return own ? HttpResponse.json(own) : notFound();
     }),
     http.get(api('/examiners'), ({ request }) => {
       const caller = callerOf(request);
