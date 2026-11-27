@@ -69,6 +69,17 @@ test('a Member sees their Profile with an Edit button', async () => {
   expect(within(clubList).getByText('Randers Taekwondo Klub')).toBeInTheDocument();
 });
 
+test('a Member’s Profile also shows their Belt, Graduations and References, read-only', async () => {
+  renderApp('/profile', { as: 'member' });
+
+  const graduations = await screen.findByRole('region', { name: 'Bælte og gradueringer' });
+  expect(within(graduations).getByText('Nuværende bælte: 8. Kup')).toBeInTheDocument();
+  expect(within(graduations).queryByRole('button')).not.toBeInTheDocument();
+  const references = screen.getByRole('region', { name: 'Referencer' });
+  expect(within(references).getByText('DK-1234')).toBeInTheDocument();
+  expect(within(references).queryByRole('button')).not.toBeInTheDocument();
+});
+
 test('a Member edits their Profile, which never sends the email', async () => {
   const requests = onUpdate();
   const { user } = renderApp('/profile', { as: 'member' });

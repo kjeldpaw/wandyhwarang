@@ -6,10 +6,12 @@ import { ERROR_KINDS } from '../api/client';
 import { useApiData } from '../api/useApiData';
 import { useWrite } from '../api/useWrite';
 import { useSession } from '../auth/useSession';
+import ClubsSection from '../members/detail/ClubsSection';
+import GraduationsSection from '../members/detail/GraduationsSection';
 import PersonalDetailsSection from '../members/detail/PersonalDetailsSection';
-import Section from '../members/detail/Section';
+import ReferencesSection from '../members/detail/ReferencesSection';
 import MemberForm, { personalDetailsOf } from '../members/MemberForm';
-import { fullName, sortClubs } from '../members/member';
+import { fullName } from '../members/member';
 import '../styles/MemberDetail.css';
 
 /** A Profile as member-service takes it: the personal details without the email, which is the login. */
@@ -20,7 +22,8 @@ export function profileDetailsOf(values) {
 
 /**
  * /profile: the logged-in person's own Member record, their Profile. They view it and edit
- * their personal details, but not their email, Clubs, Graduations or References. Someone
+ * their personal details, but not their email. Clubs, Graduations and References show as on
+ * the Member detail page (only Instructors and Admins change them). Someone
  * who logs in without a Member record (member-service answers 404) creates their Profile here.
  */
 export default function ProfilePage() {
@@ -58,15 +61,10 @@ export default function ProfilePage() {
     <article className="card member-detail">
       <h2>{fullName(profile)}</h2>
       <PersonalDetailsSection member={profile} actions={edit} />
-      <Section title={t('members.detail.clubs')}>
-        <ul className="item-list">
-          {sortClubs(profile.clubs).map((club) => (
-            <li key={club.id}>
-              <span>{club.name}</span>
-            </li>
-          ))}
-        </ul>
-      </Section>
+      {/* As on the Member detail page: read-only for a plain Member, managed by Instructors and Admins. */}
+      <ClubsSection member={profile} onChange={setProfile} />
+      <GraduationsSection member={profile} onChange={setProfile} />
+      <ReferencesSection member={profile} onChange={setProfile} />
     </article>
   );
 }
