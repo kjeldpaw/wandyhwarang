@@ -11,15 +11,9 @@ import ClubsSection from '../members/detail/ClubsSection';
 import GraduationsSection from '../members/detail/GraduationsSection';
 import PersonalDetailsSection from '../members/detail/PersonalDetailsSection';
 import ReferencesSection from '../members/detail/ReferencesSection';
-import MemberForm, { personalDetailsOf } from '../members/MemberForm';
+import MemberForm, { profileDetailsOf } from '../members/MemberForm';
 import { fullName } from '../members/member';
 import '../styles/MemberDetail.css';
-
-/** A Profile as member-service takes it: the personal details without the email, which is the login. */
-export function profileDetailsOf(values) {
-  const { email: _, ...details } = personalDetailsOf(values);
-  return details;
-}
 
 /**
  * /profile: the logged-in person's own Member record, their Profile. They view it and edit

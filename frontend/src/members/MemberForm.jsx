@@ -29,6 +29,12 @@ export function personalDetailsOf(values) {
   };
 }
 
+/** A Profile's personal details as member-service takes them: without the email, which is the login. */
+export function profileDetailsOf(values) {
+  const { email: _, ...details } = personalDetailsOf(values);
+  return details;
+}
+
 const REQUIRED = ['firstName', 'lastName', 'street', 'zipCode', 'city', 'email'];
 // Close to what member-service's @Email accepts: something@something, no spaces, a dot in the domain.
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
