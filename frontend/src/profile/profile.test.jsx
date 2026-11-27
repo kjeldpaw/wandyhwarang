@@ -1,5 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
+import { setBrowserLanguages } from '../test/browser';
 import { people } from '../test/keycloak';
 import { api, clubs, members } from '../test/memberService';
 import { completeLogin, renderApp } from '../test/renderApp';
@@ -115,6 +116,18 @@ test('the email is read-only on the edit form, with a hint to ask an Instructor'
   expect(email).toHaveValue('mads@example.com');
   expect(email).toHaveAttribute('readonly');
   expect(email).toHaveAccessibleDescription('Kontakt din instruktør for at ændre din e-mail.');
+});
+
+test.each([
+  [['en'], 'Edit', 'Email', 'Contact your Instructor to change your email.'],
+  [['de'], 'Bearbeiten', 'E-Mail', 'Wende dich an deinen Instruktor, um deine E-Mail zu ändern.'],
+])('the email hint is translated for %s', async (languages, editLabel, emailLabel, hint) => {
+  setBrowserLanguages(languages);
+  const { user } = renderApp('/profile', { as: 'member' });
+
+  await user.click(await screen.findByRole('button', { name: editLabel }));
+
+  expect(screen.getByLabelText(emailLabel)).toHaveAccessibleDescription(hint);
 });
 
 test('cancelling the edit form shows the Profile unchanged', async () => {
