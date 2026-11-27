@@ -6,7 +6,7 @@ import { api, clubs, members } from '../test/memberService';
 import { completeLogin, renderApp } from '../test/renderApp';
 import { server } from '../test/server';
 
-// Someone who can log in but has no Member record yet, so no Profile.
+// Someone who can log in but has no Member record yet, so they create their Profile first.
 const newcomer = {
   sub: '77777777-7777-7777-7777-777777777777',
   given_name: 'Nina',
@@ -79,6 +79,17 @@ test('a Member’s Profile also shows their Belt, Graduations and References, re
   const references = screen.getByRole('region', { name: 'Referencer' });
   expect(within(references).getByText('DK-1234')).toBeInTheDocument();
   expect(within(references).queryByRole('button')).not.toBeInTheDocument();
+});
+
+// Self-editing Clubs, Graduations or References is out of scope; Instructors and Admins use /members/:id.
+test.each(['instructor', 'admin'])('an %s sees the Clubs, Graduations and References of their Profile read-only', async (as) => {
+  renderApp('/profile', { as });
+
+  const clubList = await screen.findByRole('region', { name: 'Klubber' });
+  expect(within(clubList).queryByRole('button')).not.toBeInTheDocument();
+  expect(within(clubList).queryByRole('combobox')).not.toBeInTheDocument();
+  expect(within(screen.getByRole('region', { name: 'Bælte og gradueringer' })).queryByRole('button')).not.toBeInTheDocument();
+  expect(within(screen.getByRole('region', { name: 'Referencer' })).queryByRole('button')).not.toBeInTheDocument();
 });
 
 test('a Member edits their Profile, which never sends the email', async () => {
@@ -154,7 +165,7 @@ test('a failed save keeps the form and shows the error', async () => {
   expect(screen.getByLabelText('Fornavn')).toHaveValue('Mads');
 });
 
-test('someone without a Profile creates one, with name and email from their login', async () => {
+test('someone without a Member record creates their Profile, with name and email from their login', async () => {
   const requests = onCreate();
   const { user } = renderApp('/profile', { as: newcomer });
 
@@ -184,6 +195,31 @@ test('someone without a Profile creates one, with name and email from their logi
       clubIds: [clubs.nordjysk.id, clubs.randers.id],
     },
   ]);
+});
+
+test('someone whose login has no email can still submit the creation form', async () => {
+  const requests = onCreate();
+  const { user } = renderApp('/profile', { as: { ...newcomer, email: undefined } });
+  await screen.findByRole('checkbox', { name: 'Randers Taekwondo Klub' });
+
+  await user.type(screen.getByLabelText('Vej'), 'Havnegade 4');
+  await user.type(screen.getByLabelText('Postnummer'), '8900');
+  await user.type(screen.getByLabelText('By'), 'Randers');
+  await user.click(screen.getByRole('checkbox', { name: 'Randers Taekwondo Klub' }));
+  await user.click(screen.getByRole('button', { name: 'Opret profil' }));
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Nina Nielsen' })).toBeInTheDocument();
+  expect(requests).toHaveLength(1);
+});
+
+test('in English, the header says My Profile and the creation form says the Profile isn’t set up yet', async () => {
+  setBrowserLanguages(['en']);
+  renderApp('/profile', { as: newcomer });
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Create your Profile' })).toBeInTheDocument();
+  expect(screen.getByText(/^Your Profile isn’t set up yet\./)).toBeInTheDocument();
+  expect(within(screen.getByRole('navigation')).getByRole('link', { name: 'My Profile' })).toBeInTheDocument();
+  expect(await screen.findByRole('button', { name: 'Create Profile' })).toBeInTheDocument();
 });
 
 test('creating a Profile needs an address and at least one Club', async () => {
@@ -230,7 +266,7 @@ test('a plain Member lands on their Profile after login', async () => {
   expect(screen.getByRole('button', { name: 'Rediger' })).toBeInTheDocument();
 });
 
-test('a plain Member without a Profile lands on the creation form after login', async () => {
+test('someone with the member role and no Member record lands on the creation form after login', async () => {
   await logInFromStartPage(newcomer);
 
   expect(await screen.findByRole('heading', { level: 2, name: 'Opret din profil' })).toBeInTheDocument();
@@ -239,7 +275,7 @@ test('a plain Member without a Profile lands on the creation form after login', 
 // An Admin created in Keycloak only, like the first Admin: no Member record.
 const firstAdmin = { ...people.admin, sub: '88888888-8888-8888-8888-888888888888', email: 'first@example.com' };
 
-test('an Admin without a Profile can skip creating one and use the Member list', async () => {
+test('someone with the admin role and no Member record can skip creating their Profile and use the Member list', async () => {
   const { user } = renderApp('/profile', { as: firstAdmin });
 
   expect(await screen.findByRole('heading', { level: 2, name: 'Opret din profil' })).toBeInTheDocument();
@@ -249,13 +285,13 @@ test('an Admin without a Profile can skip creating one and use the Member list',
   expect(await within(table).findByText('Kim Larsen')).toBeInTheDocument();
 });
 
-test('an Admin without a Profile lands on the Member list after login', async () => {
+test('someone with the admin role and no Member record lands on the Member list after login', async () => {
   await logInFromStartPage(firstAdmin);
 
   expect(await screen.findByRole('table', { name: 'Medlemmer' })).toBeInTheDocument();
 });
 
-test('a plain Member without a Profile is not offered to skip creating one', async () => {
+test('someone with the member role and no Member record is not offered to skip creating their Profile', async () => {
   renderApp('/profile', { as: newcomer });
 
   await screen.findByRole('heading', { level: 2, name: 'Opret din profil' });

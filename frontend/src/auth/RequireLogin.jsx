@@ -9,7 +9,9 @@ export default function RequireLogin({ children }) {
   const { t, i18n } = useTranslation();
   const auth = useAuth();
   const location = useLocation();
-  const mustLogin = !auth.isLoading && !auth.isAuthenticated && !auth.activeNavigator && !hasAuthParams();
+  // On the sign-in callback's ?code&state URL, which the router's location shows like the browser's.
+  const inCallback = hasAuthParams(location);
+  const mustLogin = !auth.isLoading && !auth.isAuthenticated && !auth.activeNavigator && !inCallback;
 
   useEffect(() => {
     if (mustLogin) auth.signinRedirect(loginArgs(location, i18n.resolvedLanguage));
@@ -17,6 +19,6 @@ export default function RequireLogin({ children }) {
 
   // Wait until the sign-in callback has left the ?code&state URL: a route rendered there (such as
   // the start page's redirect to /profile) would be overtaken by the callback's own navigation.
-  if (auth.isAuthenticated && !hasAuthParams(location)) return children;
+  if (auth.isAuthenticated && !inCallback) return children;
   return <p role="status">{t('app.loggingIn')}</p>;
 }

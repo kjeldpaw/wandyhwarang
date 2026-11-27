@@ -8,13 +8,16 @@ import { useSession } from '../../auth/useSession';
 import { sortClubs } from '../member';
 import Section from './Section';
 
-/** The Clubs the Member belongs to, by name. Instructors and Admins add and remove Clubs here. */
-export default function ClubsSection({ member, onChange }) {
+/**
+ * The Clubs the Member belongs to, by name. Instructors and Admins add and remove Clubs here,
+ * unless `readOnly` (on /profile).
+ */
+export default function ClubsSection({ member, onChange, readOnly = false }) {
   const { t } = useTranslation();
-  const { isInstructor } = useSession();
+  const canEdit = useSession().isInstructor && !readOnly;
   return (
     <Section title={t('members.detail.clubs')}>
-      {isInstructor ? (
+      {canEdit ? (
         <ManageClubs member={member} onChange={onChange} />
       ) : (
         <ul className="item-list">

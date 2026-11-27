@@ -1,8 +1,9 @@
 # Wandy Wha Rang frontend
 
 Single-page app where Admins and Instructors of Wandy Wha Rang manage
-Members, their Clubs, Graduations and References. A plain Member sees only
-their own profile.
+Members, their Clubs, Graduations and References. Everyone views and edits
+their own Profile (their Member record), and someone who logs in without a
+Member record creates it. A plain Member sees nothing else.
 
 ## Architecture
 

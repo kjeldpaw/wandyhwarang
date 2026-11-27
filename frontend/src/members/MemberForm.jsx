@@ -29,15 +29,25 @@ export function personalDetailsOf(values) {
   };
 }
 
+/** A Profile's personal details as member-service takes them: without the email, which is the login. */
+export function profileDetailsOf(values) {
+  const { email: _, ...details } = personalDetailsOf(values);
+  return details;
+}
+
 const REQUIRED = ['firstName', 'lastName', 'street', 'zipCode', 'city', 'email'];
 // Close to what member-service's @Email accepts: something@something, no spaces, a dot in the domain.
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Problems with the form values, as translation keys by field name (`clubIds` when Clubs are chosen). */
-function validate(values, { withClubs }) {
+/**
+ * Problems with the form values, as translation keys by field name (`clubIds` when Clubs are chosen).
+ * A read-only email is not the person's to fix, and the caller doesn't submit it, so it isn't checked.
+ */
+function validate(values, { withClubs, withEmail }) {
   const errors = {};
-  for (const name of REQUIRED) if (!values[name].trim()) errors[name] = 'members.form.required';
-  if (!errors.email && !EMAIL.test(values.email.trim())) errors.email = 'members.form.invalidEmail';
+  const required = withEmail ? REQUIRED : REQUIRED.filter((name) => name !== 'email');
+  for (const name of required) if (!values[name].trim()) errors[name] = 'members.form.required';
+  if (withEmail && !errors.email && !EMAIL.test(values.email.trim())) errors.email = 'members.form.invalidEmail';
   if (withClubs && values.clubIds.length === 0) errors.clubIds = 'members.form.noClub';
   return errors;
 }
@@ -77,7 +87,8 @@ export default function MemberForm({
       clubIds: event.target.checked ? [...previous.clubIds, id] : previous.clubIds.filter((c) => c !== id),
     }));
 
-  const field = (name, label, props = {}, hint = undefined) => {
+  /** One labelled input. `input` are extra attributes for it; `hint` describes it below. */
+  const field = (name, label, { input = {}, hint } = {}) => {
     const hintId = `${idPrefix}-${name}-hint`;
     const describedBy = [errors[name] && errorId(name), hint && hintId].filter(Boolean).join(' ');
     return (
@@ -90,7 +101,7 @@ export default function MemberForm({
             onChange={set(name)}
             aria-invalid={errors[name] ? true : undefined}
             aria-describedby={describedBy || undefined}
-            {...props}
+            {...input}
           />
         </label>{' '}
         {errorFor(name)}
@@ -105,21 +116,26 @@ export default function MemberForm({
 
   const submit = (event) => {
     event.preventDefault();
-    const problems = validate(values, { withClubs: Boolean(clubs) });
+    const problems = validate(values, { withClubs: Boolean(clubs), withEmail: !emailReadOnly });
     setErrors(problems);
     if (Object.keys(problems).length === 0) onSubmit(values);
   };
 
   return (
     <form className="member-form" onSubmit={submit} noValidate>
-      {field('firstName', t('members.form.firstName'), { autoComplete: 'given-name' })}
-      {field('lastName', t('members.form.lastName'), { autoComplete: 'family-name' })}
-      {field('street', t('members.form.street'), { autoComplete: 'street-address' })}
-      {field('zipCode', t('members.form.zipCode'), { autoComplete: 'postal-code' })}
-      {field('city', t('members.form.city'), { autoComplete: 'address-level2' })}
-      {field('phone', t('members.form.optional', { field: t('members.fields.phone') }), { type: 'tel' })}
-      {field('email', t('members.fields.email'), { type: 'email', readOnly: emailReadOnly }, emailHint)}
-      {field('dateOfBirth', t('members.form.optional', { field: t('members.fields.dateOfBirth') }), { type: 'date' })}
+      {field('firstName', t('members.form.firstName'), { input: { autoComplete: 'given-name' } })}
+      {field('lastName', t('members.form.lastName'), { input: { autoComplete: 'family-name' } })}
+      {field('street', t('members.form.street'), { input: { autoComplete: 'street-address' } })}
+      {field('zipCode', t('members.form.zipCode'), { input: { autoComplete: 'postal-code' } })}
+      {field('city', t('members.form.city'), { input: { autoComplete: 'address-level2' } })}
+      {field('phone', t('members.form.optional', { field: t('members.fields.phone') }), { input: { type: 'tel' } })}
+      {field('email', t('members.fields.email'), {
+        input: { type: 'email', readOnly: emailReadOnly },
+        hint: emailHint,
+      })}
+      {field('dateOfBirth', t('members.form.optional', { field: t('members.fields.dateOfBirth') }), {
+        input: { type: 'date' },
+      })}
       {clubs && (
         <fieldset
           className="form-group checkbox-group"

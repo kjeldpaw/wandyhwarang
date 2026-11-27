@@ -123,7 +123,7 @@
   "profile": {
     "emailHint": "Wende dich an deinen Instruktor, um deine E-Mail zu ändern.",
     "createTitle": "Erstelle dein Profil",
-    "createIntro": "Du hast noch kein Profil. Fülle deine Angaben aus und wähle die Vereine, in denen du trainierst.",
+    "createIntro": "Dein Profil ist noch nicht eingerichtet. Fülle deine Angaben aus und wähle die Vereine, in denen du trainierst.",
     "create": "Profil erstellen",
     "conflict": "Du hast bereits ein Profil, oder jemand anderes hat deine E-Mail. Wende dich an deinen Instruktor.",
     "skip": "Überspringen"

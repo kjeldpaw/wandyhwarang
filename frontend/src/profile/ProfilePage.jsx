@@ -11,20 +11,15 @@ import ClubsSection from '../members/detail/ClubsSection';
 import GraduationsSection from '../members/detail/GraduationsSection';
 import PersonalDetailsSection from '../members/detail/PersonalDetailsSection';
 import ReferencesSection from '../members/detail/ReferencesSection';
-import MemberForm, { personalDetailsOf } from '../members/MemberForm';
+import EditPersonalDetails from '../members/EditPersonalDetails';
+import MemberForm, { profileDetailsOf } from '../members/MemberForm';
 import { fullName } from '../members/member';
 import '../styles/MemberDetail.css';
 
-/** A Profile as member-service takes it: the personal details without the email, which is the login. */
-export function profileDetailsOf(values) {
-  const { email: _, ...details } = personalDetailsOf(values);
-  return details;
-}
-
 /**
  * /profile: the logged-in person's own Member record, their Profile. They view it and edit
- * their personal details, but not their email. Clubs, Graduations and References show as on
- * the Member detail page (only Instructors and Admins change them). Someone
+ * their personal details, but not their email. Clubs, Graduations and References are
+ * read-only here for every role; Instructors and Admins change their own on /members/:id. Someone
  * who logs in without a Member record (member-service answers 404) creates their Profile here.
  */
 export default function ProfilePage() {
@@ -61,11 +56,11 @@ export default function ProfilePage() {
   return (
     <article className="card member-detail">
       <h2>{fullName(profile)}</h2>
-      <PersonalDetailsSection member={profile} actions={edit} />
-      {/* As on the Member detail page: read-only for a plain Member, managed by Instructors and Admins. */}
-      <ClubsSection member={profile} onChange={setProfile} />
-      <GraduationsSection member={profile} onChange={setProfile} />
-      <ReferencesSection member={profile} onChange={setProfile} />
+      <PersonalDetailsSection member={profile} editAction={edit} />
+      {/* Read-only for every role: Instructors and Admins change their own on /members/:id. */}
+      <ClubsSection member={profile} readOnly />
+      <GraduationsSection member={profile} readOnly />
+      <ReferencesSection member={profile} readOnly />
     </article>
   );
 }
@@ -73,29 +68,17 @@ export default function ProfilePage() {
 function EditProfile({ profile, onSaved, onCancel }) {
   const { t } = useTranslation();
   const api = useApi();
-  const { busy, error, run } = useWrite();
-
-  const save = (values) => run(async () => onSaved(await api.profile.update(profileDetailsOf(values))));
-
   return (
-    <section className="card form-page">
-      <h2>{t('members.form.editTitle', { name: fullName(profile) })}</h2>
-      <MemberForm
-        initial={profile}
-        emailReadOnly
-        emailHint={t('profile.emailHint')}
-        submitLabel={t('app.save')}
-        onSubmit={save}
-        busy={busy}
-      >
-        <ApiErrorMessage error={error} />
-      </MemberForm>
-      <p className="page-actions">
+    <EditPersonalDetails
+      member={profile}
+      emailHint={t('profile.emailHint')}
+      save={async (values) => onSaved(await api.profile.update(profileDetailsOf(values)))}
+      cancel={
         <button type="button" className="btn btn-secondary" onClick={onCancel}>
           {t('app.cancel')}
         </button>
-      </p>
-    </section>
+      }
+    />
   );
 }
 
@@ -104,7 +87,7 @@ function CreateProfile({ onCreated }) {
   const api = useApi();
   const session = useSession();
   // Any Club: the person isn't a Member of one yet.
-  const { data: clubs, error: loadError, loading } = useApiData((client) => client.clubs.list(), []);
+  const { data: clubs, error: loadError, loading } = useApiData((api) => api.clubs.list(), []);
   const { busy, error, run } = useWrite();
   const fromLogin = { firstName: session.firstName, lastName: session.lastName, email: session.email };
 
@@ -134,7 +117,7 @@ function CreateProfile({ onCreated }) {
           <ApiErrorMessage error={error} messages={{ conflict: t('profile.conflict') }} />
         </MemberForm>
       )}
-      {/* An Admin or Instructor may work without a Profile, e.g. the first Admin made in Keycloak. */}
+      {/* An Admin or Instructor may work without a Member record, e.g. the first Admin made in Keycloak. */}
       {session.isInstructor && (
         <p className="page-actions">
           <Link to="/" className="btn btn-secondary">

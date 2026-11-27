@@ -10,7 +10,7 @@
     "logout": "Log out",
     "clubs": "Clubs",
     "members": "Members",
-    "profile": "My profile"
+    "profile": "My Profile"
   },
   "roles": {
     "admin": "Admin",
@@ -122,10 +122,10 @@
   },
   "profile": {
     "emailHint": "Contact your Instructor to change your email.",
-    "createTitle": "Create your profile",
-    "createIntro": "You don't have a profile yet. Fill in your details and choose the Clubs you train in.",
-    "create": "Create profile",
-    "conflict": "You already have a profile, or someone else has your email. Contact your Instructor.",
+    "createTitle": "Create your Profile",
+    "createIntro": "Your Profile isn’t set up yet. Fill in your details and choose the Clubs you train in.",
+    "create": "Create Profile",
+    "conflict": "You already have a Profile, or someone else has your email. Contact your Instructor.",
     "skip": "Skip"
   },
   "notFound": {
