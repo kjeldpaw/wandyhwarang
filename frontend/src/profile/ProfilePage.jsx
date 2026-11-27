@@ -134,7 +134,7 @@ function CreateProfile({ onCreated }) {
           <ApiErrorMessage error={error} messages={{ conflict: t('profile.conflict') }} />
         </MemberForm>
       )}
-      {/* An Admin or Instructor may work without a Profile, e.g. the first Admin made in Keycloak. */}
+      {/* An Admin or Instructor may work without a Member record, e.g. the first Admin made in Keycloak. */}
       {session.isInstructor && (
         <p className="page-actions">
           <Link to="/" className="btn btn-secondary">
