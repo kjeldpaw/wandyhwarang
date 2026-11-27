@@ -7,6 +7,7 @@ import MemberListPage from './members/MemberListPage';
 import MemberPage from './members/MemberPage';
 import NewMemberPage from './members/NewMemberPage';
 import NotFound from './NotFound';
+import ProfilePage from './profile/ProfilePage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/members/new" element={<NewMemberPage />} />
               <Route path="/members/:id" element={<MemberPage />} />
               <Route path="/members/:id/edit" element={<EditMemberPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/clubs" element={<ClubsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

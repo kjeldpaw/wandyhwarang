@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { sortClubs } from './member';
 import '../styles/MemberForm.css';
 
-/** Form values for a Member: every field a string, Clubs as a list of ids. */
+/** Form values for a Member (or some of its fields): every field a string, Clubs as a list of ids. */
 export const formValuesOf = (member) => ({
   firstName: member?.firstName ?? '',
   lastName: member?.lastName ?? '',
-  street: member?.address.street ?? '',
-  zipCode: member?.address.zipCode ?? '',
-  city: member?.address.city ?? '',
+  street: member?.address?.street ?? '',
+  zipCode: member?.address?.zipCode ?? '',
+  city: member?.address?.city ?? '',
   phone: member?.phone ?? '',
   email: member?.email ?? '',
   dateOfBirth: member?.dateOfBirth ?? '',
@@ -45,9 +45,19 @@ function validate(values, { withClubs }) {
 /**
  * The create/edit form for a Member's personal details. `clubs` (create only) are the Clubs
  * to choose from; without it the form has no Club choice. `emailReadOnly` on edit, since the
- * email is the Keycloak username. `onSubmit(values)` is called with valid form values only.
+ * email is the Keycloak username; `emailHint` describes the email field, e.g. how to change it.
+ * `onSubmit(values)` is called with valid form values only.
  */
-export default function MemberForm({ initial, clubs, emailReadOnly = false, submitLabel, onSubmit, busy, children }) {
+export default function MemberForm({
+  initial,
+  clubs,
+  emailReadOnly = false,
+  emailHint,
+  submitLabel,
+  onSubmit,
+  busy,
+  children,
+}) {
   const { t } = useTranslation();
   const [values, setValues] = useState(() => formValuesOf(initial));
   const [errors, setErrors] = useState({});
@@ -67,22 +77,31 @@ export default function MemberForm({ initial, clubs, emailReadOnly = false, subm
       clubIds: event.target.checked ? [...previous.clubIds, id] : previous.clubIds.filter((c) => c !== id),
     }));
 
-  const field = (name, label, props = {}) => (
-    <p className="form-group">
-      <label>
-        {label}{' '}
-        <input
-          name={name}
-          value={values[name]}
-          onChange={set(name)}
-          aria-invalid={errors[name] ? true : undefined}
-          aria-describedby={errors[name] ? errorId(name) : undefined}
-          {...props}
-        />
-      </label>{' '}
-      {errorFor(name)}
-    </p>
-  );
+  const field = (name, label, props = {}, hint = undefined) => {
+    const hintId = `${idPrefix}-${name}-hint`;
+    const describedBy = [errors[name] && errorId(name), hint && hintId].filter(Boolean).join(' ');
+    return (
+      <p className="form-group">
+        <label>
+          {label}{' '}
+          <input
+            name={name}
+            value={values[name]}
+            onChange={set(name)}
+            aria-invalid={errors[name] ? true : undefined}
+            aria-describedby={describedBy || undefined}
+            {...props}
+          />
+        </label>{' '}
+        {errorFor(name)}
+        {hint && (
+          <span id={hintId} className="field-hint">
+            {hint}
+          </span>
+        )}
+      </p>
+    );
+  };
 
   const submit = (event) => {
     event.preventDefault();
@@ -99,7 +118,7 @@ export default function MemberForm({ initial, clubs, emailReadOnly = false, subm
       {field('zipCode', t('members.form.zipCode'), { autoComplete: 'postal-code' })}
       {field('city', t('members.form.city'), { autoComplete: 'address-level2' })}
       {field('phone', t('members.form.optional', { field: t('members.fields.phone') }), { type: 'tel' })}
-      {field('email', t('members.fields.email'), { type: 'email', readOnly: emailReadOnly })}
+      {field('email', t('members.fields.email'), { type: 'email', readOnly: emailReadOnly }, emailHint)}
       {field('dateOfBirth', t('members.form.optional', { field: t('members.fields.dateOfBirth') }), { type: 'date' })}
       {clubs && (
         <fieldset

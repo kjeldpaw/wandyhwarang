@@ -4,8 +4,11 @@ import { useSession } from '../../auth/useSession';
 import { useFormatDate } from '../../i18n/formatDate';
 import Section from './Section';
 
-/** Name is the page heading; this shows address, phone, email and date of birth. */
-export default function PersonalDetailsSection({ member }) {
+/**
+ * Name is the page heading; this shows address, phone, email and date of birth.
+ * `actions` replace the Edit link Instructors and Admins get to /members/:id/edit.
+ */
+export default function PersonalDetailsSection({ member, actions }) {
   const { t } = useTranslation();
   const formatDate = useFormatDate();
   const { address } = member;
@@ -17,7 +20,7 @@ export default function PersonalDetailsSection({ member }) {
     </Link>
   );
   return (
-    <Section title={t('members.detail.personal')} actions={edit}>
+    <Section title={t('members.detail.personal')} actions={actions ?? edit}>
       <dl className="details">
         <dt>{t('members.fields.address')}</dt>
         <dd>

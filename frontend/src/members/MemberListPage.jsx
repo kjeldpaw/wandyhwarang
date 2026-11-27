@@ -14,10 +14,10 @@ function matches(member, { clubId, search }) {
   return !text || fullName(member).toLowerCase().includes(text);
 }
 
-/** The start page: Instructors and Admins get the Member list, a plain Member their own profile. */
+/** The start page: Instructors and Admins get the Member list, a plain Member their Profile. */
 export default function MemberListPage() {
   const session = useSession();
-  if (!session.isInstructor) return <Navigate to={`/members/${session.memberId}`} replace />;
+  if (!session.isInstructor) return <Navigate to="/profile" replace />;
   return <MemberList />;
 }
 

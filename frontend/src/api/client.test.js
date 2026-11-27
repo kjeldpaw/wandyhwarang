@@ -38,6 +38,8 @@ const memberBody = {
   address: { street: 'Storegade 12', city: 'Randers', zipCode: '8900' },
   email: 'mads@example.com',
 };
+// A Profile has no email: it is the login, taken from the token.
+const { email: _, ...profileBody } = memberBody;
 const graduation = { date: '2024-05-01', beltId: belts.kup8.id, examinerIds: [members.ole.id] };
 // member-service calls the Examiners of a Graduation `graduatedBy`.
 const graduationBody = { date: '2024-05-01', beltId: belts.kup8.id, graduatedBy: [members.ole.id] };
@@ -85,6 +87,15 @@ test.each([
     { reference: 'DK-5678' },
   ],
   ['references.remove', (c) => c.references.remove(id, 'r-1'), 'DELETE', `/members/${id}/reference/r-1`, undefined],
+  ['profile.get', (c) => c.profile.get(), 'GET', '/profile', undefined],
+  ['profile.update', (c) => c.profile.update(profileBody), 'PUT', '/profile', profileBody],
+  [
+    'profile.create',
+    (c) => c.profile.create({ ...profileBody, clubIds: [clubs.randers.id] }),
+    'POST',
+    '/profile',
+    { ...profileBody, clubIds: [clubs.randers.id] },
+  ],
   ['clubs.list', (c) => c.clubs.list(), 'GET', '/clubs', undefined],
   ['belts.list', (c) => c.belts.list(), 'GET', '/belts', undefined],
 ])('%s sends its request to member-service with the bearer token', async (_, call, method, path, body) => {

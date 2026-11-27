@@ -120,6 +120,14 @@
       "editTitle": "Edit {{name}}"
     }
   },
+  "profile": {
+    "emailHint": "Contact your Instructor to change your email.",
+    "createTitle": "Create your profile",
+    "createIntro": "You don't have a profile yet. Fill in your details and choose the Clubs you train in.",
+    "create": "Create profile",
+    "conflict": "You already have a profile, or someone else has your email. Contact your Instructor.",
+    "skip": "Skip"
+  },
   "notFound": {
     "title": "Not found",
     "page": "This page does not exist."
