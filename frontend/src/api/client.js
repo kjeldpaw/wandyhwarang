@@ -45,6 +45,9 @@ async function parseBody(response) {
   }
 }
 
+// The app says examinerIds; member-service's request field is graduatedBy.
+const graduationBody = ({ date, beltId, examinerIds }) => ({ date, beltId, graduatedBy: examinerIds });
+
 /**
  * baseUrl         member-service base URL, e.g. https://member-service.k3s.figge.dk/api/v1
  * getAccessToken  () => Promise<string|undefined>  current access token
@@ -126,11 +129,15 @@ export function createApiClient({ baseUrl, getAccessToken, renew, login }) {
       removeClub: (id, clubId) => request('DELETE', `${member(id)}/clubs/${encodeURIComponent(clubId)}`),
     },
     graduations: {
-      /** {date, beltId, graduatedBy: examinerId[]} -> Member (the new one becomes member.graduation) */
-      add: (memberId, body) => request('POST', `${member(memberId)}/graduation`, body),
-      /** Same body; replaces date, Belt and Examiners -> Member */
-      update: (memberId, graduationId, body) =>
-        request('PUT', `${member(memberId)}/graduation/${encodeURIComponent(graduationId)}`, body),
+      /** {date, beltId, examinerIds} -> Member (the new one becomes member.graduation) */
+      add: (memberId, graduation) => request('POST', `${member(memberId)}/graduation`, graduationBody(graduation)),
+      /** Same argument; replaces date, Belt and Examiners -> Member */
+      update: (memberId, graduationId, graduation) =>
+        request(
+          'PUT',
+          `${member(memberId)}/graduation/${encodeURIComponent(graduationId)}`,
+          graduationBody(graduation),
+        ),
       /** -> Member */
       remove: (memberId, graduationId) =>
         request('DELETE', `${member(memberId)}/graduation/${encodeURIComponent(graduationId)}`),

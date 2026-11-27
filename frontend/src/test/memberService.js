@@ -38,7 +38,7 @@ export const clubs = {
 
 const DAY = 24 * 60 * 60;
 
-// Belts as seeded in member-service, keyed by grade: belts.mon9 … belts.mon1,
+// Belts as seeded in member-service, keyed by Kup, Dan or Mon number: belts.mon9 … belts.mon1,
 // belts.kup10 … belts.kup1, belts.dan1 … belts.dan3. Rank 1 is the lowest.
 export const belts = Object.fromEntries(
   [

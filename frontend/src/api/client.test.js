@@ -38,6 +38,8 @@ const memberBody = {
   address: { street: 'Storegade 12', city: 'Randers', zipCode: '8900' },
   email: 'mads@example.com',
 };
+const graduation = { date: '2024-05-01', beltId: belts.kup8.id, examinerIds: [members.ole.id] };
+// member-service calls the Examiners of a Graduation `graduatedBy`.
 const graduationBody = { date: '2024-05-01', beltId: belts.kup8.id, graduatedBy: [members.ole.id] };
 
 test.each([
@@ -59,10 +61,10 @@ test.each([
     `/members/${id}/clubs/${clubs.randers.id}`,
     undefined,
   ],
-  ['graduations.add', (c) => c.graduations.add(id, graduationBody), 'POST', `/members/${id}/graduation`, graduationBody],
+  ['graduations.add', (c) => c.graduations.add(id, graduation), 'POST', `/members/${id}/graduation`, graduationBody],
   [
     'graduations.update',
-    (c) => c.graduations.update(id, 'g-1', graduationBody),
+    (c) => c.graduations.update(id, 'g-1', graduation),
     'PUT',
     `/members/${id}/graduation/g-1`,
     graduationBody,

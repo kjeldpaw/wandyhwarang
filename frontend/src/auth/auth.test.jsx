@@ -28,7 +28,7 @@ test.each([
   expect(within(header).getByText(role)).toBeInTheDocument();
 });
 
-test('after logging in at Keycloak the user lands on the route they asked for', async () => {
+test('after logging in at Keycloak the person lands on the route they asked for', async () => {
   const first = renderApp('/clubs?x=1', { as: null });
   await waitFor(() => expect(first.navigator.urls).toHaveLength(1));
   first.unmount();
@@ -39,7 +39,7 @@ test('after logging in at Keycloak the user lands on the route they asked for', 
   expect(within(screen.getByRole('banner')).getByText('Anne Admin')).toBeInTheDocument();
 });
 
-test('a reload keeps the user logged in, because the session lives in sessionStorage', async () => {
+test('a reload keeps the person logged in, because the session lives in sessionStorage', async () => {
   const first = renderApp('/clubs', { as: null });
   await waitFor(() => expect(first.navigator.urls).toHaveLength(1));
   first.unmount();

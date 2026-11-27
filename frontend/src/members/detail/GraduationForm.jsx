@@ -8,7 +8,7 @@ import ExaminerPicker from './ExaminerPicker';
 
 /**
  * Date, Belt and Examiners of a Graduation, for adding a new one or correcting one.
- * `graduation` (optional) fills the form. `onSave({date, beltId, graduatedBy})` sends it
+ * `graduation` (optional) fills the form. `onSave({date, beltId, examinerIds})` sends it
  * to member-service and resolves when done; a rejection (ApiError) is shown in the form.
  * member-service doesn't require an Examiner, so the form does (decisions: wandyhwarang#1).
  */
@@ -33,7 +33,7 @@ export default function GraduationForm({ title, graduation, onSave, onCancel }) 
     event.preventDefault();
     setSubmitted(true);
     if (Object.values(problems).some(Boolean)) return;
-    await run(() => onSave({ date, beltId, graduatedBy: examiners.map((examiner) => examiner.id) }));
+    await run(() => onSave({ date, beltId, examinerIds: examiners.map((examiner) => examiner.id) }));
   }
 
   const errorId = (field) => shown[field] && `${ids.errors}-${field}`;

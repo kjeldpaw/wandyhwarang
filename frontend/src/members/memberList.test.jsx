@@ -76,7 +76,7 @@ test('an Admin sees the Members of all Clubs and can filter by any Club, offered
   expect(await listedNames()).toEqual(['Anne Admin', 'Sofie Berg']);
 });
 
-test('Belt names are shown normalised, and as returned when they have no grade', async () => {
+test('Belt names are shown normalised, and as returned when they have no Kup or Dan number', async () => {
   const kid = { ...members.kim, graduation: graduations({ date: '2024-01-01', belt: belts.mon9, graduatedBy: [] }) };
   const odd = {
     ...members.sofie,
