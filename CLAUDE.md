@@ -1,8 +1,9 @@
 # Wandy Wha Rang frontend
 
 Single-page app where Admins and Instructors of Wandy Wha Rang manage
-Members, their Clubs, Graduations and References. A plain Member sees only
-their own profile.
+Members, their Clubs, Graduations and References. Everyone views and edits
+their own Profile (their Member record), and someone who logs in without a
+Member record creates it. A plain Member sees nothing else.
 
 ## Architecture
 
@@ -74,7 +75,11 @@ goes through the client in `frontend/src/api/client.js` (`useApi()`), and
 roles come from `useSession()` in `frontend/src/auth/useSession.js`. Show
 Belts with `beltName()` from `frontend/src/belts/belt.js`. The Member detail
 page (`frontend/src/members/MemberPage.jsx`) is one section component per
-part of the record in `frontend/src/members/detail/`. Tests live next to the
+part of the record in `frontend/src/members/detail/`. `/profile`
+(`frontend/src/profile/ProfilePage.jsx`) shows the logged-in person's own
+Member record, their Profile, through member-service's `/profile` endpoints,
+reusing those sections and `MemberForm`; without a Member record it offers
+to create one. Tests live next to the
 code as `*.test.jsx`; `frontend/src/test/` holds the setup file, the render
 helper and the MSW handlers, with member-service fixtures (Clubs, Belts,
 Members) in `frontend/src/test/memberService.js`.

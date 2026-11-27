@@ -15,12 +15,13 @@ const typeName = (type) => REFERENCE_TYPES[type] ?? type;
 /**
  * The Member's References (Wandy Wha Rang and Kukkiwon numbers). Instructors and Admins
  * add, edit (the number only; member-service can't change the type) and remove them.
- * At most one form or confirmation is open at a time.
+ * At most one form or confirmation is open at a time. `readOnly` (on /profile) shows them to everyone
+ * without changes.
  */
-export default function ReferencesSection({ member, onChange }) {
+export default function ReferencesSection({ member, onChange, readOnly = false }) {
   const { t } = useTranslation();
   const api = useApi();
-  const { isInstructor } = useSession();
+  const canEdit = useSession().isInstructor && !readOnly;
   // null | { kind: 'add' } | { kind: 'edit', id } | { kind: 'remove', id }
   const [panel, setPanel] = useState(null);
   const { busy, error, run: runWrite, reset } = useWrite();
@@ -43,7 +44,7 @@ export default function ReferencesSection({ member, onChange }) {
   const remove = (id) => run(() => api.references.remove(member.id, id));
 
   const actions =
-    isInstructor && panel?.kind !== 'add' ? (
+    canEdit && panel?.kind !== 'add' ? (
       <button type="button" onClick={() => start({ kind: 'add' })}>
         {t('members.references.add')}
       </button>
@@ -85,7 +86,7 @@ export default function ReferencesSection({ member, onChange }) {
                     />
                   </dd>
                 )}
-                {isInstructor && !isOpen && (
+                {canEdit && !isOpen && (
                   <dd className="actions">
                     <button
                       type="button"

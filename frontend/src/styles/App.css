@@ -338,6 +338,13 @@ legend {
   font-size: 0.9rem;
 }
 
+.field-hint {
+  display: block;
+  margin-top: 0.35rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
 /* Tables, as the old user list. */
 
 .data-table {

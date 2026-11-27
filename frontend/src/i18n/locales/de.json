@@ -120,6 +120,14 @@
       "editTitle": "{{name}} bearbeiten"
     }
   },
+  "profile": {
+    "emailHint": "Wende dich an deinen Instruktor, um deine E-Mail zu ändern.",
+    "createTitle": "Erstelle dein Profil",
+    "createIntro": "Dein Profil ist noch nicht eingerichtet. Fülle deine Angaben aus und wähle die Vereine, in denen du trainierst.",
+    "create": "Profil erstellen",
+    "conflict": "Du hast bereits ein Profil, oder jemand anderes hat deine E-Mail. Wende dich an deinen Instruktor.",
+    "skip": "Überspringen"
+  },
   "notFound": {
     "title": "Nicht gefunden",
     "page": "Diese Seite gibt es nicht."

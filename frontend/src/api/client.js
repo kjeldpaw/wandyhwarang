@@ -12,7 +12,7 @@ export const ERROR_KINDS = {
   unauthorised: 'unauthorised', // 401 even after one renew; the user is being sent to login
   forbidden: 'forbidden', // 403: role or access rule
   notFound: 'notFound', // 404: missing, or not visible to this user
-  conflict: 'conflict', // 409: duplicate email on create, removing a Member's last Club
+  conflict: 'conflict', // 409: duplicate email on create, a second Profile, removing a Member's last Club
   validation: 'validation', // 400: invalid request body
   server: 'server', // 5xx or anything else unexpected
 };
@@ -151,6 +151,17 @@ export function createApiClient({ baseUrl, getAccessToken, renew, login }) {
       /** -> Member */
       remove: (memberId, referenceId) =>
         request('DELETE', `${member(memberId)}/reference/${encodeURIComponent(referenceId)}`),
+    },
+    profile: {
+      /** The caller's own Member record, their Profile: Member (404: they have none yet) */
+      get: () => request('GET', '/profile'),
+      /** {firstName, lastName, address{street, city, zipCode}, phone?, dateOfBirth?}; no email, no Clubs -> Member */
+      update: (body) => request('PUT', '/profile', body),
+      /**
+       * Same plus clubIds[] (at least one, any Club) -> Member. The id and email come from the token.
+       * 409: the caller already has a Member record, or another Member has their email.
+       */
+      create: (body) => request('POST', '/profile', body),
     },
     clubs: {
       /** All Clubs: Club[] {id, name, address{street, city, zipCode}} */

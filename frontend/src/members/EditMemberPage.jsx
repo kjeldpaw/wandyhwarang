@@ -4,11 +4,10 @@ import { useApi } from '../api/ApiProvider';
 import ApiErrorMessage from '../api/ApiErrorMessage';
 import { ERROR_KINDS } from '../api/client';
 import { useApiData } from '../api/useApiData';
-import { useWrite } from '../api/useWrite';
 import { useSession } from '../auth/useSession';
 import NotFound from '../NotFound';
-import MemberForm, { personalDetailsOf } from './MemberForm';
-import { fullName } from './member';
+import EditPersonalDetails from './EditPersonalDetails';
+import { personalDetailsOf } from './MemberForm';
 
 /** /members/:id/edit: an Instructor or Admin edits a Member's personal details (not Clubs, not email). */
 export default function EditMemberPage() {
@@ -22,8 +21,7 @@ function EditMember() {
   const api = useApi();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: member, error: loadError, loading } = useApiData((client) => client.members.get(id), [id]);
-  const { busy, error, run } = useWrite();
+  const { data: member, error: loadError, loading } = useApiData((api) => api.members.get(id), [id]);
 
   if (loading)
     return (
@@ -34,24 +32,21 @@ function EditMember() {
   if (loadError?.kind === ERROR_KINDS.notFound) return <NotFound message={t('members.detail.notFound')} />;
   if (loadError) return <ApiErrorMessage error={loadError} />;
 
-  const save = (values) =>
-    run(async () => {
-      // member-service requires the email but ignores it: it is the login and can't change.
-      await api.members.update(id, { ...personalDetailsOf(values), email: member.email });
-      navigate(`/members/${id}`);
-    });
+  // member-service requires the email but ignores it: it is the login and can't change.
+  const save = async (values) => {
+    await api.members.update(id, { ...personalDetailsOf(values), email: member.email });
+    navigate(`/members/${id}`);
+  };
 
   return (
-    <section className="card form-page">
-      <h2>{t('members.form.editTitle', { name: fullName(member) })}</h2>
-      <MemberForm initial={member} emailReadOnly submitLabel={t('app.save')} onSubmit={save} busy={busy}>
-        <ApiErrorMessage error={error} />
-      </MemberForm>
-      <p className="page-actions">
+    <EditPersonalDetails
+      member={member}
+      save={save}
+      cancel={
         <Link to={`/members/${id}`} className="btn btn-secondary">
           {t('app.cancel')}
         </Link>
-      </p>
-    </section>
+      }
+    />
   );
 }
