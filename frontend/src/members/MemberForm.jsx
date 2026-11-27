@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { sortClubs } from './member';
 import '../styles/MemberForm.css';
 
-/** Form values for a Member: every field a string, Clubs as a list of ids. */
+/** Form values for a Member (or some of its fields): every field a string, Clubs as a list of ids. */
 export const formValuesOf = (member) => ({
   firstName: member?.firstName ?? '',
   lastName: member?.lastName ?? '',
-  street: member?.address.street ?? '',
-  zipCode: member?.address.zipCode ?? '',
-  city: member?.address.city ?? '',
+  street: member?.address?.street ?? '',
+  zipCode: member?.address?.zipCode ?? '',
+  city: member?.address?.city ?? '',
   phone: member?.phone ?? '',
   email: member?.email ?? '',
   dateOfBirth: member?.dateOfBirth ?? '',

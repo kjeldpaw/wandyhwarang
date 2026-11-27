@@ -20,6 +20,7 @@ export function rolesOf(accessToken) {
  * The logged-in person, for the UI. Only valid inside RequireLogin.
  *   name        display name from the ID token
  *   memberId    token `sub` = the person's Member id in member-service
+ *   firstName, lastName, email   from the ID token (given_name, family_name, email)
  *   roles       ['admin' | 'instructor' | 'member'] they hold
  *   role        the most powerful of those ('admin' > 'instructor' > 'member')
  *   isAdmin, isInstructor (true for an Admin too), logout()
@@ -32,6 +33,9 @@ export function useSession() {
   return {
     name: profile.name ?? profile.preferred_username ?? '',
     memberId: profile.sub,
+    firstName: profile.given_name ?? '',
+    lastName: profile.family_name ?? '',
+    email: profile.email ?? '',
     roles,
     role,
     isAdmin: roles.includes('admin'),

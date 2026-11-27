@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApi } from '../api/ApiProvider';
 import ApiErrorMessage from '../api/ApiErrorMessage';
+import { ERROR_KINDS } from '../api/client';
 import { useApiData } from '../api/useApiData';
 import { useWrite } from '../api/useWrite';
+import { useSession } from '../auth/useSession';
 import PersonalDetailsSection from '../members/detail/PersonalDetailsSection';
 import Section from '../members/detail/Section';
 import MemberForm, { personalDetailsOf } from '../members/MemberForm';
@@ -18,7 +20,8 @@ export function profileDetailsOf(values) {
 
 /**
  * /profile: the logged-in person's own Member record, their Profile. They view it and edit
- * their personal details, but not their email, Clubs, Graduations or References.
+ * their personal details, but not their email, Clubs, Graduations or References. Someone
+ * who logs in without a Member record (member-service answers 404) creates their Profile here.
  */
 export default function ProfilePage() {
   const { t } = useTranslation();
@@ -31,6 +34,7 @@ export default function ProfilePage() {
         {t('app.loading')}
       </p>
     );
+  if (error?.kind === ERROR_KINDS.notFound) return <CreateProfile onCreated={setProfile} />;
   if (error) return <ApiErrorMessage error={error} />;
 
   if (editing)
@@ -92,6 +96,45 @@ function EditProfile({ profile, onSaved, onCancel }) {
           {t('app.cancel')}
         </button>
       </p>
+    </section>
+  );
+}
+
+function CreateProfile({ onCreated }) {
+  const { t } = useTranslation();
+  const api = useApi();
+  const session = useSession();
+  // Any Club: the person isn't a Member of one yet.
+  const { data: clubs, error: loadError, loading } = useApiData((client) => client.clubs.list(), []);
+  const { busy, error, run } = useWrite();
+  const fromLogin = { firstName: session.firstName, lastName: session.lastName, email: session.email };
+
+  const create = (values) =>
+    run(async () => onCreated(await api.profile.create({ ...profileDetailsOf(values), clubIds: values.clubIds })));
+
+  return (
+    <section className="card form-page">
+      <h2>{t('profile.createTitle')}</h2>
+      <p>{t('profile.createIntro')}</p>
+      {loading && (
+        <p role="status" className="loading">
+          {t('app.loading')}
+        </p>
+      )}
+      <ApiErrorMessage error={loadError} />
+      {clubs && (
+        <MemberForm
+          initial={fromLogin}
+          clubs={clubs}
+          emailReadOnly
+          emailHint={t('profile.emailHint')}
+          submitLabel={t('profile.create')}
+          onSubmit={create}
+          busy={busy}
+        >
+          <ApiErrorMessage error={error} messages={{ conflict: t('profile.conflict') }} />
+        </MemberForm>
+      )}
     </section>
   );
 }

@@ -1,8 +1,40 @@
 import { screen, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { api, members } from '../test/memberService';
+import { people } from '../test/keycloak';
+import { api, clubs, members } from '../test/memberService';
 import { renderApp } from '../test/renderApp';
 import { server } from '../test/server';
+
+// Someone who can log in but has no Member record yet, so no Profile.
+const newcomer = {
+  sub: '77777777-7777-7777-7777-777777777777',
+  given_name: 'Nina',
+  family_name: 'Nielsen',
+  email: 'nina@example.com',
+  roles: ['default-roles-wandywharang', 'member'],
+};
+
+// Records the bodies of POST /profile and answers with `response(body)` (default: the new Member).
+function onCreate(response = (body) => HttpResponse.json(newProfile(body), { status: 201 })) {
+  const requests = [];
+  server.use(
+    http.post(api('/profile'), async ({ request }) => {
+      const body = await request.json();
+      requests.push(body);
+      return response(body);
+    }),
+  );
+  return requests;
+}
+
+const newProfile = ({ clubIds, ...body }) => ({
+  id: newcomer.sub,
+  email: newcomer.email,
+  ...body,
+  clubs: Object.values(clubs).filter((club) => clubIds.includes(club.id)),
+  graduation: null,
+  references: [],
+});
 
 // Records the bodies of PUT /profile and answers with the Profile updated from the body.
 function onUpdate(profile = members.mads) {
@@ -96,4 +128,65 @@ test('a failed save keeps the form and shows the error', async () => {
 
   expect(await screen.findByRole('alert')).toHaveTextContent('member-service fejlede. Prøv igen senere.');
   expect(screen.getByLabelText('Fornavn')).toHaveValue('Mads');
+});
+
+test('someone without a Profile creates one, with name and email from their login', async () => {
+  const requests = onCreate();
+  const { user } = renderApp('/profile', { as: newcomer });
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Opret din profil' })).toBeInTheDocument();
+  await screen.findByRole('checkbox', { name: 'Nordjysk Taekwondo Center' });
+  expect(screen.getByLabelText('Fornavn')).toHaveValue('Nina');
+  expect(screen.getByLabelText('Efternavn')).toHaveValue('Nielsen');
+  expect(screen.getByLabelText('E-mail')).toHaveValue('nina@example.com');
+  expect(screen.getByLabelText('E-mail')).toHaveAttribute('readonly');
+
+  await user.type(screen.getByLabelText('Vej'), 'Havnegade 4');
+  await user.type(screen.getByLabelText('Postnummer'), '8900');
+  await user.type(screen.getByLabelText('By'), 'Randers');
+  await user.click(screen.getByRole('checkbox', { name: 'Nordjysk Taekwondo Center' }));
+  await user.click(screen.getByRole('checkbox', { name: 'Randers Taekwondo Klub' }));
+  await user.click(screen.getByRole('button', { name: 'Opret profil' }));
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Nina Nielsen' })).toBeInTheDocument();
+  expect(within(screen.getByRole('region', { name: 'Klubber' })).getByText('Nordjysk Taekwondo Center')).toBeInTheDocument();
+  expect(requests).toEqual([
+    {
+      firstName: 'Nina',
+      lastName: 'Nielsen',
+      address: { street: 'Havnegade 4', city: 'Randers', zipCode: '8900' },
+      phone: null,
+      dateOfBirth: null,
+      clubIds: [clubs.nordjysk.id, clubs.randers.id],
+    },
+  ]);
+});
+
+test('creating a Profile needs an address and at least one Club', async () => {
+  const requests = onCreate();
+  const { user } = renderApp('/profile', { as: newcomer });
+  await screen.findByRole('checkbox', { name: 'Randers Taekwondo Klub' });
+
+  await user.click(screen.getByRole('button', { name: 'Opret profil' }));
+
+  expect(screen.getByLabelText('Vej')).toHaveAccessibleDescription('Skal udfyldes.');
+  expect(screen.getByRole('group', { name: 'Klubber' })).toHaveAccessibleDescription('Vælg mindst én klub.');
+  expect(screen.getByLabelText('Telefon (valgfri)')).toBeValid();
+  expect(requests).toEqual([]);
+});
+
+test('a conflict on create says a Profile or the email already exists', async () => {
+  onCreate(() => HttpResponse.json({ message: 'Member already exists' }, { status: 409 }));
+  const { user } = renderApp('/profile', { as: newcomer });
+  await screen.findByRole('checkbox', { name: 'Randers Taekwondo Klub' });
+
+  await user.type(screen.getByLabelText('Vej'), 'Havnegade 4');
+  await user.type(screen.getByLabelText('Postnummer'), '8900');
+  await user.type(screen.getByLabelText('By'), 'Randers');
+  await user.click(screen.getByRole('checkbox', { name: 'Randers Taekwondo Klub' }));
+  await user.click(screen.getByRole('button', { name: 'Opret profil' }));
+
+  expect(await screen.findByRole('alert')).toHaveTextContent(
+    'Du har allerede en profil, eller en anden har din e-mail. Kontakt din instruktør.',
+  );
 });
