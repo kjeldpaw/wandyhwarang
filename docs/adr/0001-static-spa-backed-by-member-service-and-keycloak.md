@@ -26,7 +26,9 @@ backend and MySQL database are retired, and we start from empty data.
 
 - No self-registration or in-app password reset: Admins and Instructors
   create Members, Keycloak emails them to set a password, and Keycloak's
-  login page handles password reset.
+  login page handles password reset. A logged-in person without a Member
+  record creates their own; see
+  [0002](0002-a-person-without-a-member-record-creates-their-own-profile.md).
 - The app is down whenever the homelab is. Accepted for an internal admin
   tool.
 - The old data in MySQL is not migrated. The old app and its database at
