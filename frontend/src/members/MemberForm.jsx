@@ -33,11 +33,15 @@ const REQUIRED = ['firstName', 'lastName', 'street', 'zipCode', 'city', 'email']
 // Close to what member-service's @Email accepts: something@something, no spaces, a dot in the domain.
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Problems with the form values, as translation keys by field name (`clubIds` when Clubs are chosen). */
-function validate(values, { withClubs }) {
+/**
+ * Problems with the form values, as translation keys by field name (`clubIds` when Clubs are chosen).
+ * A read-only email is not the person's to fix, and the caller doesn't submit it, so it isn't checked.
+ */
+function validate(values, { withClubs, withEmail }) {
   const errors = {};
-  for (const name of REQUIRED) if (!values[name].trim()) errors[name] = 'members.form.required';
-  if (!errors.email && !EMAIL.test(values.email.trim())) errors.email = 'members.form.invalidEmail';
+  const required = withEmail ? REQUIRED : REQUIRED.filter((name) => name !== 'email');
+  for (const name of required) if (!values[name].trim()) errors[name] = 'members.form.required';
+  if (withEmail && !errors.email && !EMAIL.test(values.email.trim())) errors.email = 'members.form.invalidEmail';
   if (withClubs && values.clubIds.length === 0) errors.clubIds = 'members.form.noClub';
   return errors;
 }
@@ -105,7 +109,7 @@ export default function MemberForm({
 
   const submit = (event) => {
     event.preventDefault();
-    const problems = validate(values, { withClubs: Boolean(clubs) });
+    const problems = validate(values, { withClubs: Boolean(clubs), withEmail: !emailReadOnly });
     setErrors(problems);
     if (Object.keys(problems).length === 0) onSubmit(values);
   };

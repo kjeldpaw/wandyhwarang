@@ -197,6 +197,21 @@ test('someone without a Profile creates one, with name and email from their logi
   ]);
 });
 
+test('someone whose login has no email can still submit the creation form', async () => {
+  const requests = onCreate();
+  const { user } = renderApp('/profile', { as: { ...newcomer, email: undefined } });
+  await screen.findByRole('checkbox', { name: 'Randers Taekwondo Klub' });
+
+  await user.type(screen.getByLabelText('Vej'), 'Havnegade 4');
+  await user.type(screen.getByLabelText('Postnummer'), '8900');
+  await user.type(screen.getByLabelText('By'), 'Randers');
+  await user.click(screen.getByRole('checkbox', { name: 'Randers Taekwondo Klub' }));
+  await user.click(screen.getByRole('button', { name: 'Opret profil' }));
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Nina Nielsen' })).toBeInTheDocument();
+  expect(requests).toHaveLength(1);
+});
+
 test('creating a Profile needs an address and at least one Club', async () => {
   const requests = onCreate();
   const { user } = renderApp('/profile', { as: newcomer });
