@@ -247,7 +247,7 @@ test('a conflict on create says a Profile or the email already exists', async ()
   await user.click(screen.getByRole('button', { name: 'Opret profil' }));
 
   expect(await screen.findByRole('alert')).toHaveTextContent(
-    'Du har allerede en profil, eller en anden har din e-mail. Kontakt din instruktør.',
+    'Du har allerede en profil, eller en anden har din e-mail. Kontakt en Admin.',
   );
 });
 
