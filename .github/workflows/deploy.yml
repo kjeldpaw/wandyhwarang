@@ -55,7 +55,7 @@ jobs:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SFTP_USER: ${{ secrets.SFTP_USER }}
           LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
-          REMOTE_DIR: www
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR || 'www' }}
         run: |
           lftp -c "
             set sftp:auto-confirm yes

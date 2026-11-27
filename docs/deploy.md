@@ -14,8 +14,9 @@ On a pushed tag matching `v*` it runs, in `frontend/`:
 3. `npm run build` with the production configuration committed in
    `frontend/.env`.
 4. Checks that `dist/index.html` and `dist/.htaccess` exist.
-5. Uploads `dist/` over SFTP with `lftp mirror --reverse` into the `www`
-   directory of the SFTP account (the web root of wandywharang.dk).
+5. Uploads `dist/` over SFTP with `lftp mirror --reverse` into the
+   `REMOTE_DIR` directory of the SFTP account (the web root of
+   wandywharang.dk), `www` unless the secret says otherwise.
 
 The upload overwrites files but deletes nothing on the server (it has no
 `--delete`, on purpose). Old hashed files in `assets/` and anything else
@@ -35,9 +36,8 @@ the SFTP details from the one.com control panel:
 - `SFTP_HOST`: the one.com SFTP host name
 - `SFTP_USER`: the SFTP user name
 - `SFTP_PASSWORD`: the SFTP password
-
-If one.com's web root isn't `www` in the SFTP account, change `REMOTE_DIR`
-in the workflow.
+- `REMOTE_DIR` (optional): the web root's path in the SFTP account. Without
+  it the upload goes to `www`.
 
 The workflow accepts the server's SSH host key on first contact
 (`sftp:auto-confirm`), because there is no pinned known-hosts entry.
