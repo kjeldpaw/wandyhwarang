@@ -21,7 +21,7 @@ function EditMember() {
   const api = useApi();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: member, error: loadError, loading } = useApiData((client) => client.members.get(id), [id]);
+  const { data: member, error: loadError, loading } = useApiData((api) => api.members.get(id), [id]);
 
   if (loading)
     return (

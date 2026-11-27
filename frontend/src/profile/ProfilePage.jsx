@@ -87,7 +87,7 @@ function CreateProfile({ onCreated }) {
   const api = useApi();
   const session = useSession();
   // Any Club: the person isn't a Member of one yet.
-  const { data: clubs, error: loadError, loading } = useApiData((client) => client.clubs.list(), []);
+  const { data: clubs, error: loadError, loading } = useApiData((api) => api.clubs.list(), []);
   const { busy, error, run } = useWrite();
   const fromLogin = { firstName: session.firstName, lastName: session.lastName, email: session.email };
 
