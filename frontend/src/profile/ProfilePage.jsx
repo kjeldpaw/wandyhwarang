@@ -23,8 +23,8 @@ export function profileDetailsOf(values) {
 
 /**
  * /profile: the logged-in person's own Member record, their Profile. They view it and edit
- * their personal details, but not their email. Clubs, Graduations and References show as on
- * the Member detail page (only Instructors and Admins change them). Someone
+ * their personal details, but not their email. Clubs, Graduations and References are
+ * read-only here for every role; Instructors and Admins change their own on /members/:id. Someone
  * who logs in without a Member record (member-service answers 404) creates their Profile here.
  */
 export default function ProfilePage() {
@@ -62,10 +62,10 @@ export default function ProfilePage() {
     <article className="card member-detail">
       <h2>{fullName(profile)}</h2>
       <PersonalDetailsSection member={profile} actions={edit} />
-      {/* As on the Member detail page: read-only for a plain Member, managed by Instructors and Admins. */}
-      <ClubsSection member={profile} onChange={setProfile} />
-      <GraduationsSection member={profile} onChange={setProfile} />
-      <ReferencesSection member={profile} onChange={setProfile} />
+      {/* Read-only for every role: Instructors and Admins change their own on /members/:id. */}
+      <ClubsSection member={profile} readOnly />
+      <GraduationsSection member={profile} readOnly />
+      <ReferencesSection member={profile} readOnly />
     </article>
   );
 }

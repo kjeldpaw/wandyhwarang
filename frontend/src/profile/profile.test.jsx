@@ -81,6 +81,17 @@ test('a Member’s Profile also shows their Belt, Graduations and References, re
   expect(within(references).queryByRole('button')).not.toBeInTheDocument();
 });
 
+// Self-editing Clubs, Graduations or References is out of scope; Instructors and Admins use /members/:id.
+test.each(['instructor', 'admin'])('an %s sees the Clubs, Graduations and References of their Profile read-only', async (as) => {
+  renderApp('/profile', { as });
+
+  const clubList = await screen.findByRole('region', { name: 'Klubber' });
+  expect(within(clubList).queryByRole('button')).not.toBeInTheDocument();
+  expect(within(clubList).queryByRole('combobox')).not.toBeInTheDocument();
+  expect(within(screen.getByRole('region', { name: 'Bælte og gradueringer' })).queryByRole('button')).not.toBeInTheDocument();
+  expect(within(screen.getByRole('region', { name: 'Referencer' })).queryByRole('button')).not.toBeInTheDocument();
+});
+
 test('a Member edits their Profile, which never sends the email', async () => {
   const requests = onUpdate();
   const { user } = renderApp('/profile', { as: 'member' });

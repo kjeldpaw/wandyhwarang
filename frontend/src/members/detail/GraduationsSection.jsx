@@ -13,12 +13,13 @@ import Section from './Section';
 /**
  * The current Belt and the Graduation history, latest first, with the Examiners' names.
  * Instructors and Admins can add a Graduation here, and correct or delete (after confirming)
- * one in the history. One form or confirmation is open at a time.
+ * one in the history. One form or confirmation is open at a time. `readOnly` (on /profile) shows
+ * them to everyone without changes.
  */
-export default function GraduationsSection({ member, onChange }) {
+export default function GraduationsSection({ member, onChange, readOnly = false }) {
   const { t } = useTranslation();
   const api = useApi();
-  const { isInstructor } = useSession();
+  const canEdit = useSession().isInstructor && !readOnly;
   const formatDate = useFormatDate();
   const history = graduationHistory(member);
   const belt = currentBelt(member);
@@ -48,7 +49,7 @@ export default function GraduationsSection({ member, onChange }) {
       close();
     });
 
-  const actions = isInstructor && panel?.kind !== 'add' && (
+  const actions = canEdit && panel?.kind !== 'add' && (
     <button type="button" onClick={() => start({ kind: 'add' })}>
       {t('members.graduation.add')}
     </button>
@@ -91,7 +92,7 @@ export default function GraduationsSection({ member, onChange }) {
               <th scope="col">{t('members.graduation.date')}</th>
               <th scope="col">{t('members.graduation.belt')}</th>
               <th scope="col">{t('members.graduation.examiners')}</th>
-              {isInstructor && <th scope="col">{t('members.graduation.actions')}</th>}
+              {canEdit && <th scope="col">{t('members.graduation.actions')}</th>}
             </tr>
           </thead>
           <tbody>
@@ -100,7 +101,7 @@ export default function GraduationsSection({ member, onChange }) {
                 <td>{formatDate(graduation.date)}</td>
                 <td>{beltName(graduation.belt)}</td>
                 <td>{[...graduation.graduatedBy].sort(byName).map(fullName).join(', ')}</td>
-                {isInstructor && (
+                {canEdit && (
                   <td className="actions">
                     <button
                       type="button"
