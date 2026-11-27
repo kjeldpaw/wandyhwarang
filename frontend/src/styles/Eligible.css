@@ -1,0 +1,81 @@
+/* The Eligible list: the Member list's filters, its own table; on phones each row becomes a card. */
+
+/* Eligible only within the month after the date. */
+.eligible-later {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .eligible-list .data-table,
+  .eligible-list .data-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    border: none;
+    overflow: visible;
+  }
+
+  /* The column headings are still read out with the table. */
+  .eligible-list .data-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  /* Name and Eligible date on top, the Clubs below, then the Belts and the Graduation date. */
+  .eligible-list .data-table tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'name since'
+      'clubs clubs'
+      'belt next'
+      'graduated graduated';
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-surface);
+    font-size: var(--font-size-small);
+  }
+
+  .eligible-list .data-table td {
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  .eligible-list .data-table tbody tr:hover td {
+    background: none;
+  }
+
+  .eligible-list .data-table td:nth-child(1) {
+    grid-area: name;
+    font-size: 1rem;
+  }
+
+  .eligible-list .data-table td:nth-child(2) {
+    grid-area: clubs;
+    color: var(--color-muted);
+  }
+
+  .eligible-list .data-table td:nth-child(3) {
+    grid-area: belt;
+  }
+
+  .eligible-list .data-table td:nth-child(4) {
+    grid-area: graduated;
+    color: var(--color-muted);
+  }
+
+  .eligible-list .data-table td:nth-child(5) {
+    grid-area: next;
+  }
+
+  .eligible-list .data-table td:nth-child(6) {
+    grid-area: since;
+  }
+}

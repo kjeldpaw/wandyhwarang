@@ -54,11 +54,12 @@ Every UI text is a key in `frontend/src/i18n/locales/{da,en,de}.json`
 (read it with `const { t } = useTranslation()`); add each new key to all
 three files, which a test checks. Show dates with `useFormatDate()` from
 `frontend/src/i18n/formatDate.js`, and API errors with `<ApiErrorMessage>`,
-never member-service's text. Taekwondo terms (Kup, Dan, Kukkiwon) and Belt
-names are not translated. Translations of the glossary words: Member =
+never member-service's text. Taekwondo terms (Kup, Poom, Dan, Kukkiwon) and
+Belt names are not translated. Translations of the glossary words: Member =
 Medlem / Mitglied, Club = Klub / Verein, Belt = Bælte / Gürtel, Graduation =
 Graduering / Graduierung, Examiner = Eksaminator / Prüfer, Reference =
-Reference / Referenz, Instructor = Instruktør / Instruktor, Admin = Admin.
+Reference / Referenz, Instructor = Instruktør / Instruktor, Admin = Admin,
+Eligible = Berettiget / Berechtigt.
 
 ## Layout and commands
 
@@ -83,10 +84,13 @@ part of the record in `frontend/src/members/detail/`. `/profile`
 (`frontend/src/profile/ProfilePage.jsx`) shows the logged-in person's own
 Member record, their Profile, through member-service's `/profile` endpoints,
 reusing those sections and `MemberForm`; without a Member record it offers
-to create one. Tests live next to the
+to create one. `/eligible` (`frontend/src/eligible/EligiblePage.jsx`, menu
+item Berettiget) lists the Members of every Club who are Eligible for a Dan
+or Poom on a date the Instructor or Admin picks, from member-service's
+`/eligible`. Tests live next to the
 code as `*.test.jsx`; `frontend/src/test/` holds the setup file, the render
 helper and the MSW handlers, with member-service fixtures (Clubs, Belts,
-Members) in `frontend/src/test/memberService.js`.
+Members, the Eligible list) in `frontend/src/test/memberService.js`.
 
 ## Deploy
 

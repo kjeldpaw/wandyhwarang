@@ -171,6 +171,13 @@ export function createApiClient({ baseUrl, getAccessToken, renew, login }) {
       /** All Belts, unordered: Belt[] {id, name, waitTime, rank}; show them with belts/belt.js */
       list: () => request('GET', '/belts'),
     },
+    eligible: {
+      /**
+       * Instructor/Admin: Members of any Club Eligible for a Dan or Poom on the ISO `date`, with
+       * limited fields: {id, firstName, lastName, clubs, belt, graduationDate, nextBelt, eligibleSince}[]
+       */
+      list: (date) => request('GET', `/eligible?${new URLSearchParams({ date })}`),
+    },
     examiners: {
       /** Instructor/Admin: Members of any Club matching `text` (>= 2 chars, max 20): {id, firstName, lastName}[] */
       search: (text) => request('GET', `/examiners?${new URLSearchParams({ q: text })}`),

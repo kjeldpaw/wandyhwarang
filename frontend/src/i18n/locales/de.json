@@ -10,7 +10,8 @@
     "logout": "Abmelden",
     "clubs": "Vereine",
     "members": "Mitglieder",
-    "profile": "Mein Profil"
+    "profile": "Mein Profil",
+    "eligible": "Berechtigt"
   },
   "roles": {
     "admin": "Admin",
@@ -119,6 +120,21 @@
       "edit": "Bearbeiten",
       "editTitle": "{{name}} bearbeiten"
     }
+  },
+  "eligible": {
+    "title": "Berechtigte",
+    "date": "Datum der Graduierung",
+    "intro": "Wähle das Datum der nächsten Schwarzgurt-Graduierung, um zu sehen, wer für einen Dan oder Poom berechtigt ist.",
+    "club": "Verein",
+    "allClubs": "Alle Vereine",
+    "name": "Name",
+    "clubs": "Vereine",
+    "belt": "Gürtel",
+    "graduated": "Graduiert",
+    "nextBelt": "Nächster Gürtel",
+    "eligibleSince": "Berechtigt ab",
+    "eligibleFrom": "Berechtigt ab {{date}}",
+    "none": "An diesem Datum ist niemand berechtigt."
   },
   "profile": {
     "emailHint": "Wende dich an einen Admin, um deine E-Mail zu ändern.",

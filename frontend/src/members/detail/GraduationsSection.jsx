@@ -5,6 +5,7 @@ import { useWrite } from '../../api/useWrite';
 import { useSession } from '../../auth/useSession';
 import { beltName } from '../../belts/belt';
 import BeltBadge from '../../belts/BeltBadge';
+import BeltName from '../../belts/BeltName';
 import { useFormatDate } from '../../i18n/formatDate';
 import { byName, currentBelt, fullName, graduationHistory } from '../member';
 import ConfirmPanel from './ConfirmPanel';
@@ -102,10 +103,7 @@ export default function GraduationsSection({ member, onChange, readOnly = false 
               <tr key={graduation.id}>
                 <td>{formatDate(graduation.date)}</td>
                 <td>
-                  <span className="belt-name">
-                    <BeltBadge belt={graduation.belt} />
-                    {beltName(graduation.belt)}
-                  </span>
+                  <BeltName belt={graduation.belt} />
                 </td>
                 <td>{[...graduation.graduatedBy].sort(byName).map(fullName).join(', ')}</td>
                 {canEdit && (

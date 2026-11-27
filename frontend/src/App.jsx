@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import RequireLogin from './auth/RequireLogin';
 import ClubsPage from './clubs/ClubsPage';
+import EligiblePage from './eligible/EligiblePage';
 import EditMemberPage from './members/EditMemberPage';
 import Header from './Header';
 import MemberListPage from './members/MemberListPage';
@@ -22,6 +23,7 @@ function App() {
               <Route path="/members/:id" element={<MemberPage />} />
               <Route path="/members/:id/edit" element={<EditMemberPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/eligible" element={<EligiblePage />} />
               <Route path="/clubs" element={<ClubsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

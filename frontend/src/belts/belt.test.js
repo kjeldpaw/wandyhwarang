@@ -1,6 +1,18 @@
-import { beltColours } from './belt';
+import { beltColours, beltName } from './belt';
 
 const belt = (name) => ({ name });
+
+describe('beltName', () => {
+  it.each([
+    ['White Belt with yellow snippet (10. KUP)', '10. Kup'],
+    ['Black and red Belt (1. POOM)', '1. Poom'],
+    ['Black and red Belt (4. poom)', '4. Poom'],
+    ['Black Belt (2. DAN)', '2. Dan'],
+    ['Yellow Belt (9. MON)', '9. Mon'],
+  ])('shows %s as %s', (name, shown) => {
+    expect(beltName(belt(name))).toBe(shown);
+  });
+});
 
 describe('beltColours', () => {
   it.each([
@@ -16,6 +28,8 @@ describe('beltColours', () => {
     ['Red Belt with three black snippets (1. KUP)', 'red', ['black', 'black', 'black']],
     ['Black Belt (1. DAN)', 'black', []],
     ['Black Belt (9. DAN)', 'black', []],
+    ['Black and red Belt (1. POOM)', 'red-black', []],
+    ['Black and red Belt (4. POOM)', 'red-black', []],
   ])('%s is %s with stripes %j', (name, base, stripes) => {
     expect(beltColours(belt(name))).toEqual({ base, stripes });
   });

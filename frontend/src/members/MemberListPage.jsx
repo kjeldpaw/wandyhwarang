@@ -4,8 +4,7 @@ import ApiErrorMessage from '../api/ApiErrorMessage';
 import { useApiData } from '../api/useApiData';
 import { useOwnClubs } from '../auth/useOwnClubs';
 import { useSession } from '../auth/useSession';
-import BeltBadge from '../belts/BeltBadge';
-import { beltName } from '../belts/belt';
+import BeltName from '../belts/BeltName';
 import '../styles/MemberList.css';
 import { byName, currentBelt, fullName, sortClubs } from './member';
 
@@ -99,10 +98,7 @@ function MemberList() {
                 <td>{sortClubs(member.clubs).map((club) => club.name).join(', ')}</td>
                 <td>
                   {currentBelt(member) ? (
-                    <span className="belt-name">
-                      <BeltBadge belt={currentBelt(member)} />
-                      {beltName(currentBelt(member))}
-                    </span>
+                    <BeltName belt={currentBelt(member)} />
                   ) : (
                     t('members.list.noBelt')
                   )}

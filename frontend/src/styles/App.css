@@ -473,6 +473,11 @@ legend {
   background-color: var(--belt-black);
 }
 
+/* A Poom: red along the top half, black along the bottom. */
+.belt-red-black {
+  background-image: linear-gradient(to bottom, var(--belt-red) 50%, var(--belt-black) 50%);
+}
+
 /* Messages */
 
 .loading,

@@ -38,8 +38,9 @@ export const clubs = {
 
 const DAY = 24 * 60 * 60;
 
-// Belts as seeded in member-service, keyed by Kup, Dan or Mon number: belts.mon9 … belts.mon1,
-// belts.kup10 … belts.kup1, belts.dan1 … belts.dan3. Rank 1 is the lowest.
+// Belts as seeded in member-service (v1.4.0), keyed by Kup, Poom, Dan or Mon number: belts.mon9 …
+// belts.mon1, belts.kup10 … belts.kup1, belts.poom1 … belts.poom4, belts.dan1 … belts.dan3.
+// Rank 1 is the lowest; the Pooms sit between 1. Kup and 1. Dan.
 export const belts = Object.fromEntries(
   [
     [1, 'Yellow Belt (9. MON)', '2eeaf34f-cada-426b-94e8-917386df594b'],
@@ -60,10 +61,14 @@ export const belts = Object.fromEntries(
     [16, 'Red Belt (4. KUP)', '2062c9ea-a85c-4dc8-aab1-ff003d226de8'],
     [17, 'Red Belt with black snippet (3. KUP)', '3ac08b1d-4ca6-4208-a3c9-a8ebd414cc9a'],
     [18, 'Red Belt with two black snippets (2. KUP)', '83e327ba-714a-4c67-80ad-b1f37dfaee6a'],
-    [19, 'Red Belt with three black snippets (1. KUP)', '16f1e0cc-3421-4444-bfdd-a1206c7769b0'],
-    [20, 'Black Belt (1. DAN)', 'aae0ca9f-4674-460b-9b63-4850bf018dcb', 365],
-    [21, 'Black Belt (2. DAN)', '3f5c8106-a51c-4d24-bd99-a651758b5f9a', 730],
-    [22, 'Black Belt (3. DAN)', '4a5a38a8-b293-45be-af5d-7653d8318d33', 1096],
+    [19, 'Red Belt with three black snippets (1. KUP)', '16f1e0cc-3421-4444-bfdd-a1206c7769b0', 365],
+    [20, 'Black and red Belt (1. POOM)', '8b0e5c52-6f3a-4f0e-9a51-5c7e2b1d0f01', 365],
+    [21, 'Black and red Belt (2. POOM)', '8b0e5c52-6f3a-4f0e-9a51-5c7e2b1d0f02', 730],
+    [22, 'Black and red Belt (3. POOM)', '8b0e5c52-6f3a-4f0e-9a51-5c7e2b1d0f03', 1096],
+    [23, 'Black and red Belt (4. POOM)', '8b0e5c52-6f3a-4f0e-9a51-5c7e2b1d0f04', 1460],
+    [24, 'Black Belt (1. DAN)', 'aae0ca9f-4674-460b-9b63-4850bf018dcb', 365],
+    [25, 'Black Belt (2. DAN)', '3f5c8106-a51c-4d24-bd99-a651758b5f9a', 730],
+    [26, 'Black Belt (3. DAN)', '4a5a38a8-b293-45be-af5d-7653d8318d33', 1096],
   ].map(([rank, name, id, waitDays = 0]) => {
     const [, number, unit] = name.match(/\((\d+)\. (\w+)\)$/);
     return [`${unit.toLowerCase()}${number}`, { id, name, waitTime: waitDays * DAY, rank }];
@@ -153,6 +158,54 @@ export const members = {
   }),
 };
 
+// An entry of member-service's Eligible list (GET /eligible?date=, v1.4.0): limited fields of a
+// Member of any Club, their current Belt, its Graduation date, their next Belt and the day their
+// wait for it ends.
+const eligibleEntry = ({ id, firstName, lastName, clubs }, belt, graduationDate, nextBelt, eligibleSince) => ({
+  id,
+  firstName,
+  lastName,
+  clubs,
+  belt,
+  graduationDate,
+  nextBelt,
+  eligibleSince,
+});
+
+// The date the Eligible fixtures are for, and member-service's answer for it.
+//   ida    Randers and Midtdjurs, 1. Dan for 2. Dan
+//   ole    Nordjysk, a Club Ida isn't in, 1. Kup for 1. Dan
+//   emil   Randers and Aarhus, under 15, 1. Kup for 1. Poom
+//   laura  Aarhus, 1. Poom for 2. Poom, Eligible only within the month after the date
+export const eligibleDate = '2027-03-12';
+const emil = person('66666666-6666-6666-6666-666666666666', 'Emil', 'Jensen', { clubs: [clubs.randers, clubs.aarhus] });
+const laura = person('77777777-7777-7777-7777-777777777777', 'Laura', 'Poulsen', { clubs: [clubs.aarhus] });
+export const eligible = {
+  ida: eligibleEntry(ida, belts.dan1, '2015-06-01', belts.dan2, '2016-06-01'),
+  ole: eligibleEntry(ole, belts.kup1, '2026-03-01', belts.dan1, '2027-03-01'),
+  emil: eligibleEntry(emil, belts.kup1, '2026-01-10', belts.poom1, '2027-01-10'),
+  laura: eligibleEntry(laura, belts.poom1, '2026-04-01', belts.poom2, '2027-04-01'),
+};
+
+/**
+ * The Eligible list handler: Admins and Instructors get `list` for any valid date.
+ *   server.use(eligibleHandler([]))
+ */
+export function eligibleHandler(list = Object.values(eligible)) {
+  return http.get(api('/eligible'), ({ request }) => {
+    const caller = callerOf(request);
+    if (!caller) return unauthorised();
+    if (!caller.roles.some((role) => role === 'admin' || role === 'instructor')) {
+      return new HttpResponse(null, { status: 403 });
+    }
+    const date = new URL(request.url).searchParams.get('date') ?? '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return HttpResponse.json({ message: 'Query date must be a date as YYYY-MM-DD' }, { status: 400 });
+    }
+    return HttpResponse.json(list);
+  });
+}
+
 // The caller of a request, read from the bearer token like member-service does.
 function callerOf(request) {
   const token = request.headers.get('Authorization')?.match(/^Bearer (.+)$/)?.[1];
@@ -233,4 +286,5 @@ export const memberServiceHandlers = [
     callerOf(request) ? HttpResponse.json(Object.values(belts).reverse()) : unauthorised(),
   ),
   ...memberHandlers(),
+  eligibleHandler(),
 ];

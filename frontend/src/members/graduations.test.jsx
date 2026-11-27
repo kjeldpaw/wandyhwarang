@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { api, belts, graduations, members } from '../test/memberService';
+import { api, belts, graduations, memberHandlers, members } from '../test/memberService';
 import { renderApp } from '../test/renderApp';
 import { server } from '../test/server';
 
@@ -107,8 +107,28 @@ test('every Belt member-service has is offered in rank order', async () => {
     'Vælg bælte',
     ...['9. Mon', '8. Mon', '7. Mon', '6. Mon', '5. Mon', '4. Mon', '3. Mon', '2. Mon', '1. Mon'],
     ...['10. Kup', '9. Kup', '8. Kup', '7. Kup', '6. Kup', '5. Kup', '4. Kup', '3. Kup', '2. Kup', '1. Kup'],
+    ...['1. Poom', '2. Poom', '3. Poom', '4. Poom'],
     ...['1. Dan', '2. Dan', '3. Dan'],
   ]);
+});
+
+test('a Poom in the Graduation history shows as n. Poom with a red-and-black badge', async () => {
+  const poomHolder = {
+    ...members.kim,
+    graduation: graduations(
+      { date: '2025-06-01', belt: belts.poom1, graduatedBy: [members.ida] },
+      { date: '2024-06-01', belt: belts.kup1, graduatedBy: [members.ida] },
+    ),
+  };
+  server.use(...memberHandlers([...Object.values(members).filter((m) => m.id !== poomHolder.id), poomHolder]));
+  const { container } = await openDetail(poomHolder);
+
+  expect(within(section()).getByText('Nuværende bælte: 1. Poom')).toBeInTheDocument();
+  expect(historyRows()).toEqual([
+    ['1. juni 2025', '1. Poom', 'Ida Instruktør'],
+    ['1. juni 2024', '1. Kup', 'Ida Instruktør'],
+  ]);
+  expect(container.querySelectorAll('.belt-badge.belt-red-black').length).toBeGreaterThan(0);
 });
 
 test('the Examiner picker shows only names, waits for 2 letters and allows several Examiners', async () => {
