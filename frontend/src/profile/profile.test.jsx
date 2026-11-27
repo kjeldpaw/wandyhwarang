@@ -1,8 +1,8 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { people } from '../test/keycloak';
 import { api, clubs, members } from '../test/memberService';
-import { renderApp } from '../test/renderApp';
+import { completeLogin, renderApp } from '../test/renderApp';
 import { server } from '../test/server';
 
 // Someone who can log in but has no Member record yet, so no Profile.
@@ -200,4 +200,51 @@ test('a conflict on create says a Profile or the email already exists', async ()
   expect(await screen.findByRole('alert')).toHaveTextContent(
     'Du har allerede en profil, eller en anden har din e-mail. Kontakt din instruktør.',
   );
+});
+
+// Logs in at Keycloak from the start page as `as`, like opening wandywharang.dk.
+async function logInFromStartPage(as) {
+  const first = renderApp('/', { as: null });
+  await waitFor(() => expect(first.navigator.urls).toHaveLength(1));
+  first.unmount();
+  return completeLogin(first.navigator, { as });
+}
+
+test('a plain Member lands on their Profile after login', async () => {
+  await logInFromStartPage('member');
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Mads Medlem' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Rediger' })).toBeInTheDocument();
+});
+
+test('a plain Member without a Profile lands on the creation form after login', async () => {
+  await logInFromStartPage(newcomer);
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Opret din profil' })).toBeInTheDocument();
+});
+
+// An Admin created in Keycloak only, like the first Admin: no Member record.
+const firstAdmin = { ...people.admin, sub: '88888888-8888-8888-8888-888888888888', email: 'first@example.com' };
+
+test('an Admin without a Profile can skip creating one and use the Member list', async () => {
+  const { user } = renderApp('/profile', { as: firstAdmin });
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Opret din profil' })).toBeInTheDocument();
+  await user.click(screen.getByRole('link', { name: 'Spring over' }));
+
+  const table = await screen.findByRole('table', { name: 'Medlemmer' });
+  expect(await within(table).findByText('Kim Larsen')).toBeInTheDocument();
+});
+
+test('an Admin without a Profile lands on the Member list after login', async () => {
+  await logInFromStartPage(firstAdmin);
+
+  expect(await screen.findByRole('table', { name: 'Medlemmer' })).toBeInTheDocument();
+});
+
+test('a plain Member without a Profile is not offered to skip creating one', async () => {
+  renderApp('/profile', { as: newcomer });
+
+  await screen.findByRole('heading', { level: 2, name: 'Opret din profil' });
+  expect(screen.queryByRole('link', { name: 'Spring over' })).not.toBeInTheDocument();
 });

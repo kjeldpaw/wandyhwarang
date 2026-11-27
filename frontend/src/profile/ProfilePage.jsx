@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { useApi } from '../api/ApiProvider';
 import ApiErrorMessage from '../api/ApiErrorMessage';
 import { ERROR_KINDS } from '../api/client';
@@ -132,6 +133,14 @@ function CreateProfile({ onCreated }) {
         >
           <ApiErrorMessage error={error} messages={{ conflict: t('profile.conflict') }} />
         </MemberForm>
+      )}
+      {/* An Admin or Instructor may work without a Profile, e.g. the first Admin made in Keycloak. */}
+      {session.isInstructor && (
+        <p className="page-actions">
+          <Link to="/" className="btn btn-secondary">
+            {t('profile.skip')}
+          </Link>
+        </p>
       )}
     </section>
   );
