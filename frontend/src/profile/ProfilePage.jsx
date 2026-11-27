@@ -11,6 +11,7 @@ import ClubsSection from '../members/detail/ClubsSection';
 import GraduationsSection from '../members/detail/GraduationsSection';
 import PersonalDetailsSection from '../members/detail/PersonalDetailsSection';
 import ReferencesSection from '../members/detail/ReferencesSection';
+import EditPersonalDetails from '../members/EditPersonalDetails';
 import MemberForm, { profileDetailsOf } from '../members/MemberForm';
 import { fullName } from '../members/member';
 import '../styles/MemberDetail.css';
@@ -67,29 +68,17 @@ export default function ProfilePage() {
 function EditProfile({ profile, onSaved, onCancel }) {
   const { t } = useTranslation();
   const api = useApi();
-  const { busy, error, run } = useWrite();
-
-  const save = (values) => run(async () => onSaved(await api.profile.update(profileDetailsOf(values))));
-
   return (
-    <section className="card form-page">
-      <h2>{t('members.form.editTitle', { name: fullName(profile) })}</h2>
-      <MemberForm
-        initial={profile}
-        emailReadOnly
-        emailHint={t('profile.emailHint')}
-        submitLabel={t('app.save')}
-        onSubmit={save}
-        busy={busy}
-      >
-        <ApiErrorMessage error={error} />
-      </MemberForm>
-      <p className="page-actions">
+    <EditPersonalDetails
+      member={profile}
+      emailHint={t('profile.emailHint')}
+      save={async (values) => onSaved(await api.profile.update(profileDetailsOf(values)))}
+      cancel={
         <button type="button" className="btn btn-secondary" onClick={onCancel}>
           {t('app.cancel')}
         </button>
-      </p>
-    </section>
+      }
+    />
   );
 }
 
