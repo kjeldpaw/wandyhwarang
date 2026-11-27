@@ -1,16 +1,25 @@
-/* The Clubs page: one row per Club, styled as the old table rows. */
+/* The Clubs page: one row per Club. */
+
+.club-list {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+}
 
 .club-list li {
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
-  color: #666;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-muted);
+}
+
+.club-list li:last-child {
+  border-bottom: none;
 }
 
 .club-list li:hover {
-  background-color: #f8f9fa;
+  background-color: var(--color-sunken);
 }
 
 .club-name {
-  color: #333;
+  color: var(--color-text);
   font-weight: 600;
 }

@@ -1,0 +1,81 @@
+/* Design tokens: the Dojang look (wandyhwarang#19). Every colour, size and radius in the other
+   stylesheets comes from here. Dark mode follows the device setting. Text pairs meet WCAG AA. */
+
+:root {
+  color-scheme: light dark;
+
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-size: 15px;
+  --font-size-small: 0.875rem;
+  --line-height: 1.5;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  --radius: 6px;
+  --radius-small: 4px;
+  --radius-pill: 999px;
+  --control-height: 2.5rem;
+  --control-height-small: 2rem;
+  --content-width: 1120px;
+
+  /* Light */
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-sunken: #f5f1ec;
+  --color-border: #e7e0d7;
+  --color-border-input: #8f857a;
+  --color-text: #1a1715;
+  --color-muted: #665d55;
+  --color-accent: #b42318;
+  --color-accent-hover: #912018;
+  --color-on-accent: #ffffff;
+  --color-danger: #b42318;
+  --color-danger-bg: #fef3f2;
+  --color-focus: #b42318;
+  --color-header-bg: #1a1715;
+  --color-header-text: #faf8f5;
+  --color-header-muted: #c9c0b6;
+  --color-header-border: #4a423b;
+  --color-header-focus: #f97066;
+  --color-tab-active-bg: #b42318;
+  --color-tab-active-text: #ffffff;
+
+  /* Belt colours: the same in light and dark. */
+  --belt-white: #ffffff;
+  --belt-yellow: #facc15;
+  --belt-orange: #f97316;
+  --belt-green: #16a34a;
+  --belt-blue: #2563eb;
+  --belt-red: #dc2626;
+  --belt-black: #111111;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #12100e;
+    --color-surface: #1c1916;
+    --color-sunken: #171512;
+    --color-border: #352f29;
+    --color-border-input: #7a7066;
+    --color-text: #f2ede7;
+    --color-muted: #aca298;
+    --color-accent: #f97066;
+    --color-accent-hover: #fda29b;
+    --color-on-accent: #12100e;
+    --color-danger: #fda29b;
+    --color-danger-bg: #2a1513;
+    --color-focus: #f97066;
+    --color-header-bg: #0a0908;
+    --color-header-text: #f2ede7;
+    --color-header-muted: #aca298;
+    --color-header-border: #352f29;
+    --color-header-focus: #f97066;
+    --color-tab-active-bg: #f97066;
+    --color-tab-active-text: #12100e;
+  }
+}

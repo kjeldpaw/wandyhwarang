@@ -4,6 +4,7 @@ import { useApi } from '../../api/ApiProvider';
 import { useWrite } from '../../api/useWrite';
 import { useSession } from '../../auth/useSession';
 import { beltName } from '../../belts/belt';
+import BeltBadge from '../../belts/BeltBadge';
 import { useFormatDate } from '../../i18n/formatDate';
 import { byName, currentBelt, fullName, graduationHistory } from '../member';
 import ConfirmPanel from './ConfirmPanel';
@@ -50,7 +51,7 @@ export default function GraduationsSection({ member, onChange, readOnly = false 
     });
 
   const actions = canEdit && panel?.kind !== 'add' && (
-    <button type="button" onClick={() => start({ kind: 'add' })}>
+    <button type="button" className="btn-secondary" onClick={() => start({ kind: 'add' })}>
       {t('members.graduation.add')}
     </button>
   );
@@ -58,6 +59,7 @@ export default function GraduationsSection({ member, onChange, readOnly = false 
   return (
     <Section title={t('members.detail.graduations')} actions={actions}>
       <p className="current-belt">
+        {belt && <BeltBadge belt={belt} large />}
         {t('members.detail.currentBelt')}: {belt ? beltName(belt) : t('members.detail.noBelt')}
       </p>
       {panel?.kind === 'add' && <GraduationForm title={t('members.graduation.new')} onSave={add} onCancel={close} />}
@@ -99,13 +101,18 @@ export default function GraduationsSection({ member, onChange, readOnly = false 
             {history.map((graduation) => (
               <tr key={graduation.id}>
                 <td>{formatDate(graduation.date)}</td>
-                <td>{beltName(graduation.belt)}</td>
+                <td>
+                  <span className="belt-name">
+                    <BeltBadge belt={graduation.belt} />
+                    {beltName(graduation.belt)}
+                  </span>
+                </td>
                 <td>{[...graduation.graduatedBy].sort(byName).map(fullName).join(', ')}</td>
                 {canEdit && (
                   <td className="actions">
                     <button
                       type="button"
-                      className="btn-edit btn-small"
+                      className="btn-secondary btn-small"
                       aria-label={t('members.graduation.editOne', { date: formatDate(graduation.date) })}
                       onClick={() => start({ kind: 'edit', id: graduation.id })}
                     >

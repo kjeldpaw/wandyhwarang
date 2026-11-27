@@ -88,7 +88,7 @@ function ManageClubs({ member, onChange }) {
               ))}
             </select>
           </label>{' '}
-          <button type="submit" disabled={busy || !clubId}>
+          <button type="submit" className="btn-secondary" disabled={busy || !clubId}>
             {t('members.clubs.addButton')}
           </button>
         </form>
