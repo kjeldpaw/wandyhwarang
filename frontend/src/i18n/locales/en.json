@@ -1,0 +1,136 @@
+{
+  "app": {
+    "loading": "Loading…",
+    "loggingIn": "Logging in…",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "header": {
+    "language": "Language",
+    "logout": "Log out",
+    "clubs": "Clubs",
+    "members": "Members",
+    "profile": "My profile"
+  },
+  "roles": {
+    "admin": "Admin",
+    "instructor": "Instructor",
+    "member": "Member"
+  },
+  "clubs": {
+    "title": "Clubs"
+  },
+  "members": {
+    "list": {
+      "title": "Members",
+      "club": "Club",
+      "allClubs": "All Clubs",
+      "search": "Search by name",
+      "name": "Name",
+      "clubs": "Clubs",
+      "belt": "Belt",
+      "noBelt": "No Belt",
+      "none": "No Members match."
+    },
+    "fields": {
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "dateOfBirth": "Date of birth"
+    },
+    "clubs": {
+      "add": "Add Club",
+      "choose": "Choose Club",
+      "addButton": "Add",
+      "remove": "Remove",
+      "removeClub": "Remove {{club}}",
+      "lastClub": "A Member must belong to at least one Club. Add another Club before removing this one."
+    },
+    "delete": {
+      "button": "Delete Member",
+      "confirm": "Delete {{name}}? Their login, Graduations and References are deleted too. This cannot be undone.",
+      "confirmButton": "Yes, delete"
+    },
+    "detail": {
+      "personal": "Personal details",
+      "notGiven": "Not given",
+      "clubs": "Clubs",
+      "graduations": "Belt and Graduations",
+      "currentBelt": "Current Belt",
+      "noBelt": "No Belt yet",
+      "graduationHistory": "Graduations",
+      "noGraduations": "No Graduations yet.",
+      "references": "References",
+      "noReferences": "No References.",
+      "notFound": "This Member does not exist, or you do not have access to them."
+    },
+    "graduation": {
+      "date": "Date",
+      "belt": "Belt",
+      "examiners": "Examiners",
+      "add": "Add Graduation",
+      "new": "New Graduation",
+      "editTitle": "Edit Graduation",
+      "actions": "Actions",
+      "edit": "Edit",
+      "editOne": "Edit the Graduation of {{date}}",
+      "delete": "Delete",
+      "deleteOne": "Delete the Graduation of {{date}}",
+      "deleteConfirm": "Delete the Graduation of {{date}} ({{belt}})?",
+      "confirmDelete": "Yes, delete",
+      "chooseBelt": "Choose a Belt",
+      "searchExaminer": "Search Examiner",
+      "searchResults": "Search results",
+      "chosenExaminers": "Chosen Examiners",
+      "noExaminers": "No Examiners chosen.",
+      "removeExaminer": "Remove {{name}}",
+      "typeMore": "Type at least 2 letters.",
+      "noExaminersFound": "No Examiners found.",
+      "dateRequired": "Choose a date.",
+      "beltRequired": "Choose a Belt.",
+      "examinerRequired": "Choose at least one Examiner."
+    },
+    "references": {
+      "add": "Add reference",
+      "type": "Type",
+      "number": "Number",
+      "edit": "Edit",
+      "editLabel": "Edit {{type}}",
+      "remove": "Remove",
+      "removeLabel": "Remove {{type}}",
+      "removeConfirm": "Remove the {{type}} reference {{reference}}?",
+      "confirmRemove": "Yes, remove",
+      "numberRequired": "Enter the number."
+    },
+    "form": {
+      "newTitle": "New Member",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "street": "Street",
+      "zipCode": "Zip code",
+      "city": "City",
+      "optional": "{{field}} (optional)",
+      "clubs": "Clubs",
+      "create": "Create Member",
+      "duplicateEmail": "A person with this email already exists. Contact an Admin to get them into your Club.",
+      "required": "Required.",
+      "invalidEmail": "Enter a valid email address.",
+      "noClub": "Choose at least one Club.",
+      "edit": "Edit",
+      "editTitle": "Edit {{name}}"
+    }
+  },
+  "notFound": {
+    "title": "Not found",
+    "page": "This page does not exist."
+  },
+  "errors": {
+    "network": "Cannot connect to member-service. Please try again later.",
+    "unauthorised": "Your session has expired. You are being sent to the login.",
+    "forbidden": "You do not have access to this.",
+    "notFound": "It does not exist, or you do not have access to it.",
+    "conflict": "This is not possible because it conflicts with existing data.",
+    "validation": "Some of the information is not valid.",
+    "server": "member-service failed. Please try again later."
+  }
+}

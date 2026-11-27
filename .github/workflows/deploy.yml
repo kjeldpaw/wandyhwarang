@@ -1,0 +1,65 @@
+# Builds the frontend and uploads it to one.com (https://wandywharang.dk) when
+# a release tag such as v1.0.0 is pushed. See "Deploy" in AGENTS.md.
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      # A failing test stops the job here, before anything is built or uploaded.
+      - name: Test
+        run: npm test
+
+      # Uses the production configuration committed in frontend/.env.
+      - name: Build
+        run: npm run build
+
+      - name: Check the build output
+        run: |
+          test -f dist/index.html
+          test -f dist/.htaccess
+
+      - name: Install lftp
+        working-directory: .
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      # Copies dist/ over the web root without deleting anything already there.
+      - name: Upload to one.com over SFTP
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR || 'www' }}
+        run: |
+          lftp -c "
+            set sftp:auto-confirm yes
+            set net:max-retries 2
+            open --user \"$SFTP_USER\" --env-password \"sftp://$SFTP_HOST\"
+            mirror --reverse --verbose dist/ \"$REMOTE_DIR\"
+          "

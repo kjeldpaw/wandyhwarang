@@ -1,0 +1,136 @@
+{
+  "app": {
+    "loading": "Wird geladen…",
+    "loggingIn": "Anmeldung läuft…",
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  },
+  "header": {
+    "language": "Sprache",
+    "logout": "Abmelden",
+    "clubs": "Vereine",
+    "members": "Mitglieder",
+    "profile": "Mein Profil"
+  },
+  "roles": {
+    "admin": "Admin",
+    "instructor": "Instruktor",
+    "member": "Mitglied"
+  },
+  "clubs": {
+    "title": "Vereine"
+  },
+  "members": {
+    "list": {
+      "title": "Mitglieder",
+      "club": "Verein",
+      "allClubs": "Alle Vereine",
+      "search": "Nach Name suchen",
+      "name": "Name",
+      "clubs": "Vereine",
+      "belt": "Gürtel",
+      "noBelt": "Kein Gürtel",
+      "none": "Keine Mitglieder gefunden."
+    },
+    "fields": {
+      "address": "Adresse",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "dateOfBirth": "Geburtsdatum"
+    },
+    "clubs": {
+      "add": "Verein hinzufügen",
+      "choose": "Verein wählen",
+      "addButton": "Hinzufügen",
+      "remove": "Entfernen",
+      "removeClub": "{{club}} entfernen",
+      "lastClub": "Ein Mitglied muss mindestens einem Verein angehören. Füge einen anderen Verein hinzu, bevor du diesen entfernst."
+    },
+    "delete": {
+      "button": "Mitglied löschen",
+      "confirm": "{{name}} löschen? Login, Graduierungen und Referenzen werden ebenfalls gelöscht. Das kann nicht rückgängig gemacht werden.",
+      "confirmButton": "Ja, löschen"
+    },
+    "detail": {
+      "personal": "Persönliche Angaben",
+      "notGiven": "Nicht angegeben",
+      "clubs": "Vereine",
+      "graduations": "Gürtel und Graduierungen",
+      "currentBelt": "Aktueller Gürtel",
+      "noBelt": "Noch kein Gürtel",
+      "graduationHistory": "Graduierungen",
+      "noGraduations": "Noch keine Graduierungen.",
+      "references": "Referenzen",
+      "noReferences": "Keine Referenzen.",
+      "notFound": "Dieses Mitglied gibt es nicht, oder du hast keinen Zugriff darauf."
+    },
+    "graduation": {
+      "date": "Datum",
+      "belt": "Gürtel",
+      "examiners": "Prüfer",
+      "add": "Graduierung hinzufügen",
+      "new": "Neue Graduierung",
+      "editTitle": "Graduierung bearbeiten",
+      "actions": "Aktionen",
+      "edit": "Bearbeiten",
+      "editOne": "Graduierung vom {{date}} bearbeiten",
+      "delete": "Löschen",
+      "deleteOne": "Graduierung vom {{date}} löschen",
+      "deleteConfirm": "Graduierung vom {{date}} ({{belt}}) löschen?",
+      "confirmDelete": "Ja, löschen",
+      "chooseBelt": "Gürtel wählen",
+      "searchExaminer": "Prüfer suchen",
+      "searchResults": "Suchergebnisse",
+      "chosenExaminers": "Gewählte Prüfer",
+      "noExaminers": "Keine Prüfer gewählt.",
+      "removeExaminer": "{{name}} entfernen",
+      "typeMore": "Mindestens 2 Buchstaben eingeben.",
+      "noExaminersFound": "Keine Prüfer gefunden.",
+      "dateRequired": "Bitte ein Datum wählen.",
+      "beltRequired": "Bitte einen Gürtel wählen.",
+      "examinerRequired": "Bitte mindestens einen Prüfer wählen."
+    },
+    "references": {
+      "add": "Referenz hinzufügen",
+      "type": "Typ",
+      "number": "Nummer",
+      "edit": "Bearbeiten",
+      "editLabel": "{{type}} bearbeiten",
+      "remove": "Entfernen",
+      "removeLabel": "{{type}} entfernen",
+      "removeConfirm": "{{type}}-Referenz {{reference}} entfernen?",
+      "confirmRemove": "Ja, entfernen",
+      "numberRequired": "Bitte die Nummer eingeben."
+    },
+    "form": {
+      "newTitle": "Neues Mitglied",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "street": "Straße",
+      "zipCode": "Postleitzahl",
+      "city": "Ort",
+      "optional": "{{field}} (optional)",
+      "clubs": "Vereine",
+      "create": "Mitglied anlegen",
+      "duplicateEmail": "Eine Person mit dieser E-Mail-Adresse gibt es bereits. Wende dich an einen Admin, um sie in deinen Verein aufzunehmen.",
+      "required": "Pflichtfeld.",
+      "invalidEmail": "Gib eine gültige E-Mail-Adresse ein.",
+      "noClub": "Wähle mindestens einen Verein.",
+      "edit": "Bearbeiten",
+      "editTitle": "{{name}} bearbeiten"
+    }
+  },
+  "notFound": {
+    "title": "Nicht gefunden",
+    "page": "Diese Seite gibt es nicht."
+  },
+  "errors": {
+    "network": "Keine Verbindung zu member-service. Bitte später erneut versuchen.",
+    "unauthorised": "Deine Sitzung ist abgelaufen. Du wirst zur Anmeldung weitergeleitet.",
+    "forbidden": "Du hast keinen Zugriff darauf.",
+    "notFound": "Das gibt es nicht, oder du hast keinen Zugriff darauf.",
+    "conflict": "Das ist nicht möglich, weil es im Widerspruch zu vorhandenen Daten steht.",
+    "validation": "Einige Angaben sind ungültig.",
+    "server": "member-service ist fehlgeschlagen. Bitte später erneut versuchen."
+  }
+}

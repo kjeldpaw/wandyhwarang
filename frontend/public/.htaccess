@@ -1,0 +1,11 @@
+# Apache config for the static build at one.com (copied into dist by Vite).
+# Serve index.html for every path that isn't an existing file, so client-side
+# routes such as /members/42 survive a hard reload or a deep link.
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.html [L]
+</IfModule>
