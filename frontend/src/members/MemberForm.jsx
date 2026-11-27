@@ -81,7 +81,8 @@ export default function MemberForm({
       clubIds: event.target.checked ? [...previous.clubIds, id] : previous.clubIds.filter((c) => c !== id),
     }));
 
-  const field = (name, label, props = {}, hint = undefined) => {
+  /** One labelled input. `input` are extra attributes for it; `hint` describes it below. */
+  const field = (name, label, { input = {}, hint } = {}) => {
     const hintId = `${idPrefix}-${name}-hint`;
     const describedBy = [errors[name] && errorId(name), hint && hintId].filter(Boolean).join(' ');
     return (
@@ -94,7 +95,7 @@ export default function MemberForm({
             onChange={set(name)}
             aria-invalid={errors[name] ? true : undefined}
             aria-describedby={describedBy || undefined}
-            {...props}
+            {...input}
           />
         </label>{' '}
         {errorFor(name)}
@@ -116,14 +117,19 @@ export default function MemberForm({
 
   return (
     <form className="member-form" onSubmit={submit} noValidate>
-      {field('firstName', t('members.form.firstName'), { autoComplete: 'given-name' })}
-      {field('lastName', t('members.form.lastName'), { autoComplete: 'family-name' })}
-      {field('street', t('members.form.street'), { autoComplete: 'street-address' })}
-      {field('zipCode', t('members.form.zipCode'), { autoComplete: 'postal-code' })}
-      {field('city', t('members.form.city'), { autoComplete: 'address-level2' })}
-      {field('phone', t('members.form.optional', { field: t('members.fields.phone') }), { type: 'tel' })}
-      {field('email', t('members.fields.email'), { type: 'email', readOnly: emailReadOnly }, emailHint)}
-      {field('dateOfBirth', t('members.form.optional', { field: t('members.fields.dateOfBirth') }), { type: 'date' })}
+      {field('firstName', t('members.form.firstName'), { input: { autoComplete: 'given-name' } })}
+      {field('lastName', t('members.form.lastName'), { input: { autoComplete: 'family-name' } })}
+      {field('street', t('members.form.street'), { input: { autoComplete: 'street-address' } })}
+      {field('zipCode', t('members.form.zipCode'), { input: { autoComplete: 'postal-code' } })}
+      {field('city', t('members.form.city'), { input: { autoComplete: 'address-level2' } })}
+      {field('phone', t('members.form.optional', { field: t('members.fields.phone') }), { input: { type: 'tel' } })}
+      {field('email', t('members.fields.email'), {
+        input: { type: 'email', readOnly: emailReadOnly },
+        hint: emailHint,
+      })}
+      {field('dateOfBirth', t('members.form.optional', { field: t('members.fields.dateOfBirth') }), {
+        input: { type: 'date' },
+      })}
       {clubs && (
         <fieldset
           className="form-group checkbox-group"
