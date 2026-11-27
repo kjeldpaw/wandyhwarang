@@ -121,11 +121,11 @@
     }
   },
   "profile": {
-    "emailHint": "Contact your Instructor to change your email.",
+    "emailHint": "Contact an Admin to change your email.",
     "createTitle": "Create your Profile",
     "createIntro": "Your Profile isn’t set up yet. Fill in your details and choose the Clubs you train in.",
     "create": "Create Profile",
-    "conflict": "You already have a Profile, or someone else has your email. Contact your Instructor.",
+    "conflict": "You already have a Profile, or someone else has your email. Contact an Admin.",
     "skip": "Skip"
   },
   "notFound": {

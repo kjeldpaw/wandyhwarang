@@ -121,11 +121,11 @@
     }
   },
   "profile": {
-    "emailHint": "Kontakt din instruktør for at ændre din e-mail.",
+    "emailHint": "Kontakt en Admin for at ændre din e-mail.",
     "createTitle": "Opret din profil",
     "createIntro": "Din profil er ikke oprettet endnu. Udfyld dine oplysninger, og vælg de klubber, du træner i.",
     "create": "Opret profil",
-    "conflict": "Du har allerede en profil, eller en anden har din e-mail. Kontakt din instruktør.",
+    "conflict": "Du har allerede en profil, eller en anden har din e-mail. Kontakt en Admin.",
     "skip": "Spring over"
   },
   "notFound": {
