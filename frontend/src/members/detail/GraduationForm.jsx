@@ -45,9 +45,9 @@ export default function GraduationForm({ title, graduation, onSave, onCancel }) 
     );
 
   return (
-    <form aria-label={title} onSubmit={submit} noValidate>
+    <form aria-label={title} className="panel-form graduation-form" onSubmit={submit} noValidate>
       <h4>{title}</h4>
-      <div>
+      <div className="form-group">
         <label htmlFor={ids.date}>{t('members.graduation.date')}</label>
         <input
           id={ids.date}
@@ -59,7 +59,7 @@ export default function GraduationForm({ title, graduation, onSave, onCancel }) 
         />
         {fieldError('date')}
       </div>
-      <div>
+      <div className="form-group">
         <label htmlFor={ids.belt}>{t('members.graduation.belt')}</label>
         {belts.error ? (
           <ApiErrorMessage error={belts.error} />
@@ -90,12 +90,14 @@ export default function GraduationForm({ title, graduation, onSave, onCancel }) 
       />
       {fieldError('examiners')}
       <ApiErrorMessage error={error} />
-      <button type="submit" disabled={busy}>
-        {t('app.save')}
-      </button>
-      <button type="button" onClick={onCancel}>
-        {t('app.cancel')}
-      </button>
+      <div className="form-actions">
+        <button type="submit" disabled={busy}>
+          {t('app.save')}
+        </button>
+        <button type="button" className="btn-secondary" onClick={onCancel}>
+          {t('app.cancel')}
+        </button>
+      </div>
     </form>
   );
 }

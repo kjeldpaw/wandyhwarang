@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sortClubs } from './member';
+import '../styles/MemberForm.css';
 
 /** Form values for a Member: every field a string, Clubs as a list of ids. */
 export const formValuesOf = (member) => ({
@@ -67,7 +68,7 @@ export default function MemberForm({ initial, clubs, emailReadOnly = false, subm
     }));
 
   const field = (name, label, props = {}) => (
-    <p>
+    <p className="form-group">
       <label>
         {label}{' '}
         <input
@@ -91,7 +92,7 @@ export default function MemberForm({ initial, clubs, emailReadOnly = false, subm
   };
 
   return (
-    <form onSubmit={submit} noValidate>
+    <form className="member-form" onSubmit={submit} noValidate>
       {field('firstName', t('members.form.firstName'), { autoComplete: 'given-name' })}
       {field('lastName', t('members.form.lastName'), { autoComplete: 'family-name' })}
       {field('street', t('members.form.street'), { autoComplete: 'street-address' })}
@@ -101,11 +102,14 @@ export default function MemberForm({ initial, clubs, emailReadOnly = false, subm
       {field('email', t('members.fields.email'), { type: 'email', readOnly: emailReadOnly })}
       {field('dateOfBirth', t('members.form.optional', { field: t('members.fields.dateOfBirth') }), { type: 'date' })}
       {clubs && (
-        <fieldset aria-describedby={errors.clubIds ? errorId('clubIds') : undefined}>
+        <fieldset
+          className="form-group checkbox-group"
+          aria-describedby={errors.clubIds ? errorId('clubIds') : undefined}
+        >
           <legend>{t('members.form.clubs')}</legend>
           {errorFor('clubIds')}
           {sortClubs(clubs).map((club) => (
-            <label key={club.id}>
+            <label key={club.id} className="checkbox">
               <input type="checkbox" checked={values.clubIds.includes(club.id)} onChange={toggleClub(club.id)} />{' '}
               {club.name}
             </label>
@@ -113,9 +117,11 @@ export default function MemberForm({ initial, clubs, emailReadOnly = false, subm
         </fieldset>
       )}
       {children}
-      <button type="submit" disabled={busy}>
-        {submitLabel}
-      </button>
+      <div className="form-actions">
+        <button type="submit" disabled={busy}>
+          {submitLabel}
+        </button>
+      </div>
     </form>
   );
 }

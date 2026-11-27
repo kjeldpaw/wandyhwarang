@@ -31,7 +31,7 @@ function DeleteAction({ member }) {
     });
 
   return (
-    <div>
+    <div className="delete-member">
       {confirming ? (
         <ConfirmPanel
           message={t('members.delete.confirm', { name: fullName(member) })}
@@ -42,7 +42,7 @@ function DeleteAction({ member }) {
           onCancel={() => setConfirming(false)}
         />
       ) : (
-        <button type="button" onClick={() => setConfirming(true)}>
+        <button type="button" className="btn-danger" onClick={() => setConfirming(true)}>
           {t('members.delete.button')}
         </button>
       )}

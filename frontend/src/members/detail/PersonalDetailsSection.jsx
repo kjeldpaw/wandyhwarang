@@ -11,10 +11,14 @@ export default function PersonalDetailsSection({ member }) {
   const { address } = member;
   const { isInstructor } = useSession();
   const missing = t('members.detail.notGiven');
-  const edit = isInstructor && <Link to={`/members/${member.id}/edit`}>{t('members.form.edit')}</Link>;
+  const edit = isInstructor && (
+    <Link to={`/members/${member.id}/edit`} className="btn btn-edit">
+      {t('members.form.edit')}
+    </Link>
+  );
   return (
     <Section title={t('members.detail.personal')} actions={edit}>
-      <dl>
+      <dl className="details">
         <dt>{t('members.fields.address')}</dt>
         <dd>
           {address.street}, {address.zipCode} {address.city}

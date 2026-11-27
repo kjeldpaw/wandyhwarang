@@ -55,12 +55,12 @@ export default function ReferencesSection({ member, onChange }) {
       {references.length === 0 ? (
         <p>{t('members.detail.noReferences')}</p>
       ) : (
-        <dl>
+        <dl className="details references">
           {references.map((reference) => {
             const name = typeName(reference.type);
             const isOpen = panel?.id === reference.id;
             return (
-              <div key={reference.id}>
+              <div key={reference.id} className="reference">
                 <dt>{name}</dt>
                 {isOpen && panel.kind === 'edit' ? (
                   <dd>
@@ -86,9 +86,10 @@ export default function ReferencesSection({ member, onChange }) {
                   </dd>
                 )}
                 {isInstructor && !isOpen && (
-                  <dd>
+                  <dd className="actions">
                     <button
                       type="button"
+                      className="btn-edit btn-small"
                       aria-label={t('members.references.editLabel', { type: name })}
                       onClick={() => start({ kind: 'edit', id: reference.id })}
                     >
@@ -96,6 +97,7 @@ export default function ReferencesSection({ member, onChange }) {
                     </button>
                     <button
                       type="button"
+                      className="btn-danger btn-small"
                       aria-label={t('members.references.removeLabel', { type: name })}
                       onClick={() => start({ kind: 'remove', id: reference.id })}
                     >
@@ -132,7 +134,7 @@ function ReferenceForm({ initial, busy, onSave, onCancel }) {
   };
 
   return (
-    <form onSubmit={submit} noValidate>
+    <form className="panel-form reference-form" onSubmit={submit} noValidate>
       {!initial && (
         <>
           <label htmlFor={`${id}-type`}>{t('members.references.type')}</label>
@@ -157,13 +159,19 @@ function ReferenceForm({ initial, busy, onSave, onCancel }) {
           setMissing(false);
         }}
       />
-      {missing && <p id={`${id}-missing`}>{t('members.references.numberRequired')}</p>}
-      <button type="submit" disabled={busy}>
-        {t('app.save')}
-      </button>
-      <button type="button" disabled={busy} onClick={onCancel}>
-        {t('app.cancel')}
-      </button>
+      {missing && (
+        <p id={`${id}-missing`} className="field-error">
+          {t('members.references.numberRequired')}
+        </p>
+      )}
+      <div className="form-actions">
+        <button type="submit" disabled={busy}>
+          {t('app.save')}
+        </button>
+        <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
+          {t('app.cancel')}
+        </button>
+      </div>
     </form>
   );
 }

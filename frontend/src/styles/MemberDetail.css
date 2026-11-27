@@ -1,0 +1,295 @@
+/* The Member detail page. Sections and the graduation form follow the old BeltForm.css
+   (grey panel, two-column form); the confirm panel and examiner picker are new. */
+
+.delete-member {
+  margin-bottom: 1rem;
+}
+
+.detail-section {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.section-header h3 {
+  color: #333;
+  font-size: 1.3em;
+}
+
+.section-actions .btn,
+.section-actions button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.detail-section h4 {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.detail-section .data-table {
+  background: white;
+}
+
+.detail-section .data-table thead {
+  background-color: #f0f0f0;
+}
+
+.detail-section .data-table th,
+.detail-section .data-table td {
+  padding: 10px;
+}
+
+.detail-section .empty {
+  padding: 1rem;
+}
+
+.current-belt {
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+/* Term and value side by side. */
+.details {
+  display: grid;
+  grid-template-columns: minmax(8rem, max-content) 1fr;
+  gap: 0.5rem 1.5rem;
+}
+
+.details dt {
+  font-weight: 600;
+  color: #555;
+}
+
+.details dd {
+  color: #333;
+}
+
+.references .reference {
+  display: contents;
+}
+
+.references .reference dd.actions,
+.references .reference dd:has(.panel-form),
+.references .reference dd:has(.confirm-panel) {
+  grid-column: 2;
+}
+
+.item-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.item-list li:last-child {
+  border-bottom: none;
+}
+
+.inline-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.inline-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Graduation and Reference forms: a white panel, the old belt form's two columns. */
+.panel-form {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.graduation-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.graduation-form > h4,
+.graduation-form > fieldset,
+.graduation-form > .field-error,
+.graduation-form > .error-message,
+.graduation-form > .form-actions {
+  grid-column: 1 / -1;
+}
+
+.panel-form .form-group {
+  margin-bottom: 0;
+}
+
+.panel-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.panel-form input,
+.panel-form select {
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.panel-form .form-actions {
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.panel-form .form-actions button {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.reference-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 24rem;
+  margin: 0.5rem 0;
+}
+
+.reference-form > label {
+  margin-top: 0.25rem;
+}
+
+/* Examiner picker */
+.examiner-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.examiner-picker .hint {
+  color: #999;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chips li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #ede9fb;
+  color: #4b3a8c;
+  font-size: 0.9rem;
+}
+
+.panel-form .chips button.chip-remove {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background-color: #764ba2;
+}
+
+.panel-form .chips button.chip-remove:hover {
+  background-color: #5e3b82;
+}
+
+.search-results {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  max-height: 14rem;
+  overflow-y: auto;
+}
+
+.search-results li + li {
+  border-top: 1px solid #eee;
+}
+
+.panel-form .search-results button.search-result {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0;
+  background: transparent;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.panel-form .search-results button.search-result:hover {
+  background-color: #f0f4ff;
+  color: #333;
+}
+
+/* Asks before a delete: a warning panel. */
+.confirm-panel {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  color: #856404;
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.confirm-panel p {
+  margin-bottom: 0.75rem;
+}
+
+.confirm-panel button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .graduation-form {
+    grid-template-columns: 1fr;
+  }
+
+  .details {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .details dd {
+    margin-bottom: 0.5rem;
+  }
+
+  .references .reference dd.actions,
+  .references .reference dd:has(.panel-form),
+  .references .reference dd:has(.confirm-panel) {
+    grid-column: 1;
+  }
+
+  .detail-section {
+    padding: 12px;
+  }
+
+  .detail-section .data-table {
+    display: block;
+    overflow-x: auto;
+  }
+}

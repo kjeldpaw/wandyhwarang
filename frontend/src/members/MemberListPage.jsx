@@ -5,6 +5,7 @@ import { useApiData } from '../api/useApiData';
 import { useOwnClubs } from '../auth/useOwnClubs';
 import { useSession } from '../auth/useSession';
 import { beltName } from '../belts/belt';
+import '../styles/MemberList.css';
 import { byName, currentBelt, fullName, sortClubs } from './member';
 
 function matches(member, { clubId, search }) {
@@ -45,12 +46,16 @@ function MemberList() {
   const shown = members?.filter((member) => matches(member, filter)).sort(byName);
 
   return (
-    <section>
-      <h2 id="members-title">{t('members.list.title')}</h2>
-      <p>
-        <Link to="/members/new">{t('members.form.newTitle')}</Link>
-      </p>
-      <div>
+    <section className="card member-list">
+      <div className="card-header">
+        <h2 id="members-title">{t('members.list.title')}</h2>
+        <p>
+          <Link to="/members/new" className="btn">
+            {t('members.form.newTitle')}
+          </Link>
+        </p>
+      </div>
+      <div className="filters">
         <label>
           {t('members.list.club')}{' '}
           <select value={filter.clubId} onChange={(event) => setFilter('club', event.target.value)}>
@@ -68,11 +73,15 @@ function MemberList() {
           <input type="search" value={filter.search} onChange={(event) => setFilter('q', event.target.value)} />
         </label>
       </div>
-      {loading && <p role="status">{t('app.loading')}</p>}
+      {loading && (
+        <p role="status" className="loading">
+          {t('app.loading')}
+        </p>
+      )}
       <ApiErrorMessage error={error} />
-      {shown && shown.length === 0 && <p>{t('members.list.none')}</p>}
+      {shown && shown.length === 0 && <p className="empty">{t('members.list.none')}</p>}
       {shown && shown.length > 0 && (
-        <table aria-labelledby="members-title">
+        <table aria-labelledby="members-title" className="data-table">
           <thead>
             <tr>
               <th scope="col">{t('members.list.name')}</th>

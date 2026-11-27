@@ -10,6 +10,7 @@ import GraduationsSection from './detail/GraduationsSection';
 import PersonalDetailsSection from './detail/PersonalDetailsSection';
 import ReferencesSection from './detail/ReferencesSection';
 import { fullName } from './member';
+import '../styles/MemberDetail.css';
 
 /**
  * A Member's detail page (/members/:id). It loads the Member and lays out one section per
@@ -22,12 +23,17 @@ export default function MemberPage() {
   const { id } = useParams();
   const { data: member, error, loading, setData: setMember } = useApiData((api) => api.members.get(id), [id]);
 
-  if (loading) return <p role="status">{t('app.loading')}</p>;
+  if (loading)
+    return (
+      <p role="status" className="loading">
+        {t('app.loading')}
+      </p>
+    );
   if (error?.kind === ERROR_KINDS.notFound) return <NotFound message={t('members.detail.notFound')} />;
   if (error) return <ApiErrorMessage error={error} />;
 
   return (
-    <article>
+    <article className="card member-detail">
       <h2>{fullName(member)}</h2>
       <DeleteMember member={member} />
       <PersonalDetailsSection member={member} onChange={setMember} />

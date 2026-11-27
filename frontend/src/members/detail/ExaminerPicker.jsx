@@ -49,16 +49,16 @@ export default function ExaminerPicker({ value, onChange, invalid, describedBy }
   const remove = (examiner) => onChange(value.filter((other) => other.id !== examiner.id));
 
   return (
-    <fieldset aria-invalid={invalid || undefined} aria-describedby={describedBy}>
+    <fieldset className="examiner-picker" aria-invalid={invalid || undefined} aria-describedby={describedBy}>
       <legend>{t('members.graduation.examiners')}</legend>
       {value.length === 0 ? (
-        <p>{t('members.graduation.noExaminers')}</p>
+        <p className="hint">{t('members.graduation.noExaminers')}</p>
       ) : (
-        <ul aria-label={t('members.graduation.chosenExaminers')}>
+        <ul aria-label={t('members.graduation.chosenExaminers')} className="chips">
           {[...value].sort(byName).map((examiner) => (
             <li key={examiner.id}>
               {fullName(examiner)}{' '}
-              <button type="button" onClick={() => remove(examiner)}>
+              <button type="button" className="chip-remove" onClick={() => remove(examiner)}>
                 {t('members.graduation.removeExaminer', { name: fullName(examiner) })}
               </button>
             </li>
@@ -73,16 +73,16 @@ export default function ExaminerPicker({ value, onChange, invalid, describedBy }
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      {text.length > 0 && text.length < MIN_QUERY && <p>{t('members.graduation.typeMore')}</p>}
+      {text.length > 0 && text.length < MIN_QUERY && <p className="hint">{t('members.graduation.typeMore')}</p>}
       <ApiErrorMessage error={search.error} />
       {results &&
         (results.length === 0 ? (
-          <p>{t('members.graduation.noExaminersFound')}</p>
+          <p className="hint">{t('members.graduation.noExaminersFound')}</p>
         ) : (
-          <ul aria-label={t('members.graduation.searchResults')}>
+          <ul aria-label={t('members.graduation.searchResults')} className="search-results">
             {results.map((examiner) => (
               <li key={examiner.id}>
-                <button type="button" onClick={() => add(examiner)}>
+                <button type="button" className="search-result" onClick={() => add(examiner)}>
                   {fullName(examiner)}
                 </button>
               </li>

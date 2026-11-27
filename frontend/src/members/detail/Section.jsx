@@ -4,9 +4,11 @@ import { useId } from 'react';
 export default function Section({ title, actions, children }) {
   const headingId = useId();
   return (
-    <section aria-labelledby={headingId}>
-      <h3 id={headingId}>{title}</h3>
-      {actions}
+    <section aria-labelledby={headingId} className="detail-section">
+      <div className="section-header">
+        <h3 id={headingId}>{title}</h3>
+        {actions && <div className="section-actions">{actions}</div>}
+      </div>
       {children}
     </section>
   );

@@ -17,7 +17,7 @@ export default function ClubsSection({ member, onChange }) {
       {isInstructor ? (
         <ManageClubs member={member} onChange={onChange} />
       ) : (
-        <ul>
+        <ul className="item-list">
           {sortClubs(member.clubs).map((club) => (
             <li key={club.id}>
               <span>{club.name}</span>
@@ -53,13 +53,14 @@ function ManageClubs({ member, onChange }) {
 
   return (
     <>
-      <ul>
+      <ul className="item-list">
         {sortClubs(member.clubs).map((club) => (
           <li key={club.id}>
             <span>{club.name}</span>{' '}
             {canManage(club) && (
               <button
                 type="button"
+                className="btn-danger btn-small"
                 disabled={busy}
                 aria-label={t('members.clubs.removeClub', { club: club.name })}
                 onClick={() => write(() => api.members.removeClub(member.id, club.id))}
@@ -72,7 +73,7 @@ function ManageClubs({ member, onChange }) {
       </ul>
       <ApiErrorMessage error={error} messages={{ conflict: t('members.clubs.lastClub') }} />
       {addable.length > 0 && (
-        <form onSubmit={add}>
+        <form className="inline-form" onSubmit={add}>
           <label>
             {t('members.clubs.add')}{' '}
             <select value={clubId} onChange={(event) => setClubId(event.target.value)}>

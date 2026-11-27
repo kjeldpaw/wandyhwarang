@@ -1,0 +1,30 @@
+/* The create/edit Member form, after the old UserForm.css. */
+
+.member-form {
+  max-width: 40rem;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  color: #333;
+  cursor: pointer;
+}
+
+.checkbox-group .checkbox input {
+  display: inline-block;
+  width: auto;
+  margin: 0;
+}
+
+.page-actions {
+  margin-top: 0.75rem;
+}
