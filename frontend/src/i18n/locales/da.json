@@ -120,6 +120,9 @@
       "editTitle": "Rediger {{name}}"
     }
   },
+  "profile": {
+    "emailHint": "Kontakt din instruktør for at ændre din e-mail."
+  },
   "notFound": {
     "title": "Ikke fundet",
     "page": "Siden findes ikke."

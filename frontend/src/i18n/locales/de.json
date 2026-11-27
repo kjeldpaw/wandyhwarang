@@ -120,6 +120,9 @@
       "editTitle": "{{name}} bearbeiten"
     }
   },
+  "profile": {
+    "emailHint": "Wende dich an deinen Instruktor, um deine E-Mail zu ändern."
+  },
   "notFound": {
     "title": "Nicht gefunden",
     "page": "Diese Seite gibt es nicht."

@@ -120,6 +120,9 @@
       "editTitle": "Edit {{name}}"
     }
   },
+  "profile": {
+    "emailHint": "Contact your Instructor to change your email."
+  },
   "notFound": {
     "title": "Not found",
     "page": "This page does not exist."
