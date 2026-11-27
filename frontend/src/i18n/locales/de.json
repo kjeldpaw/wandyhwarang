@@ -121,7 +121,7 @@
     }
   },
   "profile": {
-    "emailHint": "Wende dich an deinen Instruktor, um deine E-Mail zu ändern.",
+    "emailHint": "Wende dich an einen Admin, um deine E-Mail zu ändern.",
     "createTitle": "Erstelle dein Profil",
     "createIntro": "Dein Profil ist noch nicht eingerichtet. Fülle deine Angaben aus und wähle die Vereine, in denen du trainierst.",
     "create": "Profil erstellen",

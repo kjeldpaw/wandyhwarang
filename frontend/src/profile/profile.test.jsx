@@ -118,7 +118,7 @@ test('a Member edits their Profile, which never sends the email', async () => {
   ]);
 });
 
-test('the email is read-only on the edit form, with a hint to ask an Instructor', async () => {
+test('the email is read-only on the edit form, with a hint to ask an Admin', async () => {
   const { user } = renderApp('/profile', { as: 'member' });
 
   await user.click(await screen.findByRole('button', { name: 'Rediger' }));
@@ -126,12 +126,12 @@ test('the email is read-only on the edit form, with a hint to ask an Instructor'
   const email = screen.getByLabelText('E-mail');
   expect(email).toHaveValue('mads@example.com');
   expect(email).toHaveAttribute('readonly');
-  expect(email).toHaveAccessibleDescription('Kontakt din instruktør for at ændre din e-mail.');
+  expect(email).toHaveAccessibleDescription('Kontakt en Admin for at ændre din e-mail.');
 });
 
 test.each([
-  [['en'], 'Edit', 'Email', 'Contact your Instructor to change your email.'],
-  [['de'], 'Bearbeiten', 'E-Mail', 'Wende dich an deinen Instruktor, um deine E-Mail zu ändern.'],
+  [['en'], 'Edit', 'Email', 'Contact an Admin to change your email.'],
+  [['de'], 'Bearbeiten', 'E-Mail', 'Wende dich an einen Admin, um deine E-Mail zu ändern.'],
 ])('the email hint is translated for %s', async (languages, editLabel, emailLabel, hint) => {
   setBrowserLanguages(languages);
   const { user } = renderApp('/profile', { as: 'member' });

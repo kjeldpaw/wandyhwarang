@@ -121,7 +121,7 @@
     }
   },
   "profile": {
-    "emailHint": "Kontakt din instruktør for at ændre din e-mail.",
+    "emailHint": "Kontakt en Admin for at ændre din e-mail.",
     "createTitle": "Opret din profil",
     "createIntro": "Din profil er ikke oprettet endnu. Udfyld dine oplysninger, og vælg de klubber, du træner i.",
     "create": "Opret profil",
