@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import AppProviders from './AppProviders';
 import { createUserManager } from './auth/userManager';
+import './styles/tokens.css';
 import './styles/App.css';
 
 const userManager = createUserManager();

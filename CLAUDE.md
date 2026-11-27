@@ -73,7 +73,11 @@ Everything runs from `frontend/`:
 `frontend/src/App.jsx` holds the routes. Code that talks to member-service
 goes through the client in `frontend/src/api/client.js` (`useApi()`), and
 roles come from `useSession()` in `frontend/src/auth/useSession.js`. Show
-Belts with `beltName()` from `frontend/src/belts/belt.js`. The Member detail
+Belts with `beltName()` from `frontend/src/belts/belt.js`, next to a
+`<BeltBadge>` (`frontend/src/belts/BeltBadge.jsx`) where the list or history
+shows them. Styles take every colour, size and radius from the tokens in
+`frontend/src/styles/tokens.css` (dark mode follows the device setting);
+buttons are primary by default, `btn-secondary` or `btn-danger` otherwise. The Member detail
 page (`frontend/src/members/MemberPage.jsx`) is one section component per
 part of the record in `frontend/src/members/detail/`. `/profile`
 (`frontend/src/profile/ProfilePage.jsx`) shows the logged-in person's own

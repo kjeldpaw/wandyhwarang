@@ -45,7 +45,7 @@ export default function ReferencesSection({ member, onChange, readOnly = false }
 
   const actions =
     canEdit && panel?.kind !== 'add' ? (
-      <button type="button" onClick={() => start({ kind: 'add' })}>
+      <button type="button" className="btn-secondary" onClick={() => start({ kind: 'add' })}>
         {t('members.references.add')}
       </button>
     ) : null;
@@ -90,7 +90,7 @@ export default function ReferencesSection({ member, onChange, readOnly = false }
                   <dd className="actions">
                     <button
                       type="button"
-                      className="btn-edit btn-small"
+                      className="btn-secondary btn-small"
                       aria-label={t('members.references.editLabel', { type: name })}
                       onClick={() => start({ kind: 'edit', id: reference.id })}
                     >

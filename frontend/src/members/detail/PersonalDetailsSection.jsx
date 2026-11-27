@@ -16,7 +16,7 @@ export default function PersonalDetailsSection({ member, editAction }) {
   const { isInstructor } = useSession();
   const missing = t('members.detail.notGiven');
   const edit = isInstructor && (
-    <Link to={`/members/${member.id}/edit`} className="btn btn-edit">
+    <Link to={`/members/${member.id}/edit`} className="btn btn-secondary">
       {t('members.form.edit')}
     </Link>
   );

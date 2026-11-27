@@ -1,23 +1,81 @@
-/* The Member list: filters above the old user-list table. */
+/* The Member list: filters above the table; on phones each row becomes a card. */
 
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem 1.5rem;
-  margin-bottom: 1rem;
+  gap: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-2);
 }
 
 .filters label {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1 1 14rem;
+  color: var(--color-muted);
+  font-size: var(--font-size-small);
 }
 
-@media (max-width: 768px) {
-  /* Let the table scroll sideways rather than squash the columns. */
-  .member-list .data-table {
-    display: block;
-    overflow-x: auto;
+.filters input,
+.filters select {
+  font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+  .member-list .data-table,
+  .member-list .data-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    border: none;
+    overflow: visible;
+  }
+
+  /* The column headings are still read out with the table. */
+  .member-list .data-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  /* Name and belt on top, the Clubs below. */
+  .member-list .data-table tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'name belt'
+      'clubs clubs';
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-surface);
+  }
+
+  .member-list .data-table td {
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  .member-list .data-table tbody tr:hover td {
+    background: none;
+  }
+
+  .member-list .data-table td:nth-child(1) {
+    grid-area: name;
+  }
+
+  .member-list .data-table td:nth-child(2) {
+    grid-area: clubs;
+    color: var(--color-muted);
+    font-size: var(--font-size-small);
+  }
+
+  .member-list .data-table td:nth-child(3) {
+    grid-area: belt;
+    font-size: var(--font-size-small);
   }
 }

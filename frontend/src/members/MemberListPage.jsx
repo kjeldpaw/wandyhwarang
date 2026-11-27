@@ -4,6 +4,7 @@ import ApiErrorMessage from '../api/ApiErrorMessage';
 import { useApiData } from '../api/useApiData';
 import { useOwnClubs } from '../auth/useOwnClubs';
 import { useSession } from '../auth/useSession';
+import BeltBadge from '../belts/BeltBadge';
 import { beltName } from '../belts/belt';
 import '../styles/MemberList.css';
 import { byName, currentBelt, fullName, sortClubs } from './member';
@@ -50,7 +51,7 @@ function MemberList() {
       <div className="card-header">
         <h2 id="members-title">{t('members.list.title')}</h2>
         <p>
-          <Link to="/members/new" className="btn">
+          <Link to="/members/new" className="btn btn-primary">
             {t('members.form.newTitle')}
           </Link>
         </p>
@@ -96,7 +97,16 @@ function MemberList() {
                   <Link to={`/members/${member.id}`}>{fullName(member)}</Link>
                 </td>
                 <td>{sortClubs(member.clubs).map((club) => club.name).join(', ')}</td>
-                <td>{currentBelt(member) ? beltName(currentBelt(member)) : t('members.list.noBelt')}</td>
+                <td>
+                  {currentBelt(member) ? (
+                    <span className="belt-name">
+                      <BeltBadge belt={currentBelt(member)} />
+                      {beltName(currentBelt(member))}
+                    </span>
+                  ) : (
+                    t('members.list.noBelt')
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

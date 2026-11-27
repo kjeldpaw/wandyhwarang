@@ -13,7 +13,7 @@ export default function LanguageSwitcher() {
 
   return (
     <label className="language-switcher">
-      {t('header.language')}{' '}
+      <span className="language-label">{t('header.language')}</span>{' '}
       <select value={i18n.resolvedLanguage} onChange={choose}>
         {LANGUAGES.map((language) => (
           <option key={language} value={language} lang={language}>

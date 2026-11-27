@@ -49,7 +49,7 @@ export default function ProfilePage() {
     );
 
   const edit = (
-    <button type="button" className="btn btn-edit" onClick={() => setEditing(true)}>
+    <button type="button" className="btn btn-secondary" onClick={() => setEditing(true)}>
       {t('members.form.edit')}
     </button>
   );
