@@ -4,6 +4,7 @@ import ApiErrorMessage from '../../api/ApiErrorMessage';
 import { useWrite } from '../../api/useWrite';
 import { useApi } from '../../api/ApiProvider';
 import { useSession } from '../../auth/useSession';
+import ConfirmPanel from './ConfirmPanel';
 import Section from './Section';
 
 // Reference types are names, not translated.
@@ -21,19 +22,19 @@ export default function ReferencesSection({ member, onChange }) {
   const api = useApi();
   const { isInstructor } = useSession();
   // null | { kind: 'add' } | { kind: 'edit', id } | { kind: 'remove', id }
-  const [open, setOpen] = useState(null);
+  const [panel, setPanel] = useState(null);
   const { busy, error, run: runWrite, reset } = useWrite();
   const references = member.references ?? [];
 
   const start = (next) => {
     reset();
-    setOpen(next);
+    setPanel(next);
   };
 
   const run = (write) =>
     runWrite(async () => {
       const updated = await write();
-      setOpen(null);
+      setPanel(null);
       onChange(updated);
     });
 
@@ -42,7 +43,7 @@ export default function ReferencesSection({ member, onChange }) {
   const remove = (id) => run(() => api.references.remove(member.id, id));
 
   const actions =
-    isInstructor && open?.kind !== 'add' ? (
+    isInstructor && panel?.kind !== 'add' ? (
       <button type="button" onClick={() => start({ kind: 'add' })}>
         {t('members.references.add')}
       </button>
@@ -50,18 +51,18 @@ export default function ReferencesSection({ member, onChange }) {
 
   return (
     <Section title={t('members.detail.references')} actions={actions}>
-      {open?.kind === 'add' && <ReferenceForm busy={busy} onSave={add} onCancel={() => start(null)} />}
+      {panel?.kind === 'add' && <ReferenceForm busy={busy} onSave={add} onCancel={() => start(null)} />}
       {references.length === 0 ? (
         <p>{t('members.detail.noReferences')}</p>
       ) : (
         <dl>
           {references.map((reference) => {
             const name = typeName(reference.type);
-            const isOpen = open?.id === reference.id;
+            const isOpen = panel?.id === reference.id;
             return (
               <div key={reference.id}>
                 <dt>{name}</dt>
-                {isOpen && open.kind === 'edit' ? (
+                {isOpen && panel.kind === 'edit' ? (
                   <dd>
                     <ReferenceForm
                       initial={reference}
@@ -73,15 +74,15 @@ export default function ReferencesSection({ member, onChange }) {
                 ) : (
                   <dd>{reference.reference}</dd>
                 )}
-                {isOpen && open.kind === 'remove' && (
+                {isOpen && panel.kind === 'remove' && (
                   <dd>
-                    <p>{t('members.references.removeConfirm', { type: name, reference: reference.reference })}</p>
-                    <button type="button" disabled={busy} onClick={() => remove(reference.id)}>
-                      {t('members.references.confirmRemove')}
-                    </button>
-                    <button type="button" disabled={busy} onClick={() => start(null)}>
-                      {t('app.cancel')}
-                    </button>
+                    <ConfirmPanel
+                      message={t('members.references.removeConfirm', { type: name, reference: reference.reference })}
+                      confirmLabel={t('members.references.confirmRemove')}
+                      busy={busy}
+                      onConfirm={() => remove(reference.id)}
+                      onCancel={() => start(null)}
+                    />
                   </dd>
                 )}
                 {isInstructor && !isOpen && (

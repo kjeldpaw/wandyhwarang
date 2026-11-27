@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ApiErrorMessage from '../../api/ApiErrorMessage';
 import { useApi } from '../../api/ApiProvider';
 import { useWrite } from '../../api/useWrite';
 import { useSession } from '../../auth/useSession';
 import { beltName } from '../../belts/belt';
 import { useFormatDate } from '../../i18n/formatDate';
 import { byName, currentBelt, fullName, graduationHistory } from '../member';
+import ConfirmPanel from './ConfirmPanel';
 import GraduationForm from './GraduationForm';
 import Section from './Section';
 
@@ -22,13 +22,14 @@ export default function GraduationsSection({ member, onChange }) {
   const formatDate = useFormatDate();
   const history = graduationHistory(member);
   const belt = currentBelt(member);
-  // What's open: nothing, { adding }, { editing: graduation } or { deleting: graduation }.
-  const [open, setOpen] = useState({});
+  // The open panel: null | { kind: 'add' } | { kind: 'edit', id } | { kind: 'delete', id }.
+  const [panel, setPanel] = useState(null);
+  const chosen = panel?.id && history.find((graduation) => graduation.id === panel.id);
   const removal = useWrite();
-  const close = () => setOpen({});
-  const openOnly = (next) => {
+  const close = () => setPanel(null);
+  const start = (next) => {
     removal.reset();
-    setOpen(next);
+    setPanel(next);
   };
 
   async function add(body) {
@@ -37,18 +38,18 @@ export default function GraduationsSection({ member, onChange }) {
   }
 
   async function update(body) {
-    onChange(await api.graduations.update(member.id, open.editing.id, body));
+    onChange(await api.graduations.update(member.id, panel.id, body));
     close();
   }
 
   const remove = () =>
     removal.run(async () => {
-      onChange(await api.graduations.remove(member.id, open.deleting.id));
+      onChange(await api.graduations.remove(member.id, panel.id));
       close();
     });
 
-  const actions = isInstructor && !open.adding && (
-    <button type="button" onClick={() => openOnly({ adding: true })}>
+  const actions = isInstructor && panel?.kind !== 'add' && (
+    <button type="button" onClick={() => start({ kind: 'add' })}>
       {t('members.graduation.add')}
     </button>
   );
@@ -58,32 +59,28 @@ export default function GraduationsSection({ member, onChange }) {
       <p>
         {t('members.detail.currentBelt')}: {belt ? beltName(belt) : t('members.detail.noBelt')}
       </p>
-      {open.adding && <GraduationForm title={t('members.graduation.new')} onSave={add} onCancel={close} />}
-      {open.editing && (
+      {panel?.kind === 'add' && <GraduationForm title={t('members.graduation.new')} onSave={add} onCancel={close} />}
+      {panel?.kind === 'edit' && chosen && (
         <GraduationForm
-          key={open.editing.id}
+          key={chosen.id}
           title={t('members.graduation.editTitle')}
-          graduation={open.editing}
+          graduation={chosen}
           onSave={update}
           onCancel={close}
         />
       )}
-      {open.deleting && (
-        <div>
-          <p>
-            {t('members.graduation.deleteConfirm', {
-              date: formatDate(open.deleting.date),
-              belt: beltName(open.deleting.belt),
-            })}
-          </p>
-          <ApiErrorMessage error={removal.error} />
-          <button type="button" disabled={removal.busy} onClick={remove}>
-            {t('members.graduation.confirmDelete')}
-          </button>
-          <button type="button" disabled={removal.busy} onClick={close}>
-            {t('app.cancel')}
-          </button>
-        </div>
+      {panel?.kind === 'delete' && chosen && (
+        <ConfirmPanel
+          message={t('members.graduation.deleteConfirm', {
+            date: formatDate(chosen.date),
+            belt: beltName(chosen.belt),
+          })}
+          confirmLabel={t('members.graduation.confirmDelete')}
+          busy={removal.busy}
+          error={removal.error}
+          onConfirm={remove}
+          onCancel={close}
+        />
       )}
       {history.length === 0 ? (
         <p>{t('members.detail.noGraduations')}</p>
@@ -108,14 +105,14 @@ export default function GraduationsSection({ member, onChange }) {
                     <button
                       type="button"
                       aria-label={t('members.graduation.editOne', { date: formatDate(graduation.date) })}
-                      onClick={() => openOnly({ editing: graduation })}
+                      onClick={() => start({ kind: 'edit', id: graduation.id })}
                     >
                       {t('members.graduation.edit')}
                     </button>{' '}
                     <button
                       type="button"
                       aria-label={t('members.graduation.deleteOne', { date: formatDate(graduation.date) })}
-                      onClick={() => openOnly({ deleting: graduation })}
+                      onClick={() => start({ kind: 'delete', id: graduation.id })}
                     >
                       {t('members.graduation.delete')}
                     </button>
