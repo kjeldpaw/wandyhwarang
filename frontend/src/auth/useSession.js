@@ -1,4 +1,5 @@
 import { useAuth } from 'react-oidc-context';
+import { clearDrafts } from '../api/drafts';
 
 // Realm roles the app knows, most powerful first.
 const ROLES = ['admin', 'instructor', 'member'];
@@ -40,6 +41,9 @@ export function useSession() {
     role,
     isAdmin: roles.includes('admin'),
     isInstructor: roles.includes('admin') || roles.includes('instructor'),
-    logout: () => auth.signoutRedirect(),
+    logout: () => {
+      clearDrafts();
+      return auth.signoutRedirect();
+    },
   };
 }

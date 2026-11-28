@@ -496,6 +496,16 @@ legend {
   color: var(--color-text);
 }
 
+/* Something the person should know that isn't an error, e.g. a Member was created. */
+.notice {
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-small);
+  background-color: var(--color-sunken);
+  color: var(--color-text);
+}
+
 .not-found {
   text-align: center;
 }

@@ -8,9 +8,9 @@ import { fullName } from './member';
  * The card for editing a Member's personal details, used for /members/:id/edit and the Profile.
  * The email is read-only, as it is the Keycloak login; `emailHint` describes it.
  * `save(values)` writes the valid form values; its failure shows on the form. `cancel` (a link
- * or button) goes below the form. `role` adds MemberForm's Role select.
+ * or button) goes below the form. `role` adds MemberForm's Role select; `draftKey` is MemberForm's.
  */
-export default function EditPersonalDetails({ member, emailHint, role, save, cancel }) {
+export default function EditPersonalDetails({ member, emailHint, role, draftKey, save, cancel }) {
   const { t } = useTranslation();
   const { busy, error, run } = useWrite();
   return (
@@ -21,6 +21,7 @@ export default function EditPersonalDetails({ member, emailHint, role, save, can
         emailReadOnly
         emailHint={emailHint}
         role={role}
+        draftKey={draftKey}
         submitLabel={t('app.save')}
         onSubmit={(values) => run(() => save(values))}
         busy={busy}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useApi } from '../api/ApiProvider';
+import { readDraft } from '../api/drafts';
 import ApiErrorMessage from '../api/ApiErrorMessage';
 import { ERROR_KINDS } from '../api/client';
 import { useApiData } from '../api/useApiData';
@@ -22,10 +23,13 @@ import '../styles/MemberDetail.css';
  * read-only here for every role; Instructors and Admins change their own on /members/:id. Someone
  * who logs in without a Member record (member-service answers 404) creates their Profile here.
  */
+const PROFILE_EDIT = 'profile:edit';
+
 export default function ProfilePage() {
   const { t } = useTranslation();
   const { data: profile, error, loading, setData: setProfile } = useApiData((api) => api.profile.get(), []);
-  const [editing, setEditing] = useState(false);
+  // Edited details kept across a login (see MemberForm's draftKey) reopen the edit form.
+  const [editing, setEditing] = useState(() => Boolean(readDraft(PROFILE_EDIT)));
 
   if (loading)
     return (
@@ -72,6 +76,7 @@ function EditProfile({ profile, onSaved, onCancel }) {
     <EditPersonalDetails
       member={profile}
       emailHint={t('profile.emailHint')}
+      draftKey={PROFILE_EDIT}
       save={async (values) => onSaved(await api.profile.update(profileDetailsOf(values)))}
       cancel={
         <button type="button" className="btn btn-secondary" onClick={onCancel}>
@@ -110,6 +115,7 @@ function CreateProfile({ onCreated }) {
           clubs={clubs}
           emailReadOnly
           emailHint={t('profile.emailHint')}
+          draftKey="profile:new"
           submitLabel={t('profile.create')}
           onSubmit={create}
           busy={busy}

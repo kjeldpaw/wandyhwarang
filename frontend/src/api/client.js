@@ -112,6 +112,8 @@ export function createApiClient({ baseUrl, getAccessToken, renew, login }) {
   // Shapes are member-service's (see its api/*.java). Every write on a Member's Clubs,
   // Graduations or References resolves with the whole updated Member.
   return {
+    /** True once a 401 survived the renew and the browser is on its way to the Keycloak login. */
+    sessionLost: () => loggingIn,
     members: {
       /** Members the caller may see (Admin: all; Instructor: sharing a Club; Member: self): Member[] */
       list: () => request('GET', '/members'),

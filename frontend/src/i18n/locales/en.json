@@ -3,7 +3,8 @@
     "loading": "Loading…",
     "loggingIn": "Logging in…",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "sessionRestored": "Your session expired before the details were saved. Check them and click \"{{action}}\" again."
   },
   "header": {
     "language": "Language",
@@ -64,7 +65,8 @@
       "noGraduations": "No Graduations yet.",
       "references": "References",
       "noReferences": "No References.",
-      "notFound": "This Member does not exist, or you do not have access to them."
+      "notFound": "This Member does not exist, or you do not have access to them.",
+      "created": "Member created. An email to set a password has been sent to {{email}}."
     },
     "graduation": {
       "date": "Date",

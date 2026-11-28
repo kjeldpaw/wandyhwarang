@@ -52,6 +52,7 @@ function EditMember() {
     <EditPersonalDetails
       member={member}
       role={withRole ? { disabled: own, hint: own ? t('members.form.ownRole') : undefined } : undefined}
+      draftKey={`member:${id}:edit`}
       save={save}
       cancel={
         <Link to={`/members/${id}`} className="btn btn-secondary">

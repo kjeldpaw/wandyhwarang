@@ -1,5 +1,7 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useApi } from '../api/ApiProvider';
+import { clearDraft, readDraft, saveDraft } from '../api/drafts';
 import { sortClubs } from './member';
 import '../styles/MemberForm.css';
 
@@ -62,6 +64,9 @@ function validate(values, { withClubs, withEmail }) {
  * email is the Keycloak username; `emailHint` describes the email field, e.g. how to change it.
  * `role` (Admins only) adds a Role select: `{ disabled, hint }`, e.g. disabled with a hint when
  * an Admin edits their own record. `onSubmit(values)` is called with valid form values only.
+ * `draftKey` (unique per form) keeps the values across a trip to the Keycloak login: if the
+ * session is lost while `onSubmit` runs, the form comes back filled in, saying so, and waits
+ * for the person to submit again.
  */
 export default function MemberForm({
   initial,
@@ -69,14 +74,22 @@ export default function MemberForm({
   emailReadOnly = false,
   emailHint,
   role,
+  draftKey,
   submitLabel,
   onSubmit,
   busy,
   children,
 }) {
   const { t } = useTranslation();
-  const [values, setValues] = useState(() => formValuesOf(initial));
+  const api = useApi();
+  const [draft] = useState(() => draftKey && readDraft(draftKey));
+  const [values, setValues] = useState(() => draft ?? formValuesOf(initial));
+  const [restored, setRestored] = useState(Boolean(draft));
   const [errors, setErrors] = useState({});
+  // The values are back on the form; it saves them again if the next submit loses the session too.
+  useEffect(() => {
+    if (draft) clearDraft(draftKey);
+  }, [draft, draftKey]);
   const idPrefix = useId();
   const errorId = (name) => `${idPrefix}-${name}-error`;
   const errorFor = (name) =>
@@ -124,11 +137,23 @@ export default function MemberForm({
     event.preventDefault();
     const problems = validate(values, { withClubs: Boolean(clubs), withEmail: !emailReadOnly });
     setErrors(problems);
-    if (Object.keys(problems).length === 0) onSubmit(values);
+    if (Object.keys(problems).length > 0) return;
+    setRestored(false);
+    if (!draftKey) return onSubmit(values);
+    saveDraft(draftKey, values);
+    // Kept only while the browser leaves for the login; any other outcome drops it.
+    Promise.resolve(onSubmit(values)).finally(() => {
+      if (!api.sessionLost()) clearDraft(draftKey);
+    });
   };
 
   return (
     <form className="member-form" onSubmit={submit} noValidate>
+      {restored && (
+        <p role="alert" className="notice">
+          {t('app.sessionRestored', { action: submitLabel })}
+        </p>
+      )}
       {field('firstName', t('members.form.firstName'), { input: { autoComplete: 'given-name' } })}
       {field('lastName', t('members.form.lastName'), { input: { autoComplete: 'family-name' } })}
       {field('street', t('members.form.street'), { input: { autoComplete: 'street-address' } })}
