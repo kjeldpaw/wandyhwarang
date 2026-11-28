@@ -215,7 +215,8 @@ test('the Role stays on the detail after a write that answers without it', async
   const { user } = renderApp(`/members/${members.mads.id}`, { as: 'admin' });
 
   const clubsRegion = await screen.findByRole('region', { name: 'Klubber' });
-  await user.selectOptions(within(clubsRegion).getByRole('combobox'), clubs.aarhus.name);
+  // The Club picker appears once the Clubs the Admin may add have loaded.
+  await user.selectOptions(await within(clubsRegion).findByRole('combobox', { name: 'Tilføj klub' }), clubs.aarhus.name);
   await user.click(within(clubsRegion).getByRole('button', { name: 'Tilføj' }));
 
   await within(clubsRegion).findByText(clubs.aarhus.name);
