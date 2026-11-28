@@ -10,7 +10,9 @@
   gap: var(--space-2);
 }
 
-.checkbox {
+/* Scoped under .checkbox-group to beat `.form-group > label` (display: block)
+   and `.form-group input` (width: 100%) in App.css. */
+.checkbox-group > .checkbox {
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -20,6 +22,8 @@
 
 .checkbox-group .checkbox input {
   display: inline-block;
+  flex: none;
+  width: 1.1rem;
   margin: 0;
 }
 
