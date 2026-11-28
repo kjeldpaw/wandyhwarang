@@ -19,13 +19,16 @@ function NewMember() {
   const { t } = useTranslation();
   const api = useApi();
   const navigate = useNavigate();
+  const { isAdmin } = useSession();
   // A new Member can join only the Clubs the Instructor works with (any Club for an Admin).
   const { data: clubs, error: loadError, loading } = useOwnClubs();
   const { busy, error, run } = useWrite();
 
   const create = (values) =>
     run(async () => {
-      const member = await api.members.create({ ...personalDetailsOf(values), clubIds: values.clubIds });
+      // Only Admins give a Role; member-service makes everyone else's new Members plain Members.
+      const role = isAdmin ? { role: values.role } : {};
+      const member = await api.members.create({ ...personalDetailsOf(values), clubIds: values.clubIds, ...role });
       navigate(`/members/${member.id}`);
     });
 
@@ -39,7 +42,13 @@ function NewMember() {
       )}
       <ApiErrorMessage error={loadError} />
       {clubs && (
-        <MemberForm clubs={clubs} submitLabel={t('members.form.create')} onSubmit={create} busy={busy}>
+        <MemberForm
+          clubs={clubs}
+          role={isAdmin ? {} : undefined}
+          submitLabel={t('members.form.create')}
+          onSubmit={create}
+          busy={busy}
+        >
           <ApiErrorMessage error={error} messages={{ conflict: t('members.form.duplicateEmail') }} />
         </MemberForm>
       )}

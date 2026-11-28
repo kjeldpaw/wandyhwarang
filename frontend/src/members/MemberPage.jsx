@@ -16,7 +16,8 @@ import '../styles/MemberDetail.css';
  * A Member's detail page (/members/:id). It loads the Member and lays out one section per
  * part of the record. Each section gets the Member and `onChange(updatedMember)`: every
  * member-service write on a Member resolves with the whole updated Member, so a section
- * that writes passes that result to onChange and the page re-renders all sections.
+ * that writes passes that result to onChange and the page re-renders all sections. Those
+ * results carry no Role, so the page keeps the one it loaded.
  */
 export default function MemberPage() {
   const { t } = useTranslation();
@@ -32,14 +33,15 @@ export default function MemberPage() {
   if (error?.kind === ERROR_KINDS.notFound) return <NotFound message={t('members.detail.notFound')} />;
   if (error) return <ApiErrorMessage error={error} />;
 
+  const onChange = (updated) => setMember({ ...updated, role: member.role });
   return (
     <article className="card member-detail">
       <h2>{fullName(member)}</h2>
       <DeleteMember member={member} />
-      <PersonalDetailsSection member={member} onChange={setMember} />
-      <ClubsSection member={member} onChange={setMember} />
-      <GraduationsSection member={member} onChange={setMember} />
-      <ReferencesSection member={member} onChange={setMember} />
+      <PersonalDetailsSection member={member} onChange={onChange} />
+      <ClubsSection member={member} onChange={onChange} />
+      <GraduationsSection member={member} onChange={onChange} />
+      <ReferencesSection member={member} onChange={onChange} />
     </article>
   );
 }

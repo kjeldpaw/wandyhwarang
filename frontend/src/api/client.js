@@ -115,12 +115,14 @@ export function createApiClient({ baseUrl, getAccessToken, renew, login }) {
     members: {
       /** Members the caller may see (Admin: all; Instructor: sharing a Club; Member: self): Member[] */
       list: () => request('GET', '/members'),
-      /** One Member: {id, firstName, lastName, address, phone, email, dateOfBirth, clubs, graduation, references} */
+      /** One Member: {id, firstName, lastName, address, phone, email, dateOfBirth, clubs, graduation, references, role?} (role: Admins only) */
       get: (id) => request('GET', member(id)),
-      /** {firstName, lastName, address{street, city, zipCode}, phone?, email, dateOfBirth?, clubIds[]} -> Member (409: email exists) */
+      /** {firstName, lastName, address{street, city, zipCode}, phone?, email, dateOfBirth?, clubIds[], role?} -> Member (409: email exists; role is Admin only) */
       create: (body) => request('POST', '/members', body),
       /** Same as create without clubIds; email is required but can't change -> Member */
       update: (id, body) => request('PUT', member(id), body),
+      /** Admin only, never for the caller's own record: 'member' | 'instructor' | 'admin' -> Member with its role */
+      updateRole: (id, role) => request('PUT', `${member(id)}/role`, { role }),
       /** Admin only; resolves with nothing */
       remove: (id) => request('DELETE', member(id)),
       /** -> Member */

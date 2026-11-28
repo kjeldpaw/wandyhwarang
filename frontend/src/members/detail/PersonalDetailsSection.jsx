@@ -5,7 +5,8 @@ import { useFormatDate } from '../../i18n/formatDate';
 import Section from './Section';
 
 /**
- * Name is the page heading; this shows address, phone, email and date of birth.
+ * Name is the page heading; this shows address, phone, email, date of birth and, when
+ * member-service sends it (to Admins only), the Member's Role.
  * `editAction` replaces the Edit link Instructors and Admins get to /members/:id/edit, e.g.
  * with the Profile's own Edit button.
  */
@@ -33,6 +34,12 @@ export default function PersonalDetailsSection({ member, editAction }) {
         <dd>{member.email}</dd>
         <dt>{t('members.fields.dateOfBirth')}</dt>
         <dd>{member.dateOfBirth ? formatDate(member.dateOfBirth) : missing}</dd>
+        {member.role && (
+          <>
+            <dt>{t('members.fields.role')}</dt>
+            <dd>{t(`roles.${member.role}`)}</dd>
+          </>
+        )}
       </dl>
     </Section>
   );

@@ -37,7 +37,8 @@
       "address": "Address",
       "phone": "Phone",
       "email": "Email",
-      "dateOfBirth": "Date of birth"
+      "dateOfBirth": "Date of birth",
+      "role": "Role"
     },
     "clubs": {
       "add": "Add Club",
@@ -118,7 +119,8 @@
       "invalidEmail": "Enter a valid email address.",
       "noClub": "Choose at least one Club.",
       "edit": "Edit",
-      "editTitle": "Edit {{name}}"
+      "editTitle": "Edit {{name}}",
+      "ownRole": "Another Admin has to change your Role."
     }
   },
   "eligible": {

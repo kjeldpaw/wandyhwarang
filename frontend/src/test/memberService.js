@@ -158,6 +158,11 @@ export const members = {
   }),
 };
 
+// Each Member's Role as Keycloak holds it (member-service v1.5.0): Ida is an Instructor, Anne an
+// Admin, everyone else a plain Member. GET /members/:id carries it for Admins only.
+export const roles = { [ida.id]: 'instructor', [people.admin.sub]: 'admin' };
+export const roleOf = (member) => roles[member.id] ?? 'member';
+
 // An entry of member-service's Eligible list (GET /eligible?date=, v1.4.0): limited fields of a
 // Member of any Club, their current Belt, its Graduation date, their next Belt and the day their
 // wait for it ends.
@@ -248,7 +253,8 @@ export function memberHandlers(list = Object.values(members)) {
       const caller = callerOf(request);
       if (!caller) return unauthorised();
       const member = list.find((m) => m.id === params.id);
-      return member && visibleTo(caller, member, list) ? HttpResponse.json(member) : notFound();
+      if (!member || !visibleTo(caller, member, list)) return notFound();
+      return HttpResponse.json(caller.roles.includes('admin') ? { ...member, role: roleOf(member) } : member);
     }),
     // The caller's own Member record (member-service v1.2.0), or 404 if they have none.
     http.get(api('/profile'), ({ request }) => {
