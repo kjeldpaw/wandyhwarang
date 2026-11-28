@@ -37,7 +37,8 @@
       "address": "Adresse",
       "phone": "Telefon",
       "email": "E-Mail",
-      "dateOfBirth": "Geburtsdatum"
+      "dateOfBirth": "Geburtsdatum",
+      "role": "Rolle"
     },
     "clubs": {
       "add": "Verein hinzufügen",
@@ -118,7 +119,8 @@
       "invalidEmail": "Gib eine gültige E-Mail-Adresse ein.",
       "noClub": "Wähle mindestens einen Verein.",
       "edit": "Bearbeiten",
-      "editTitle": "{{name}} bearbeiten"
+      "editTitle": "{{name}} bearbeiten",
+      "ownRole": "Ein anderer Admin muss deine Rolle ändern."
     }
   },
   "eligible": {

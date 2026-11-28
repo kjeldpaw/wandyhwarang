@@ -37,7 +37,8 @@
       "address": "Adresse",
       "phone": "Telefon",
       "email": "E-mail",
-      "dateOfBirth": "Fødselsdato"
+      "dateOfBirth": "Fødselsdato",
+      "role": "Rolle"
     },
     "clubs": {
       "add": "Tilføj klub",
@@ -118,7 +119,8 @@
       "invalidEmail": "Indtast en gyldig e-mail-adresse.",
       "noClub": "Vælg mindst én klub.",
       "edit": "Rediger",
-      "editTitle": "Rediger {{name}}"
+      "editTitle": "Rediger {{name}}",
+      "ownRole": "En anden Admin skal ændre din rolle."
     }
   },
   "eligible": {

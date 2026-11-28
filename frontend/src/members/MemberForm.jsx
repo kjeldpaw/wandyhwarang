@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { sortClubs } from './member';
 import '../styles/MemberForm.css';
 
+// A Member's Role, lowest first: realm roles as member-service takes them.
+export const ROLES = ['member', 'instructor', 'admin'];
+
 /** Form values for a Member (or some of its fields): every field a string, Clubs as a list of ids. */
 export const formValuesOf = (member) => ({
   firstName: member?.firstName ?? '',
@@ -14,6 +17,7 @@ export const formValuesOf = (member) => ({
   email: member?.email ?? '',
   dateOfBirth: member?.dateOfBirth ?? '',
   clubIds: [],
+  role: member?.role ?? 'member',
 });
 
 /** The personal details of a Member as member-service takes them (without Clubs). */
@@ -56,13 +60,15 @@ function validate(values, { withClubs, withEmail }) {
  * The create/edit form for a Member's personal details. `clubs` (create only) are the Clubs
  * to choose from; without it the form has no Club choice. `emailReadOnly` on edit, since the
  * email is the Keycloak username; `emailHint` describes the email field, e.g. how to change it.
- * `onSubmit(values)` is called with valid form values only.
+ * `role` (Admins only) adds a Role select: `{ disabled, hint }`, e.g. disabled with a hint when
+ * an Admin edits their own record. `onSubmit(values)` is called with valid form values only.
  */
 export default function MemberForm({
   initial,
   clubs,
   emailReadOnly = false,
   emailHint,
+  role,
   submitLabel,
   onSubmit,
   busy,
@@ -150,6 +156,31 @@ export default function MemberForm({
             </label>
           ))}
         </fieldset>
+      )}
+      {role && (
+        <p className="form-group">
+          <label>
+            {t('members.fields.role')}{' '}
+            <select
+              name="role"
+              value={values.role}
+              onChange={set('role')}
+              disabled={role.disabled}
+              aria-describedby={role.hint ? `${idPrefix}-role-hint` : undefined}
+            >
+              {ROLES.map((name) => (
+                <option key={name} value={name}>
+                  {t(`roles.${name}`)}
+                </option>
+              ))}
+            </select>
+          </label>{' '}
+          {role.hint && (
+            <span id={`${idPrefix}-role-hint`} className="field-hint">
+              {role.hint}
+            </span>
+          )}
+        </p>
       )}
       {children}
       <div className="form-actions">

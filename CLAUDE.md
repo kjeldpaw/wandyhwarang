@@ -87,7 +87,9 @@ reusing those sections and `MemberForm`; without a Member record it offers
 to create one. `/eligible` (`frontend/src/eligible/EligiblePage.jsx`, menu
 item Berettiget) lists the Members of every Club who are Eligible for a Dan
 or Poom on a date the Instructor or Admin picks, from member-service's
-`/eligible`. Tests live next to the
+`/eligible`. Admins give a Member a Role (Medlem, Instruktør or Admin) with
+`MemberForm`'s Role select on create and edit, never their own;
+member-service sends a Member's `role` to Admins only. Tests live next to the
 code as `*.test.jsx`; `frontend/src/test/` holds the setup file, the render
 helper and the MSW handlers, with member-service fixtures (Clubs, Belts,
 Members, the Eligible list) in `frontend/src/test/memberService.js`.
