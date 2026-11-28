@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ApiErrorMessage from '../../api/ApiErrorMessage';
+import { DraftRestored, openDraft, useFormDraft } from '../../api/formDraft';
 import { useWrite } from '../../api/useWrite';
 import { useApi } from '../../api/ApiProvider';
 import { useSession } from '../../auth/useSession';
@@ -23,7 +24,9 @@ export default function ReferencesSection({ member, onChange, readOnly = false }
   const api = useApi();
   const canEdit = useSession().isInstructor && !readOnly;
   // null | { kind: 'add' } | { kind: 'edit', id } | { kind: 'remove', id }
-  const [panel, setPanel] = useState(null);
+  // A form kept across a login (see ReferenceForm's draftKey) opens again.
+  const draftKey = `member:${member.id}:reference`;
+  const [panel, setPanel] = useState(() => (canEdit && openDraft(draftKey)) || null);
   const { busy, error, run: runWrite, reset } = useWrite();
   const references = member.references ?? [];
 
@@ -52,7 +55,9 @@ export default function ReferencesSection({ member, onChange, readOnly = false }
 
   return (
     <Section title={t('members.detail.references')} actions={actions}>
-      {panel?.kind === 'add' && <ReferenceForm busy={busy} onSave={add} onCancel={() => start(null)} />}
+      {panel?.kind === 'add' && (
+        <ReferenceForm draftKey={draftKey} panel={panel} busy={busy} onSave={add} onCancel={() => start(null)} />
+      )}
       {references.length === 0 ? (
         <p>{t('members.detail.noReferences')}</p>
       ) : (
@@ -67,6 +72,8 @@ export default function ReferencesSection({ member, onChange, readOnly = false }
                   <dd>
                     <ReferenceForm
                       initial={reference}
+                      draftKey={draftKey}
+                      panel={panel}
                       busy={busy}
                       onSave={(values) => update(reference.id, values)}
                       onCancel={() => start(null)}
@@ -116,12 +123,16 @@ export default function ReferencesSection({ member, onChange, readOnly = false }
   );
 }
 
-/** Add form (type and number) or, given `initial`, edit form (number only). */
-function ReferenceForm({ initial, busy, onSave, onCancel }) {
+/**
+ * Add form (type and number) or, given `initial`, edit form (number only). `draftKey` and
+ * `panel` keep the values across a trip to the Keycloak login, as in GraduationForm.
+ */
+function ReferenceForm({ initial, draftKey, panel, busy, onSave, onCancel }) {
   const { t } = useTranslation();
   const id = useId();
-  const [type, setType] = useState(initial?.type ?? 'WandyWhaRang');
-  const [reference, setReference] = useState(initial?.reference ?? '');
+  const draft = useFormDraft(draftKey, panel);
+  const [type, setType] = useState(draft.values?.type ?? initial?.type ?? 'WandyWhaRang');
+  const [reference, setReference] = useState(draft.values?.reference ?? initial?.reference ?? '');
   const [missing, setMissing] = useState(false);
 
   const submit = (event) => {
@@ -131,11 +142,12 @@ function ReferenceForm({ initial, busy, onSave, onCancel }) {
       setMissing(true);
       return;
     }
-    onSave({ type, reference: trimmed });
+    draft.keep({ type, reference }, () => onSave({ type, reference: trimmed }));
   };
 
   return (
     <form className="panel-form reference-form" onSubmit={submit} noValidate>
+      {draft.restored && <DraftRestored action={t('app.save')} />}
       {!initial && (
         <>
           <label htmlFor={`${id}-type`}>{t('members.references.type')}</label>

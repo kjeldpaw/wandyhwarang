@@ -60,6 +60,9 @@ test('an Instructor creates a Member from the Member list and lands on their det
   await user.click(screen.getByRole('button', { name: 'Opret medlem' }));
 
   expect(await screen.findByRole('heading', { level: 2, name: 'Lotte Jensen' })).toBeInTheDocument();
+  expect(screen.getByRole('status')).toHaveTextContent(
+    'Medlem oprettet. Der er sendt en e-mail til lotte@example.com om at vælge en adgangskode.',
+  );
   expect(requests).toEqual([
     {
       firstName: 'Lotte',
@@ -71,6 +74,22 @@ test('an Instructor creates a Member from the Member list and lands on their det
       clubIds: [clubs.randers.id],
     },
   ]);
+});
+
+test('the Member created message goes away once the Instructor leaves the page', async () => {
+  onCreate();
+  const { user } = renderApp('/members/new', { as: 'instructor' });
+  await screen.findByRole('checkbox', { name: 'Randers Taekwondo Klub' });
+  await fillRequired(user);
+  await user.click(screen.getByRole('button', { name: 'Opret medlem' }));
+  await screen.findByText(/Medlem oprettet/);
+
+  const personal = screen.getByRole('region', { name: 'Personlige oplysninger' });
+  await user.click(within(personal).getByRole('link', { name: 'Rediger' }));
+  await user.click(await screen.findByRole('link', { name: 'Annuller' }));
+
+  expect(await screen.findByRole('heading', { level: 2, name: 'Lotte Jensen' })).toBeInTheDocument();
+  expect(screen.queryByText(/Medlem oprettet/)).not.toBeInTheDocument();
 });
 
 test('an Instructor can only choose their own Clubs for a new Member', async () => {

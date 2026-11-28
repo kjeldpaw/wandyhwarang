@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DraftRestored, useFormDraft } from '../api/formDraft';
 import { sortClubs } from './member';
 import '../styles/MemberForm.css';
 
@@ -62,6 +63,9 @@ function validate(values, { withClubs, withEmail }) {
  * email is the Keycloak username; `emailHint` describes the email field, e.g. how to change it.
  * `role` (Admins only) adds a Role select: `{ disabled, hint }`, e.g. disabled with a hint when
  * an Admin edits their own record. `onSubmit(values)` is called with valid form values only.
+ * `draftKey` (unique per form) keeps the values across a trip to the Keycloak login: if the
+ * session is lost while `onSubmit` runs, the form comes back filled in, saying so, and waits
+ * for the person to submit again.
  */
 export default function MemberForm({
   initial,
@@ -69,13 +73,15 @@ export default function MemberForm({
   emailReadOnly = false,
   emailHint,
   role,
+  draftKey,
   submitLabel,
   onSubmit,
   busy,
   children,
 }) {
   const { t } = useTranslation();
-  const [values, setValues] = useState(() => formValuesOf(initial));
+  const draft = useFormDraft(draftKey);
+  const [values, setValues] = useState(() => draft.values ?? formValuesOf(initial));
   const [errors, setErrors] = useState({});
   const idPrefix = useId();
   const errorId = (name) => `${idPrefix}-${name}-error`;
@@ -124,11 +130,12 @@ export default function MemberForm({
     event.preventDefault();
     const problems = validate(values, { withClubs: Boolean(clubs), withEmail: !emailReadOnly });
     setErrors(problems);
-    if (Object.keys(problems).length === 0) onSubmit(values);
+    if (Object.keys(problems).length === 0) draft.keep(values, () => onSubmit(values));
   };
 
   return (
     <form className="member-form" onSubmit={submit} noValidate>
+      {draft.restored && <DraftRestored action={submitLabel} />}
       {field('firstName', t('members.form.firstName'), { input: { autoComplete: 'given-name' } })}
       {field('lastName', t('members.form.lastName'), { input: { autoComplete: 'family-name' } })}
       {field('street', t('members.form.street'), { input: { autoComplete: 'street-address' } })}

@@ -121,8 +121,19 @@
 .graduation-form > fieldset,
 .graduation-form > .field-error,
 .graduation-form > .error-message,
+.graduation-form > .notice,
 .graduation-form > .form-actions {
   grid-column: 1 / -1;
+}
+
+/* The panel is already sunken: the notice stands out on the surface colour. */
+.panel-form .notice {
+  margin: 0 0 var(--space-4);
+  background-color: var(--color-surface);
+}
+
+.graduation-form > .notice {
+  margin: 0;
 }
 
 .panel-form .form-group {

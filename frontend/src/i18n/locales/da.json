@@ -3,7 +3,8 @@
     "loading": "Henter…",
     "loggingIn": "Logger ind…",
     "save": "Gem",
-    "cancel": "Annuller"
+    "cancel": "Annuller",
+    "sessionRestored": "Din session udløb, før oplysningerne blev gemt. Tjek dem, og klik på \"{{action}}\" igen."
   },
   "header": {
     "language": "Sprog",
@@ -64,7 +65,8 @@
       "noGraduations": "Ingen gradueringer endnu.",
       "references": "Referencer",
       "noReferences": "Ingen referencer.",
-      "notFound": "Medlemmet findes ikke, eller du har ikke adgang til det."
+      "notFound": "Medlemmet findes ikke, eller du har ikke adgang til det.",
+      "created": "Medlem oprettet. Der er sendt en e-mail til {{email}} om at vælge en adgangskode."
     },
     "graduation": {
       "date": "Dato",

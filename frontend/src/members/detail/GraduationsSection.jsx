@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApi } from '../../api/ApiProvider';
+import { openDraft } from '../../api/formDraft';
 import { useWrite } from '../../api/useWrite';
 import { useSession } from '../../auth/useSession';
 import { beltName } from '../../belts/belt';
@@ -26,7 +27,9 @@ export default function GraduationsSection({ member, onChange, readOnly = false 
   const history = graduationHistory(member);
   const belt = currentBelt(member);
   // The open panel: null | { kind: 'add' } | { kind: 'edit', id } | { kind: 'delete', id }.
-  const [panel, setPanel] = useState(null);
+  // A form kept across a login (see GraduationForm's draftKey) opens again.
+  const draftKey = `member:${member.id}:graduation`;
+  const [panel, setPanel] = useState(() => (canEdit && openDraft(draftKey)) || null);
   const chosen = panel?.id && history.find((graduation) => graduation.id === panel.id);
   const removal = useWrite();
   const close = () => setPanel(null);
@@ -63,12 +66,22 @@ export default function GraduationsSection({ member, onChange, readOnly = false 
         {belt && <BeltBadge belt={belt} large />}
         {t('members.detail.currentBelt')}: {belt ? beltName(belt) : t('members.detail.noBelt')}
       </p>
-      {panel?.kind === 'add' && <GraduationForm title={t('members.graduation.new')} onSave={add} onCancel={close} />}
+      {panel?.kind === 'add' && (
+        <GraduationForm
+          title={t('members.graduation.new')}
+          draftKey={draftKey}
+          panel={panel}
+          onSave={add}
+          onCancel={close}
+        />
+      )}
       {panel?.kind === 'edit' && chosen && (
         <GraduationForm
           key={chosen.id}
           title={t('members.graduation.editTitle')}
           graduation={chosen}
+          draftKey={draftKey}
+          panel={panel}
           onSave={update}
           onCancel={close}
         />

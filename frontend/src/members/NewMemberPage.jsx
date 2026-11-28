@@ -29,7 +29,8 @@ function NewMember() {
       // Only Admins give a Role; member-service makes everyone else's new Members plain Members.
       const role = isAdmin ? { role: values.role } : {};
       const member = await api.members.create({ ...personalDetailsOf(values), clubIds: values.clubIds, ...role });
-      navigate(`/members/${member.id}`);
+      // The Member's page says the Member was created, and where the setup email went.
+      navigate(`/members/${member.id}`, { state: { created: { id: member.id, email: member.email } } });
     });
 
   return (
@@ -45,6 +46,7 @@ function NewMember() {
         <MemberForm
           clubs={clubs}
           role={isAdmin ? {} : undefined}
+          draftKey="member:new"
           submitLabel={t('members.form.create')}
           onSubmit={create}
           busy={busy}

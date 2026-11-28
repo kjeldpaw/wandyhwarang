@@ -3,7 +3,8 @@
     "loading": "Wird geladen…",
     "loggingIn": "Anmeldung läuft…",
     "save": "Speichern",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "sessionRestored": "Deine Sitzung ist abgelaufen, bevor die Angaben gespeichert wurden. Prüfe sie und klicke erneut auf „{{action}}“."
   },
   "header": {
     "language": "Sprache",
@@ -64,7 +65,8 @@
       "noGraduations": "Noch keine Graduierungen.",
       "references": "Referenzen",
       "noReferences": "Keine Referenzen.",
-      "notFound": "Dieses Mitglied gibt es nicht, oder du hast keinen Zugriff darauf."
+      "notFound": "Dieses Mitglied gibt es nicht, oder du hast keinen Zugriff darauf.",
+      "created": "Mitglied angelegt. Eine E-Mail zum Festlegen des Passworts wurde an {{email}} gesendet."
     },
     "graduation": {
       "date": "Datum",
