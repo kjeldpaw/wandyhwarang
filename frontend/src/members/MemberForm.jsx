@@ -1,7 +1,6 @@
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useApi } from '../api/ApiProvider';
-import { clearDraft, readDraft, saveDraft } from '../api/drafts';
+import { DraftRestored, useFormDraft } from '../api/formDraft';
 import { sortClubs } from './member';
 import '../styles/MemberForm.css';
 
@@ -81,15 +80,9 @@ export default function MemberForm({
   children,
 }) {
   const { t } = useTranslation();
-  const api = useApi();
-  const [draft] = useState(() => draftKey && readDraft(draftKey));
-  const [values, setValues] = useState(() => draft ?? formValuesOf(initial));
-  const [restored, setRestored] = useState(Boolean(draft));
+  const draft = useFormDraft(draftKey);
+  const [values, setValues] = useState(() => draft.values ?? formValuesOf(initial));
   const [errors, setErrors] = useState({});
-  // The values are back on the form; it saves them again if the next submit loses the session too.
-  useEffect(() => {
-    if (draft) clearDraft(draftKey);
-  }, [draft, draftKey]);
   const idPrefix = useId();
   const errorId = (name) => `${idPrefix}-${name}-error`;
   const errorFor = (name) =>
@@ -137,23 +130,12 @@ export default function MemberForm({
     event.preventDefault();
     const problems = validate(values, { withClubs: Boolean(clubs), withEmail: !emailReadOnly });
     setErrors(problems);
-    if (Object.keys(problems).length > 0) return;
-    setRestored(false);
-    if (!draftKey) return onSubmit(values);
-    saveDraft(draftKey, values);
-    // Kept only while the browser leaves for the login; any other outcome drops it.
-    Promise.resolve(onSubmit(values)).finally(() => {
-      if (!api.sessionLost()) clearDraft(draftKey);
-    });
+    if (Object.keys(problems).length === 0) draft.keep(values, () => onSubmit(values));
   };
 
   return (
     <form className="member-form" onSubmit={submit} noValidate>
-      {restored && (
-        <p role="alert" className="notice">
-          {t('app.sessionRestored', { action: submitLabel })}
-        </p>
-      )}
+      {draft.restored && <DraftRestored action={submitLabel} />}
       {field('firstName', t('members.form.firstName'), { input: { autoComplete: 'given-name' } })}
       {field('lastName', t('members.form.lastName'), { input: { autoComplete: 'family-name' } })}
       {field('street', t('members.form.street'), { input: { autoComplete: 'street-address' } })}
